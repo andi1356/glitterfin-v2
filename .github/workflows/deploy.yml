@@ -5,8 +5,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Setup SSH key
@@ -17,6 +17,8 @@ jobs:
       - name: Connect via SSH
         run: |
           ssh -o StrictHostKeyChecking=no -p ${{ secrets.PI_SSH_PORT }} -i id_rsa ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }} << 'EOF'
+          set -e 
+          
           echo "Removing repo folder if it exists"
           #TODO remove following line after development is done
           rm -rf ${{ github.event.repository.name }}
@@ -25,8 +27,8 @@ jobs:
           
           echo "Decrypting secrets..."
           echo "${{ secrets.PI_DECRYPTION_PASS }}" > pass_file
-          ./tools/bash/decrypt_secrets.sh && echo "Secrets decryption done!"
-          
+          ./tools/bash/decryp0t_secrets.sh && echo "Secrets decryption done!"
+
           echo "Substituting secrets..."
           ./tools/bash/substitute_secrets.sh && echo "Secrets substitution done!"
           
