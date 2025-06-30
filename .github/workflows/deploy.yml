@@ -54,4 +54,5 @@ jobs:
           EOF
 
       - name: Remove SSH key
+        if: always()
         run: rm -f id_rsa
