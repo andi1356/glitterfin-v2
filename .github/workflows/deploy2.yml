@@ -1,5 +1,4 @@
 name: Deploy to Raspberry Pi
-
 on:
   push:
     branches: [ "main" ]
@@ -14,13 +13,27 @@ jobs:
           echo "${{ secrets.PI_SSH_KEY }}" > id_rsa
           chmod 600 id_rsa
 
-      - name: Deploy via SSH
+      - name: Connect via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no -p ${{ secrets.PI_SSH_PORT }} -i id_rsa ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }} << 'EOF'
-          rm -rf ${{ github.event.repository.name }}
-          git clone git@github.com:${{ github.repository }}.git 
-          cd demo2
-          echo "${{ secrets.PI_DECRYPTION_PASS }}" > pass_file
-          openssl enc -d -aes-256-cbc -pbkdf2 -iter 1000 -salt -in secrets.enc -out secrets -pass "file:pass_file"
-          docker compose up -d
-          EOF
+               ssh -o StrictHostKeyChecking=no -p ${{ secrets.PI_SSH_PORT }} -i id_rsa ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }} << 'EOF'
+               echo "Removing repo folder if it exists;"
+          #          TODO remove following line after action is complete developing:
+               rm -rf ${{ github.event.repository.name }}
+               git clone git@github.com:${{ github.repository }}.git
+               cd ${{ github.event.repository.name }}
+               
+               echo "Decrypting secrets..."
+               echo "${{ secrets.PI_DECRYPTION_PASS }}" > pass_file
+               openssl enc -d -aes-256-cbc -pbkdf2 -iter 1000 -salt -in secrets.enc -out secrets -pass "file:pass_file" && echo "Decryption done!"
+          #          TODO use decrypt.sh instead of openssl
+               
+               echo "Substituting secrets..."
+               export $(cat secrets | xargs) && for file in $(cat code_files); do envsubst < "$file" > "$file.tmp" && mv "$file.tmp" "$file"; done && echo "Secrets substituted!"
+               
+               echo "Updating containers... "
+               docker compose up -d
+          #               TODO update to a better no downtime command
+               
+               echo "Removing codebase from host..."
+               cd ..
+               rm -rf ${{ github.event.repository.name }} && echo "Codebase Removed"
