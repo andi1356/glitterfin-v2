@@ -27,15 +27,15 @@ jobs:
           
           echo "Decrypting secrets..."
           echo "${{ secrets.PI_DECRYPTION_PASS }}" > pass_file
-          if ! ./tools/bash/decryp0t_secrets.sh; then
-            echo "\033[31mSecrets decryption FAILED!\033[0m"
+          if ! ./tools/bash/decrypt_secrets.sh; then
+            echo "Secrets decryption FAILED!"
             exit 1
           fi
           echo "Secrets decryption DONE!"
 
           echo "Substituting secrets..."
           if ! ./tools/bash/substitute_secrets.sh; then
-            echo "\033[31mSecrets substitution FAILED!\033[0m" 
+            echo "Secrets substitution FAILED!" 
             exit 1
           echo "Secrets substitution DONE!"
           
