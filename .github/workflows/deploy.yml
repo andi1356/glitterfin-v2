@@ -37,6 +37,7 @@ jobs:
           if ! ./tools/bash/substitute_secrets.sh; then
             echo "Secrets substitution FAILED!" 
             exit 1
+          fi
           echo "Secrets substitution DONE!"
           
           echo "Updating containers... "
