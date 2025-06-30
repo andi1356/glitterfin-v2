@@ -1,4 +1,3 @@
-# This workflow will is consisting of the deployment steps necessary for the deployment on raspberry-pi
 name: Glitterfin CI/CD
 on:
   push:
