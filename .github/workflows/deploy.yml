@@ -13,9 +13,8 @@ jobs:
         run: |
           echo "${{ secrets.PI_SSH_KEY }}" > id_rsa
           chmod 600 id_rsa
-          trap 'rm -f id_rsa' EXIT
 
-      - name: Connect via SSH
+      - name: Connect via SSH and Deploy
         run: |
           ssh -o StrictHostKeyChecking=no -p ${{ secrets.PI_SSH_PORT }} -i id_rsa ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }} << 'EOF'
           set -e 
@@ -50,3 +49,6 @@ jobs:
           
           
           EOF
+
+      - name: Remove SSH key
+        run: rm -f id_rsa
