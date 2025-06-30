@@ -1,9 +1,18 @@
 services:
-  postgres:
-    image: 'postgres:latest'
+  database:
+    image: 'postgres:16.9-bullseye'
     environment:
-      - 'POSTGRES_DB=${DB_NAME}'
-      - 'POSTGRES_PASSWORD=${DB_PASSWORD}'
-      - 'POSTGRES_USER=${DB_USER}'
+      - 'POSTGRES_DB=glitterfin-db'
+      - 'POSTGRES_PASSWORD=random-generated-password'
+      - 'POSTGRES_USER=glitterfin-db-user'
     ports:
-      - '${DB_PORT}'
+      - '5444'
+  app:
+    build: .
+    depends_on:
+      - database
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped

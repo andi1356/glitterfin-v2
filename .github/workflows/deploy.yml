@@ -13,6 +13,7 @@ jobs:
         run: |
           echo "${{ secrets.PI_SSH_KEY }}" > id_rsa
           chmod 600 id_rsa
+          trap 'rm -f id_rsa' EXIT
 
       - name: Connect via SSH
         run: |
