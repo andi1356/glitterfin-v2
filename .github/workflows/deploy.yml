@@ -18,6 +18,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -p ${{ secrets.PI_SSH_PORT }} -i id_rsa ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }} << 'EOF'
           echo "Removing repo folder if it exists"
+#REMOVE THIS STEP
           rm -rf ${{ github.event.repository.name }}
           git clone git@github.com:${{ github.repository }}.git
           cd ${{ github.event.repository.name }}
