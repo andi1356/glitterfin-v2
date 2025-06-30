@@ -27,10 +27,17 @@ jobs:
           
           echo "Decrypting secrets..."
           echo "${{ secrets.PI_DECRYPTION_PASS }}" > pass_file
-          ./tools/bash/decryp0t_secrets.sh && echo "Secrets decryption done!"
+          if ! ./tools/bash/decryp0t_secrets.sh; then
+            echo "\033[31mSecrets decryption FAILED!\033[0m"
+            exit 1
+          fi
+          echo "Secrets decryption DONE!"
 
           echo "Substituting secrets..."
-          ./tools/bash/substitute_secrets.sh && echo "Secrets substitution done!"
+          if ! ./tools/bash/substitute_secrets.sh; then
+            echo "\033[31mSecrets substitution FAILED!\033[0m" 
+            exit 1
+          echo "Secrets substitution DONE!"
           
           echo "Updating containers... "
           docker compose up -d
