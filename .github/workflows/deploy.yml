@@ -26,7 +26,7 @@ jobs:
           cd ${{ github.event.repository.name }}
           
           echo "Decrypting secrets..."
-          echo "${{ secrets.PI_DECRYPTION_PASS }}" > pass_file
+          echo "${{ secrets.PI_DECRYPTION_PASS }}" > enc_password_file
           if ! ./tools/bash/decrypt_secrets.sh; then
             echo "Secrets decryption FAILED!"
             exit 1
