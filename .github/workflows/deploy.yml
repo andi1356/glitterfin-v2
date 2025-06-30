@@ -17,4 +17,4 @@ jobs:
       - name: Connect via SSH
         run: |
            ssh -o StrictHostKeyChecking=no -p ${{ secrets.PI_SSH_PORT }} -i id_rsa ${{ secrets.PI_USER }}@${{ secrets.PI_HOST }} << 'EOF'
-           echo "Removing repo folder if it exists;"
+           echo "Removing repo folder if it exists"
