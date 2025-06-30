@@ -8,7 +8,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - database_data:/var/lib/postgresql/data
 
   app:
     build: .
@@ -16,9 +16,7 @@ services:
       - database
     ports:
       - "8080:8080"
-    volumes:
-      - ./logs:/app/logs
     restart: unless-stopped
-
 volumes:
-  - pgdata:
+  database_data: {}
+
