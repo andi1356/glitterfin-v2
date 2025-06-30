@@ -41,9 +41,9 @@ jobs:
           echo "Secrets substitution DONE!"
           
           echo "Updating containers... "
-          docker-compose down
-          docker-compose build --no-cache
-          docker-compose up -d
+          docker compose down
+          docker compose build --no-cache
+          docker compose up -d
           docker system prune -f
           
           echo "Removing codebase from host..."
