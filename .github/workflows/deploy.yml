@@ -35,7 +35,7 @@ jobs:
           
           echo "Removing codebase from host..."
           cd ..
-#          rm -rf ${{ github.event.repository.name }} && echo "Codebase Removed"
+          #rm -rf ${{ github.event.repository.name }} && echo "Codebase Removed"
           
           
           EOF
