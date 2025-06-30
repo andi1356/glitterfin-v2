@@ -28,7 +28,7 @@ jobs:
 #          TODO use decrypt.sh instead of openssl
           
           echo "Substituting secrets..."
-          export $(cat secrets | xargs) && for file in $(cat code_files); do envsubst < "$file" > "$file.tmp" && mv "$file.tmp" "$file"; done && echo "Secrets substituted!"
+          export $(cat secrets | xargs) && for file in $(cat code_files); do envsubst < "$file" > "$file.tmp" && mv "$file.tmp" "$file"; done
           
           echo "Updating containers... " 
           docker compose up -d
