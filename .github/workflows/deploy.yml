@@ -1,4 +1,4 @@
-name: Glitterfin CI/CD
+name: Deploy to Raspberry Pi
 on:
   push:
     branches: [ "main" ]
