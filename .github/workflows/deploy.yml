@@ -41,9 +41,8 @@ jobs:
           echo "Secrets substitution DONE!"
           
           echo "Updating containers... "
-          docker compose down
-          docker compose build --no-cache
-          docker compose up -d
+          docker compose -f compose-prod.yaml down
+          docker compose -f compose-prod.yaml up -d --build
           docker system prune -f
           
           echo "Removing codebase from host..."
@@ -51,6 +50,26 @@ jobs:
           #rm -rf ${{ github.event.repository.name }} && echo "Codebase Removed"
           
           EOF
+
+      - name: Verify application health
+        run: |
+          echo "Verifying deployment health..."
+          timeout=300
+          while [ $timeout -gt 0 ]; do
+            if curl -f https://${{ secrets.PI_HOST }}/actuator/health; then
+              echo "Application is healthy!"
+              break
+            fi
+            echo "Waiting for application to become healthy... ($timeout seconds remaining)"
+            sleep 10
+            timeout=$((timeout-10))
+          done
+          
+          if [ $timeout -le 0 ]; then
+            echo "Application failed to become healthy - deployment failed!"
+            docker compose logs
+            exit 1  
+          fi
 
       - name: Remove SSH key
         if: always()
