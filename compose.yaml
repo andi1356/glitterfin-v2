@@ -1,0 +1,70 @@
+services:
+  app-prod:
+    profiles:
+      - prod
+    build:
+      context: .
+      args:
+        BUILD_ENV: prod
+    depends_on:
+      - database-prod
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  database-prod:
+    profiles:
+      - prod
+      - db-prod
+    image: 'postgres:16-alpine'
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+    ports:
+      - '5432:5432'
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pguser -d pgdb"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  app-dev:
+    profiles:
+      - dev
+    build:
+      context: .
+      args:
+        BUILD_ENV: dev
+    depends_on:
+      - database-dev
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  database-dev:
+    profiles:
+      - dev
+      - db-dev
+    image: 'postgres:16-alpine'
+    environment:
+      - POSTGRES_DB=pgdb
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=pgpass
+    ports:
+      - '5432:5432'
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U pguser -d pgdb" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  database_data: {}
+

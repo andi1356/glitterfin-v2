@@ -41,8 +41,8 @@ jobs:
           echo "Secrets substitution DONE!"
           
           echo "Updating containers... "
-          docker compose -f compose-prod.yaml down
-          docker compose -f compose-prod.yaml up -d --build
+          docker compose --profile prod down
+          docker compose --profile prod up -d --build
           docker system prune -f
           
           echo "Removing codebase from host..."
@@ -57,7 +57,7 @@ jobs:
           timeout=300
           while [ $timeout -gt 0 ]; do
             if curl -f https://${{ secrets.PI_HOST }}/actuator/health; then
-              echo "Application is healthy!"
+              echo " Application is healthy!"
               break
             fi
             echo "Waiting for application to become healthy... ($timeout seconds remaining)"

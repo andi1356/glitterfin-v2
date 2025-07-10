@@ -1,1 +1,1 @@
-export $(cat secrets | xargs) && for file in $(cat code_files); do envsubst < "$file" > "$file.tmp" && mv "$file.tmp" "$file"; done
+export $(cat secrets | xargs) && for file in $(cat encoded_files_list); do envsubst < "$file" > "$file.tmp" && mv "$file.tmp" "$file"; done
