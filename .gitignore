@@ -1,6 +1,6 @@
 secrets
 tools/enc_password_file
-
+logs
 
 HELP.md
 target/
