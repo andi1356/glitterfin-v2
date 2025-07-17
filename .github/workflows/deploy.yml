@@ -33,13 +33,6 @@ jobs:
           fi
           echo "Secrets decryption DONE!"
 
-          echo "Substituting secrets..."
-          if ! ./tools/bash/substitute_secrets.sh; then
-            echo "Secrets substitution FAILED!" 
-            exit 1
-          fi
-          echo "Secrets substitution DONE!"
-          
           echo "Updating containers... "
           docker compose --profile prod down
           docker compose --profile prod up -d --build
@@ -47,7 +40,7 @@ jobs:
           
           echo "Removing codebase from host..."
           cd ..
-          #rm -rf ${{ github.event.repository.name }} && echo "Codebase Removed"
+          rm -rf ${{ github.event.repository.name }} && echo "Codebase Removed"
           
           EOF
 

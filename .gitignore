@@ -1,5 +1,7 @@
-secrets
+.env.prod
+.env.dev
 tools/enc_password_file
+
 logs
 
 HELP.md
