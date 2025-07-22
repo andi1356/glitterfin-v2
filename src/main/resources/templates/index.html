@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${appName}">Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header>
+<!--    <div th:insert="~{fragments/header :: header}"></div>-->
+    <h1 th:text="${appName}">App Name</h1>
+</header>
+
+<main>
+    <div class="container">
+        <h2 th:text="${message}">Welcome Message</h2>
+
+        <!-- Example of conditional rendering -->
+        <div th:if="${user}" class="user-info">
+            <p>Hello, <span th:text="${user.name}">User</span>!</p>
+        </div>
+
+        <!-- Example of iteration -->
+        <ul th:if="${items}">
+            <li th:each="item : ${items}" th:text="${item}">Item</li>
+        </ul>
+    </div>
+</main>
+
+<!--<div th:insert="~{fragments/footer :: footer}"></div>-->
+
+<!--<script th:src="@{/js/app.js}"></script>-->
+</body>
+</html>
