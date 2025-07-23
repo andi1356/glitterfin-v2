@@ -7,7 +7,7 @@ COPY src/ src/
 RUN mvn -f pom.xml clean package -DskipTests
 
 FROM amazoncorretto:21.0.8-alpine3.22
-RUN groupadd -r glitterfin-group && useradd -r -g glitterfin-group glitterfin-user
+RUN addgroup -S glitterfin-group && adduser -S -G glitterfin-group glitterfin-user
 WORKDIR /app
 COPY --from=build /app/target/*.jar glitterfin.jar
 RUN chown -R glitterfin-user:glitterfin-group /app
