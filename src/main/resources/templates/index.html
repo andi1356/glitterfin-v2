@@ -15,6 +15,7 @@
 <main>
     <div class="container">
         <h2 th:text="${message}">Welcome Message</h2>
+        <a th:href="@{/login}">Login</a>
 
         <!-- Example of conditional rendering -->
         <div th:if="${user}" class="user-info">

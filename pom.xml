@@ -56,6 +56,12 @@
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sesv2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
             <!--VERSION MANAGED BY BOM (Bill of Materials)-->
         </dependency>
 

@@ -1,4 +1,4 @@
-package arobu.glitterfinv2;
+package arobu.glitterfinv2.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

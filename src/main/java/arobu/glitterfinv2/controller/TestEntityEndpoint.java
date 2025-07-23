@@ -1,5 +1,7 @@
-package arobu.glitterfinv2;
+package arobu.glitterfinv2.controller;
 
+import arobu.glitterfinv2.model.entity.TestEntity;
+import arobu.glitterfinv2.model.repository.TestEntityRepo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,5 +20,10 @@ public class TestEntityEndpoint{
         test.setId(1L);
         test.setName("test");
         return "entity saved: " + repo.save(test);
+    }
+
+    @GetMapping("finances")
+    public String finances(){
+        return "TBD These will be your finances";
     }
 }

@@ -1,4 +1,4 @@
-FROM maven:3.9.7-eclipse-temurin-21-alpine AS build
+FROM maven:3.9.11-amazoncorretto-21-alpine AS build
 RUN echo "Building App"
 WORKDIR /app
 COPY pom.xml .
@@ -6,7 +6,7 @@ RUN mvn dependency:go-offline
 COPY src/ src/
 RUN mvn -f pom.xml clean package -DskipTests
 
-FROM eclipse-temurin:21
+FROM amazoncorretto:21.0.8-alpine3.22
 RUN groupadd -r glitterfin-group && useradd -r -g glitterfin-group glitterfin-user
 WORKDIR /app
 COPY --from=build /app/target/*.jar glitterfin.jar

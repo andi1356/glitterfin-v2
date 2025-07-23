@@ -1,6 +1,6 @@
 package arobu.glitterfinv2.controller.frontend;
 
-import arobu.glitterfinv2.TestEntity;
+import arobu.glitterfinv2.model.entity.TestEntity;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

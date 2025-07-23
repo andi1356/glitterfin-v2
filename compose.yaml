@@ -13,7 +13,7 @@ services:
       - internal-prod
 
     env_file:
-      - .env.prod-ORIGINAL
+      - .env.prod
 
     deploy:
       resources:
@@ -41,7 +41,7 @@ services:
       - internal-prod
 
     env_file:
-      - .env.prod-ORIGINAL
+      - .env.prod
 
     deploy:
       resources:
@@ -71,12 +71,12 @@ services:
     env_file:
       - .env.dev
     depends_on:
-      - db-dev
+      - localhost
     ports:
       - "8080:8080"
 
 
-  db-dev:
+  localhost:
     image: 'postgres:16-alpine'
     profiles:
       - dev
