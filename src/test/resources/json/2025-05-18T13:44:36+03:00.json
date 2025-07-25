@@ -1,0 +1,16 @@
+{
+  "ownerId": "andi",
+  "amount": 60,
+  "timestamp": "2025-05-18T13:44:36+03:00",
+  "source": "CASH",
+  "merchant": "Garajul cu Bere",
+
+  "locationData": {
+    "longitude": "26.86214836843467",
+    "latitude": "47.02150164236227",
+  },
+  "category": "Ieseala 🍻",
+  "receiptData": "TEST_RECEIPT_DATA",
+  "shared": false,
+  "outlier": false
+}

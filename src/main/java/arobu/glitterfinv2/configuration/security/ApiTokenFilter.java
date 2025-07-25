@@ -46,7 +46,10 @@ public class ApiTokenFilter extends OncePerRequestFilter {
                 return;
             }
             String userAgentId = getUserAgentId(request);
-            PreAuthenticatedAuthenticationToken apiUser = new PreAuthenticatedAuthenticationToken("api-client-id:" + userAgentId, request.getHeader(API_TOKEN_VALID_VALUE), singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
+            PreAuthenticatedAuthenticationToken apiUser = new PreAuthenticatedAuthenticationToken(
+                    "api-client-id:" + userAgentId,
+                    apiKey,
+                    singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
             apiUser.setAuthenticated(true);
             SecurityContextHolder.getContext().setAuthentication(apiUser);
 
