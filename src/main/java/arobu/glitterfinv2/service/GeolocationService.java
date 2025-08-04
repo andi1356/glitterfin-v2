@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,17 +16,17 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 
-public class GeolocationExternalService {
+@Service
+public class GeolocationService {
 
-    static Logger LOGGER = LogManager.getLogger(GeolocationExternalService.class);
+    static Logger LOGGER = LogManager.getLogger(GeolocationService.class);
 
     @Value("${external.geocode.api-uri}")
-    private static String GEOCODING_RESOURCE;
+    private String GEOCODING_API_URI;
 
-    public static GeoCodeResponse reverseGeocode(String lat, String lon) {
-        try {
-            HttpClient httpClient = HttpClient.newHttpClient();
-            String requestUri = GEOCODING_RESOURCE  + "&lat=" + lat + "&lon=" + lon;
+    public GeoCodeResponse reverseGeocode(String lat, String lon) {
+        try (HttpClient httpClient = HttpClient.newHttpClient()){
+            String requestUri = GEOCODING_API_URI + "&lat=" + lat + "&lon=" + lon;
             HttpRequest geocodingRequest = HttpRequest.newBuilder()
                     .GET()
                     .uri(URI.create(requestUri))

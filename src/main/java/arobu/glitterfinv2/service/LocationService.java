@@ -15,31 +15,38 @@ public class LocationService {
     Logger LOGGER = LogManager.getLogger(LocationService.class);
 
     private final LocationRepository locationRepository;
+    private final GeolocationService geolocationService;
 
-    public LocationService(LocationRepository locationRepository) {
+    public LocationService(LocationRepository locationRepository, GeolocationService geolocationService) {
         this.locationRepository = locationRepository;
+        this.geolocationService = geolocationService;
     }
 
     public Location getOrSaveLocationEntity(final LocationData locationData) {
         GeoCodeResponse geoCodeResponse = reverseGeocode(locationData);
         LOGGER.info("Geocode Service returned response: {}", geoCodeResponse);
 
-        Location entity = LocationMapper.toEntity(geoCodeResponse);
+        Location newEntity = LocationMapper.toEntity(geoCodeResponse);
 
-        locationRepository.findLocationByGeocodePlaceId(entity.getGeocodePlaceId())
-                .ifPresent(location -> {
-                    if (!location.getDisplayName().equals(entity.getDisplayName())) {
+        return locationRepository.findLocationByGeocodePlaceId(newEntity.getGeocodePlaceId())
+                .map(location -> {
+                    if (!location.getDisplayName().equals(newEntity.getDisplayName())) {
                         LOGGER.warn("GeoCode service returned a new display name for existing " +
                                 "Location entity with id: {}", location.getId());
-                        LOGGER.warn("Updating location entity from: {} to {}", location, entity);
-                        entity.setId(location.getId());
+                        LOGGER.warn("Updating location's display name from: {} to {}",
+                                location.getDisplayName(), newEntity.getDisplayName());
+                        location.setDisplayName(newEntity.getDisplayName());
+                        return locationRepository.save(location);
+                    } else {
+                        return location;
                     }
+                }).orElseGet(() -> {
+                    LOGGER.info("Persisting location entity: {}", newEntity);
+                    return locationRepository.save(newEntity);
                 });
-        LOGGER.info("Persisting location entity: {}", entity);
-        return locationRepository.save(entity);
     }
 
     public GeoCodeResponse reverseGeocode(LocationData locationData) {
-        return GeolocationExternalService.reverseGeocode(locationData.getLatitude(), locationData.getLongitude());
+        return geolocationService.reverseGeocode(locationData.getLatitude(), locationData.getLongitude());
     }
 }

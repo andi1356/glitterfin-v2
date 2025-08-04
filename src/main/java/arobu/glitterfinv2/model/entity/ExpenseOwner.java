@@ -13,17 +13,15 @@ public class ExpenseOwner {
         return id;
     }
 
-    public ExpenseOwner setId(String id) {
-        this.id = id;
-        return this;
-    }
-
     public String getUserAgentId() {
         return userAgentId;
     }
 
-    public ExpenseOwner setUserAgentId(String userAgentId) {
-        this.userAgentId = userAgentId;
-        return this;
+    @Override
+    public String toString() {
+        return "ExpenseOwner{" +
+                "id='" + id + '\'' +
+                ", userAgentId='" + userAgentId + '\'' +
+                '}';
     }
 }

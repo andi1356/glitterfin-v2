@@ -21,6 +21,7 @@ CREATE TABLE expense (
     owner_id  VARCHAR(255),
     amount    REAL         NOT NULL,
     timestamp TIMESTAMP    NOT NULL,
+    timezone  varchar(6)   NOT NULL,
     source    VARCHAR(15)  NOT NULL,
     merchant  VARCHAR(255) NOT NULL,
 

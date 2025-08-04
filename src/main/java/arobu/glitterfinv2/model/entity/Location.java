@@ -1,12 +1,11 @@
 package arobu.glitterfinv2.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Location {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     @Column(unique = true)
     Integer geocodePlaceId;
@@ -79,6 +78,19 @@ public class Location {
     public Location setLongitude(Double longitude) {
         this.longitude = longitude;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", geocodePlaceId=" + geocodePlaceId +
+                ", countryCode='" + countryCode + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
     }
 }
 

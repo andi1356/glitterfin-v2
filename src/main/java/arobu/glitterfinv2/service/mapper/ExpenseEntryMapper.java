@@ -5,6 +5,9 @@ import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
 
+import static java.time.ZonedDateTime.parse;
+import static java.util.Objects.nonNull;
+
 public class ExpenseEntryMapper {
     private static final String TEXT_DELIMITING_CHARACTERS = "||";
     private static final String REGEX_EXPRESSION = "\\|\\|";
@@ -16,18 +19,23 @@ public class ExpenseEntryMapper {
         expense
                 .setOwner(owner)
                 .setAmount(dto.getAmount())
-                .setTimestamp(dto.getTimestamp())
+                .setTimestamp(parse(dto.getTimestamp()))
+                .setTimezone(parse(dto.getTimestamp()).getZone().getId())
                 .setSource(dto.getSource())
                 .setMerchant(dto.getMerchant())
 
                 .setLocation(location)
 //                .setCategory(dto.getCategory()) // parse category from DTO ||
                 .setReceiptData(dto.getReceiptData())
-//                .setDescription()
-                .setDetails(dto.getReceiptData())
+//                .setDescription()  // parse from merchant
+                .setDetails(dto.getMerchant());
 
-                .setShared(dto.getShared())
-                .setShared(dto.getOutlier());
+        if (nonNull(dto.getShared())) {
+            expense.setShared(dto.getShared());
+        }
+        if (nonNull(dto.getOutlier())) {
+            expense.setOutlier(dto.getOutlier());
+        }
 
         return expense;
     }

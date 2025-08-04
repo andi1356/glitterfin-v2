@@ -1,20 +1,20 @@
 package arobu.glitterfinv2.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.time.ZonedDateTime;
 
 @Entity(name = "expense")
 public class ExpenseEntry {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     @ManyToOne
     private ExpenseOwner owner;
     private Double amount;
     private ZonedDateTime timestamp;
+    private String timezone;
     private String source;
     private String merchant;
 
@@ -25,8 +25,8 @@ public class ExpenseEntry {
     private String description;
     private String details;
 
-    private Boolean shared;
-    private Boolean outlier;
+    private Boolean shared = false;
+    private Boolean outlier = false;
 
     public Integer getId() {
         return id;
@@ -59,8 +59,17 @@ public class ExpenseEntry {
         return timestamp;
     }
 
+    public String getTimezone() {
+        return timezone;
+    }
+
     public ExpenseEntry setTimestamp(ZonedDateTime timestamp) {
         this.timestamp = timestamp;
+        return this;
+    }
+
+    public ExpenseEntry setTimezone(String timezone) {
+        this.timezone = timezone;
         return this;
     }
 
@@ -143,5 +152,24 @@ public class ExpenseEntry {
     public ExpenseEntry setOutlier(Boolean outlier) {
         this.outlier = outlier;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "ExpenseEntry{" +
+                "id=" + id +
+                ", owner=" + owner +
+                ", amount=" + amount +
+                ", timestamp=" + timestamp +
+                ", source='" + source + '\'' +
+                ", merchant='" + merchant + '\'' +
+                ", location=" + location +
+                ", category='" + category + '\'' +
+                ", receiptData='" + receiptData + '\'' +
+                ", description='" + description + '\'' +
+                ", details='" + details + '\'' +
+                ", shared=" + shared +
+                ", outlier=" + outlier +
+                '}';
     }
 }

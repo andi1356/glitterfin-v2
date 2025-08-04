@@ -4,19 +4,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class GeoCodeResponse {
     @JsonProperty("place_id")
     private int placeId;
 
-    private String lat;
-    private String lon;
-
     @JsonProperty("display_name")
     private String displayName;
 
+    private String lat;
+    private String lon;
+
+    private String licence;
+    private String osm_type;
+    private String osm_id;
     private Map<String, Object> address;
+    @JsonProperty("boundingbox")
+    private List<String> boundingBox;
 
     public int getPlaceId() {
         return placeId;
@@ -36,5 +40,31 @@ public class GeoCodeResponse {
 
     public Map<String, Object> getAddress() {
         return address;
+    }
+
+    public String getLicence() {
+        return licence;
+    }
+
+    public String getOsm_type() {
+        return osm_type;
+    }
+
+    public String getOsm_id() {
+        return osm_id;
+    }
+
+    public List<String> getBoundingBox() {
+        return boundingBox;
+    }
+
+    @Override
+    public String toString() {
+        return "GeoCodeResponse{" +
+                "placeId=" + placeId +
+                ", displayName='" + displayName + '\'' +
+                ", lat='" + lat + '\'' +
+                ", lon='" + lon + '\'' +
+                '}';
     }
 }

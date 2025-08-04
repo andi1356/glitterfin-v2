@@ -7,10 +7,10 @@
 
   "locationData": {
     "longitude": "26.86214836843467",
-    "latitude": "47.02150164236227",
+    "latitude": "47.02150164236227"
   },
   "category": "Ieseala 🍻",
   "receiptData": "TEST_RECEIPT_DATA",
   "shared": false,
-  "outlier": false
+  "outlier": true
 }

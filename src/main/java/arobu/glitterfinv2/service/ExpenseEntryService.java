@@ -5,7 +5,6 @@ import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
 import arobu.glitterfinv2.model.repository.ExpenseEntryRepository;
-import arobu.glitterfinv2.model.repository.ExpenseOwnerRepository;
 import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
 import arobu.glitterfinv2.service.mapper.ExpenseEntryMapper;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +26,7 @@ public class ExpenseEntryService {
         this.locationService = locationService;
     }
 
-    public ExpenseEntry save(final ExpenseEntryPostDTO expenseEntryPostDTO) throws OwnerNotFoundException {
+    public ExpenseEntry saveExpense(final ExpenseEntryPostDTO expenseEntryPostDTO) throws OwnerNotFoundException {
         ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntity(expenseEntryPostDTO.getOwnerId());
         Location location = locationService.getOrSaveLocationEntity(expenseEntryPostDTO.getLocationData());
 

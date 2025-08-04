@@ -31,9 +31,9 @@ public class ExpenseEntryController {
     @PostMapping
     public ResponseEntity<Map<String,String>> insertExpense(@RequestBody final ExpenseEntryPostDTO dto) {
         Map<String, String> response = new HashMap<>();
-        ExpenseEntry savedEntity = null;
+        ExpenseEntry savedEntity;
         try {
-            savedEntity = expenseEntryService.save(dto);
+            savedEntity = expenseEntryService.saveExpense(dto);
         } catch (OwnerNotFoundException e) {
             LOGGER.error("Owner not found for expense {}",dto, e);
             response.put("status", "failure");
