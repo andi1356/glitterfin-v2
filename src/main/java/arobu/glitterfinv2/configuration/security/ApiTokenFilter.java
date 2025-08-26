@@ -1,5 +1,6 @@
 package arobu.glitterfinv2.configuration.security;
 
+import arobu.glitterfinv2.service.ExpenseOwnerService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,8 +26,12 @@ public class ApiTokenFilter extends OncePerRequestFilter {
     Logger LOGGER = LogManager.getLogger(ApiTokenFilter.class);
 
     private static final String API_KEY_HEADER_NAME = "X-API-KEY";
-    @Value("${security.api-token}")
-    private String API_TOKEN_VALID_VALUE;
+
+    private final ExpenseOwnerService expenseOwnerService;
+
+    public ApiTokenFilter(ExpenseOwnerService expenseOwnerService) {
+        this.expenseOwnerService = expenseOwnerService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
@@ -37,17 +42,21 @@ public class ApiTokenFilter extends OncePerRequestFilter {
         if (apiKey == null) {
             filterChain.doFilter(request, response);
         } else {
-            if (!apiKey.equals(API_TOKEN_VALID_VALUE)) {
-                LOGGER.warn("Invalid API key attempt from IP: {} with User-Agent: {}",
+            String userAgentId = getUserAgentId(request);
+
+            if (!expenseOwnerService.validate(userAgentId, apiKey)) {
+                LOGGER.warn("Invalid API use attempt from IP: {} with User-Agent: {}",
                         request.getRemoteAddr(), request.getHeader("User-Agent"));
 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Invalid API key");
                 return;
             }
-            String userAgentId = getUserAgentId(request);
-            PreAuthenticatedAuthenticationToken apiUser = new PreAuthenticatedAuthenticationToken("api-client-id:" + userAgentId, request.getHeader(API_TOKEN_VALID_VALUE), singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
-            apiUser.setAuthenticated(true);
+
+            PreAuthenticatedAuthenticationToken apiUser = new PreAuthenticatedAuthenticationToken(
+                    userAgentId,
+                    apiKey,
+                    singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
+            apiUser.setDetails("TO BE DEFINED");
             SecurityContextHolder.getContext().setAuthentication(apiUser);
 
             LOGGER.info("Successfully authenticated api user: {}", userAgentId);
