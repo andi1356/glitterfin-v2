@@ -1,7 +1,6 @@
 package arobu.glitterfinv2.model.dto;
 
 public class ExpenseEntryPostDTO {
-    private String ownerId;
     private Double amount;
     private String timestamp;
     private String source;
@@ -13,10 +12,6 @@ public class ExpenseEntryPostDTO {
 
     private Boolean shared;
     private Boolean outlier;
-
-    public String getOwnerId() {
-        return ownerId;
-    }
 
     public Double getAmount() {
         return amount;

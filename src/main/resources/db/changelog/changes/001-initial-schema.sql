@@ -1,8 +1,11 @@
 CREATE TABLE owner
 (
-    id              VARCHAR(255),
-    user_agent_id   VARCHAR(255),
-    PRIMARY KEY (id)
+    user_agent_id VARCHAR(255),
+    api_token     VARCHAR(255) NOT NULL,
+    details       VARCHAR(255) NOT NULL,
+    username      VARCHAR(255) NOT NULL,
+    password      VARCHAR(255) NOT NULL,
+    PRIMARY KEY (user_agent_id)
 );
 
 CREATE TABLE location
@@ -43,8 +46,6 @@ CREATE TABLE test_entity (
                              id BIGINT PRIMARY KEY,
                              name VARCHAR(50) NOT NULL
 );
-
-INSERT INTO owner VALUES ('andi', 'user-agent-123');
 
 --rollback DROP TABLE expense;
 --rollback DROP TABLE owner;

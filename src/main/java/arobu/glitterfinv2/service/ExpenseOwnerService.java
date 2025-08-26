@@ -13,8 +13,13 @@ public class ExpenseOwnerService {
         this.expenseOwnerRepository = expenseOwnerRepository;
     }
 
-    public ExpenseOwner getExpenseOwnerEntity(String id) throws OwnerNotFoundException {
+    public ExpenseOwner getExpenseOwnerEntityById(String id) throws OwnerNotFoundException {
         return expenseOwnerRepository.findById(id)
                 .orElseThrow(() -> new OwnerNotFoundException(id));
+    }
+
+    public boolean validate(String userAgentId, String apiKey) {
+        return expenseOwnerRepository.
+                existsExpenseOwnerByUserAgentIdAndApiToken(userAgentId, apiKey);
     }
 }

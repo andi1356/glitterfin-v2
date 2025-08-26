@@ -24,7 +24,7 @@ public class LocationService {
 
     public Location getOrSaveLocationEntity(final LocationData locationData) {
         GeoCodeResponse geoCodeResponse = reverseGeocode(locationData);
-        LOGGER.info("Geocode Service returned response: {}", geoCodeResponse);
+        LOGGER.info("GeoCode Service returned response: {}", geoCodeResponse);
 
         Location newEntity = LocationMapper.toEntity(geoCodeResponse);
 

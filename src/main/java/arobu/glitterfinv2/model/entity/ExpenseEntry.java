@@ -11,6 +11,7 @@ public class ExpenseEntry {
     Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "owner_id")
     private ExpenseOwner owner;
     private Double amount;
     private ZonedDateTime timestamp;

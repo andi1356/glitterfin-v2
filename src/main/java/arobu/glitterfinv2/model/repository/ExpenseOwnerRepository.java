@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExpenseOwnerRepository extends JpaRepository<ExpenseOwner, String> {
 
+    boolean existsExpenseOwnerByUserAgentIdAndApiToken(String userAgentId, String apiToken);
 }

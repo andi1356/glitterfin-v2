@@ -9,6 +9,7 @@ import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
 import arobu.glitterfinv2.service.mapper.ExpenseEntryMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,7 +28,8 @@ public class ExpenseEntryService {
     }
 
     public ExpenseEntry saveExpense(final ExpenseEntryPostDTO expenseEntryPostDTO) throws OwnerNotFoundException {
-        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntity(expenseEntryPostDTO.getOwnerId());
+        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityById(
+                SecurityContextHolder.getContext().getAuthentication().getName());
         Location location = locationService.getOrSaveLocationEntity(expenseEntryPostDTO.getLocationData());
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryPostDTO, owner, location);
