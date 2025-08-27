@@ -2,6 +2,7 @@ package arobu.glitterfinv2.service.external.geocode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,8 @@ public class GeoCodeResponse {
     public GeoCodeResponse(String lat, String lon) {
         this.lat = lat;
         this.lon = lon;
+        this.displayName = "";
+        this.address = new HashMap<>();
     }
 
     public int getPlaceId() {

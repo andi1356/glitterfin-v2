@@ -41,8 +41,8 @@ public class GeolocationService {
                 return new ObjectMapper().readValue(geocodingResponseString.body(), GeoCodeResponse.class);
             }
         } catch (IOException | InterruptedException e) {
-            LOGGER.error(e);
-            throw new RuntimeException(e);
+            LOGGER.error(e.getMessage());
+            return new GeoCodeResponse(lat, lon);
         }
     }
 }
