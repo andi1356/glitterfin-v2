@@ -12,8 +12,8 @@ public class GeoCodeResponse {
     @JsonProperty("display_name")
     private String displayName;
 
-    private String lat;
-    private String lon;
+    private final String lat;
+    private final String lon;
 
     private String licence;
     private String osm_type;
