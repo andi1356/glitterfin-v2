@@ -22,6 +22,11 @@ public class GeoCodeResponse {
     @JsonProperty("boundingbox")
     private List<String> boundingBox;
 
+    public GeoCodeResponse(String lat, String lon) {
+        this.lat = lat;
+        this.lon = lon;
+    }
+
     public int getPlaceId() {
         return placeId;
     }

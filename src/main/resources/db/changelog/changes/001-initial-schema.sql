@@ -16,7 +16,7 @@ CREATE TABLE location
     postcode         VARCHAR(255),
     display_name     VARCHAR(255),
     latitude         FLOAT NOT NULL,
-    longitude        FLOAT
+    longitude        FLOAT NOT NULL
 );
 
 CREATE TABLE expense (
