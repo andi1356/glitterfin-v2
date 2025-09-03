@@ -1,6 +1,7 @@
 package arobu.glitterfinv2.service;
 
 import arobu.glitterfinv2.service.external.geocode.GeoCodeResponse;
+import arobu.glitterfinv2.service.external.geocode.GeocodeRequestErrorException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

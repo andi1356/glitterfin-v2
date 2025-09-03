@@ -33,7 +33,8 @@ public class ExpenseOwnerService {
         if (passwordEncoder.matches(apiKey, encodedApiToken)) {
             return expenseOwnerRepository.
                 existsExpenseOwnerByUserAgentIdAndApiToken(userAgentId, encodedApiToken);
+        } else {
+            return false;
         }
-        return false;
     }
 }

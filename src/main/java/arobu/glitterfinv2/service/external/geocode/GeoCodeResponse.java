@@ -30,7 +30,7 @@ public class GeoCodeResponse {
         this.address = new HashMap<>();
     }
 
-    public int getPlaceId() {
+  public int getPlaceId() {
         return placeId;
     }
 
