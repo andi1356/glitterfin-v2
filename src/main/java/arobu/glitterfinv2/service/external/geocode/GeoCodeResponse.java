@@ -2,6 +2,7 @@ package arobu.glitterfinv2.service.external.geocode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +13,8 @@ public class GeoCodeResponse {
     @JsonProperty("display_name")
     private String displayName;
 
-    private String lat;
-    private String lon;
+    private final String lat;
+    private final String lon;
 
     private String licence;
     private String osm_type;
@@ -22,7 +23,14 @@ public class GeoCodeResponse {
     @JsonProperty("boundingbox")
     private List<String> boundingBox;
 
-    public int getPlaceId() {
+    public GeoCodeResponse(String lat, String lon) {
+        this.lat = lat;
+        this.lon = lon;
+        this.displayName = "";
+        this.address = new HashMap<>();
+    }
+
+  public int getPlaceId() {
         return placeId;
     }
 

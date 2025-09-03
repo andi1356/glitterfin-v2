@@ -34,12 +34,16 @@ public class GeolocationService {
 
             HttpResponse<String> geocodingResponseString = httpClient.send(geocodingRequest, BodyHandlers.ofString());
             if(geocodingResponseString.statusCode() != 200) {
-                throw new GeocodeRequestErrorException(geocodingResponseString);
+                LOGGER.error("GeoCode Service returned an error response status: {}. " +
+                                "Building custom response containing only latitude and longitude.",
+                        geocodingResponseString.statusCode());
+                return new GeoCodeResponse(lat, lon);
+            } else {
+                return new ObjectMapper().readValue(geocodingResponseString.body(), GeoCodeResponse.class);
             }
-            return new ObjectMapper().readValue(geocodingResponseString.body(), GeoCodeResponse.class);
-        } catch (GeocodeRequestErrorException | IOException | InterruptedException e) {
-            LOGGER.error(e);
-            throw new RuntimeException(e);
+        } catch (IOException | InterruptedException e) {
+            LOGGER.error(e.getMessage());
+            return new GeoCodeResponse(lat, lon);
         }
     }
 }

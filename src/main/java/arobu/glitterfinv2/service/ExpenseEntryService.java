@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ExpenseEntryService {
 
@@ -35,5 +37,10 @@ public class ExpenseEntryService {
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryPostDTO, owner, location);
         LOGGER.info("Persisting expense entry: {}", entity);
         return expenseEntryRepository.save(entity);
+    }
+
+    public List<ExpenseEntry> getExpensesForCurrentUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return expenseEntryRepository.findAllByOwner_Username(username);
     }
 }

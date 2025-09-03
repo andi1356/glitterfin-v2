@@ -12,8 +12,8 @@ public class LocationMapper {
                 .setGeocodePlaceId(geoCodeResponse.getPlaceId())
                 .setLatitude(Double.valueOf(geoCodeResponse.getLat()))
                 .setLongitude(Double.valueOf(geoCodeResponse.getLon()))
-                .setCountryCode(String.valueOf(geoCodeResponse.getAddress().get("country_code")))
-                .setPostcode(String.valueOf(geoCodeResponse.getAddress().get("postcode")))
+                .setCountryCode(String.valueOf(geoCodeResponse.getAddress().getOrDefault("country_code", "")))
+                .setPostcode(String.valueOf(geoCodeResponse.getAddress().getOrDefault("postcode", "")))
                 .setDisplayName(geoCodeResponse.getDisplayName());
 
         return location;
