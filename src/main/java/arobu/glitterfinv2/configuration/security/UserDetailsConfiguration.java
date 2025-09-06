@@ -43,11 +43,10 @@ public class UserDetailsConfiguration {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(
-            UserDetailsService uds, PasswordEncoder encoder) {
-        DaoAuthenticationProvider p = new DaoAuthenticationProvider(uds);
-        p.setPasswordEncoder(encoder);
-        return p;
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
     }
 
     @Bean

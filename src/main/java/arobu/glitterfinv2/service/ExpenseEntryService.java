@@ -1,6 +1,7 @@
 package arobu.glitterfinv2.service;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryPostDTO;
+import arobu.glitterfinv2.model.dto.ExpenseFrontendDTO;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class ExpenseEntryService {
@@ -39,8 +41,11 @@ public class ExpenseEntryService {
         return expenseEntryRepository.save(entity);
     }
 
-    public List<ExpenseEntry> getExpensesForCurrentUser() {
+    public List<ExpenseFrontendDTO> getExpensesForCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return expenseEntryRepository.findAllByOwner_Username(username);
+        List<ExpenseEntry> expenses = expenseEntryRepository.findAllByOwner_Username(username);
+        return expenses.stream()
+                .map(ExpenseEntryMapper::toFrontend)
+                .toList();
     }
 }

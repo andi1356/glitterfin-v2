@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${appName}">Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>Expenses</h1>
+<main>
+    <div class="container">
+        <div th:if="${user}" class="user-info">
+            <h1>These are <span th:text="${user.name}">user</span>'s expenses</h1>
+        </div>
+
+
+        <!-- Example of iteration -->
+        <ul th:if="${expenses}">
+            <li th:each="expense : ${expenses}" th:text="${expense}">Expense</li>
+        </ul>
+    </div>
+</main>
+</body>
+</html>

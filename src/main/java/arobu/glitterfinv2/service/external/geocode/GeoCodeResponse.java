@@ -13,8 +13,8 @@ public class GeoCodeResponse {
     @JsonProperty("display_name")
     private String displayName;
 
-    private final String lat;
-    private final String lon;
+    private String lat;
+    private String lon;
 
     private String licence;
     private String osm_type;
@@ -22,6 +22,9 @@ public class GeoCodeResponse {
     private Map<String, Object> address;
     @JsonProperty("boundingbox")
     private List<String> boundingBox;
+
+    public GeoCodeResponse() {
+    }
 
     public GeoCodeResponse(String lat, String lon) {
         this.lat = lat;
