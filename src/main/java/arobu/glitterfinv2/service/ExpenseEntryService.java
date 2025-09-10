@@ -13,8 +13,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.reverseOrder;
 
 @Service
 public class ExpenseEntryService {
@@ -46,6 +50,7 @@ public class ExpenseEntryService {
         List<ExpenseEntry> expenses = expenseEntryRepository.findAllByOwner_Username(username);
         return expenses.stream()
                 .map(ExpenseEntryMapper::toFrontend)
+                .sorted(comparing(ExpenseFrontendDTO::getTimestamp).reversed())
                 .toList();
     }
 }

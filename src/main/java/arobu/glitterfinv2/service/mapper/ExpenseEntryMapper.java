@@ -49,7 +49,7 @@ public class ExpenseEntryMapper {
                 .setCategory(expense.getCategory())
                 .setLocation(expense.getLocation().getDisplayName())
                 .setMerchant(expense.getMerchant())
-                .setTimestamp(expense.getTimestamp().toString());
+                .setTimestamp(expense.getTimestamp());
     }
 
     private String extractMerchant(final ExpenseEntryPostDTO dto) {

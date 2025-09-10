@@ -7,18 +7,35 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>Expenses</h1>
+<div th:insert="~{fragments/header :: header}"></div>
 <main>
     <div class="container">
-        <div th:if="${user}" class="user-info">
-            <h1>These are <span th:text="${user.name}">user</span>'s expenses</h1>
+        <h1>Expenses</h1>
+        <div th:if="${username}" class="user-info">
+            <h2>These are <span th:text="${username}">user</span>'s expenses</h2>
         </div>
 
 
-        <!-- Example of iteration -->
-        <ul th:if="${expenses}">
-            <li th:each="expense : ${expenses}" th:text="${expense}">Expense</li>
-        </ul>
+        <table th:if="${expenses}">
+            <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Merchant</th>
+                <th>Location</th>
+                <th>Category</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="expense : ${expenses}">
+                <td th:text="${expense.amount}">Amount</td>
+                <td th:text="${expense.timestamp}">Timestamp</td>
+                <td th:text="${expense.merchant}">Merchant</td>
+                <td th:text="${expense.location}">Location</td>
+                <td th:text="${expense.category}">Category</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </main>
 </body>
