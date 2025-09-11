@@ -39,9 +39,6 @@ public class ExpenseEntryController {
             response.put("status", "failure");
             response.put("reason", "Owner not found for expense " + dto);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            // vreau un un response code nasol
-            // Ce se intampla daca se arunca eroarea si o prind aici?
-            // mai e logata oare?
         }
 
         response.put("status", "success");

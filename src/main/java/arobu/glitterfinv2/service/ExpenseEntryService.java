@@ -30,7 +30,7 @@ public class ExpenseEntryService {
     }
 
     public ExpenseEntry saveExpense(final ExpenseEntryPostDTO expenseEntryPostDTO) throws OwnerNotFoundException {
-        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityById(
+        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityByUsername(
                 SecurityContextHolder.getContext().getAuthentication().getName());
         Location location = locationService.getOrSaveLocationEntity(expenseEntryPostDTO.getLocationData());
 

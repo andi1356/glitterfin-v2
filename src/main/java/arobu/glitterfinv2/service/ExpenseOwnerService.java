@@ -2,10 +2,11 @@ package arobu.glitterfinv2.service;
 
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.repository.ExpenseOwnerRepository;
-import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ExpenseOwnerService {
@@ -15,26 +16,20 @@ public class ExpenseOwnerService {
         this.expenseOwnerRepository = expenseOwnerRepository;
     }
 
-    public ExpenseOwner getExpenseOwnerEntityById(String id) throws OwnerNotFoundException {
-        return expenseOwnerRepository.findById(id)
-                .orElseThrow(() -> new OwnerNotFoundException(id));
-    }
-
     public ExpenseOwner getExpenseOwnerEntityByUsername(String username) {
         return expenseOwnerRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
-    public boolean validate(String userAgentId, String apiKey) {
-        String encodedApiToken = expenseOwnerRepository
-                .getExpenseOwnerByUserAgentId(userAgentId)
-                .getApiToken();
+    public Optional<ExpenseOwner> getExpenseOwner(String userAgentId, String apiKey) {
+        ExpenseOwner expenseOwner = expenseOwnerRepository
+                .getExpenseOwnerByUserAgentId(userAgentId);
+
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        if (passwordEncoder.matches(apiKey, encodedApiToken)) {
-            return expenseOwnerRepository.
-                existsExpenseOwnerByUserAgentIdAndApiToken(userAgentId, encodedApiToken);
+        if (passwordEncoder.matches(apiKey, expenseOwner.getApiToken())) {
+            return Optional.of(expenseOwner);
         } else {
-            return false;
+            return Optional.empty();
         }
     }
 }

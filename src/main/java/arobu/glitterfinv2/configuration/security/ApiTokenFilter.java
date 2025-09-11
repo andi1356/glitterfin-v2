@@ -45,22 +45,23 @@ public class ApiTokenFilter extends OncePerRequestFilter {
         } else {
             String userAgentId = getUserAgentId(request);
 
-            if (!expenseOwnerService.validate(userAgentId, apiKey)) {
-                LOGGER.warn("Invalid API use attempt from IP: {} with User-Agent: {}",
-                        request.getRemoteAddr(), request.getHeader("User-Agent"));
+            expenseOwnerService.getExpenseOwner(userAgentId, apiKey)
+                    .ifPresentOrElse(expenseOwner -> {
+                        PreAuthenticatedAuthenticationToken apiUser = new PreAuthenticatedAuthenticationToken(
+                                expenseOwner.getUsername(),
+                                apiKey,
+                                singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
+                        apiUser.setDetails("TO BE DEFINED");
+                        SecurityContextHolder.getContext().setAuthentication(apiUser);
 
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
+                        LOGGER.info("Successfully authenticated api user: {} with api agent: {}",
+                                expenseOwner.getUsername(), expenseOwner.getUserAgentId());
+                    },() -> {
+                        LOGGER.warn("Invalid API use attempt from IP: {} with User-Agent: {}",
+                                request.getRemoteAddr(), request.getHeader("User-Agent"));
 
-            PreAuthenticatedAuthenticationToken apiUser = new PreAuthenticatedAuthenticationToken(
-                    userAgentId,
-                    apiKey,
-                    singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
-            apiUser.setDetails("TO BE DEFINED");
-            SecurityContextHolder.getContext().setAuthentication(apiUser);
-
-            LOGGER.info("Successfully authenticated api user: {}", userAgentId);
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    });
 
             filterChain.doFilter(request, response);
         }
