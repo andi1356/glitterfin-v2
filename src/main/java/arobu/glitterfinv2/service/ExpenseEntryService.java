@@ -6,6 +6,7 @@ import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
 import arobu.glitterfinv2.model.repository.ExpenseEntryRepository;
+import arobu.glitterfinv2.service.exception.ExpenseNotFoundException;
 import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
 import arobu.glitterfinv2.service.mapper.ExpenseEntryMapper;
 import org.apache.logging.log4j.LogManager;
@@ -13,12 +14,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
-import static java.util.Comparator.reverseOrder;
 
 @Service
 public class ExpenseEntryService {
@@ -52,5 +50,30 @@ public class ExpenseEntryService {
                 .map(ExpenseEntryMapper::toFrontend)
                 .sorted(comparing(ExpenseFrontendDTO::getTimestamp).reversed())
                 .toList();
+    }
+
+    public ExpenseEntry getExpenseById(Integer id) throws ExpenseNotFoundException {
+        return expenseEntryRepository.findById(id)
+                .orElseThrow(() -> new ExpenseNotFoundException(id));
+    }
+
+    public ExpenseEntry updateExpense(Integer id, ExpenseEntryPostDTO expenseEntryPostDTO) throws OwnerNotFoundException, ExpenseNotFoundException {
+        ExpenseEntry existing = getExpenseById(id);
+
+        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityById(
+                SecurityContextHolder.getContext().getAuthentication().getName());
+        Location location = locationService.getOrSaveLocationEntity(expenseEntryPostDTO.getLocationData());
+
+        ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryPostDTO, owner, location);
+        entity.setId(existing.getId());
+        LOGGER.info("Updating expense entry: {}", entity);
+        return expenseEntryRepository.save(entity);
+    }
+
+    public void deleteExpense(Integer id) throws ExpenseNotFoundException {
+        if (!expenseEntryRepository.existsById(id)) {
+            throw new ExpenseNotFoundException(id);
+        }
+        expenseEntryRepository.deleteById(id);
     }
 }

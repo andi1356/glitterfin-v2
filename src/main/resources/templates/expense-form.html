@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${appName}">Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+<main>
+    <div class="container">
+        <h1 th:text="${expenseId} == null ? 'New Expense' : 'Edit Expense'"></h1>
+        <form th:action="${expenseId} == null ? '/expenses' : '/expenses/' + expenseId" th:object="${expense}" method="post">
+            <label>Amount: <input type="text" th:field="*{amount}"/></label><br/>
+            <label>Timestamp: <input type="text" th:field="*{timestamp}"/></label><br/>
+            <label>Source: <input type="text" th:field="*{source}"/></label><br/>
+            <label>Merchant: <input type="text" th:field="*{merchant}"/></label><br/>
+            <label>Category: <input type="text" th:field="*{category}"/></label><br/>
+            <label>Latitude: <input type="text" th:field="*{locationData.latitude}"/></label><br/>
+            <label>Longitude: <input type="text" th:field="*{locationData.longitude}"/></label><br/>
+            <label>Shared: <input type="checkbox" th:field="*{shared}"/></label><br/>
+            <label>Outlier: <input type="checkbox" th:field="*{outlier}"/></label><br/>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>
