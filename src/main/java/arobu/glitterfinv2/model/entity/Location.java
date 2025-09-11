@@ -17,6 +17,12 @@ public class Location {
     @Column(nullable = false)
     Double longitude;
 
+    String country;
+    String county;
+    String city;
+    String road;
+    String houseNumber;
+
     public Integer getId() {
         return id;
     }
@@ -80,17 +86,65 @@ public class Location {
         return this;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public Location setCountry(String country) {
+        this.country = country;
+        return this;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public Location setCounty(String county) {
+        this.county = county;
+        return this;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public Location setCity(String city) {
+        this.city = city;
+        return this;
+    }
+
+    public String getRoad() {
+        return road;
+    }
+
+    public Location setRoad(String road) {
+        this.road = road;
+        return this;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public Location setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Location{" +
                 "id=" + id +
                 ", geocodePlaceId=" + geocodePlaceId +
-                ", countryCode='" + countryCode + '\'' +
                 ", postcode='" + postcode + '\'' +
                 ", displayName='" + displayName + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", country='" + country + '\'' +
+                ", county='" + county + '\'' +
+                ", city='" + city + '\'' +
+                ", road='" + road + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
                 '}';
     }
 }
-

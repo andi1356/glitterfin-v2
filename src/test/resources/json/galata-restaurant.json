@@ -1,0 +1,15 @@
+{
+  "amount": 100,
+  "timestamp": "2025-05-18T20:00:36+03:00",
+  "source": "REVOLUT",
+  "merchant": "Pizzeria Alila",
+
+  "locationData": {
+    "longitude": "27.571586",
+    "latitude": "47.150841"
+  },
+  "category": "Restaurant",
+  "receiptData": "TEST_RECEIPT_DATA",
+  "shared": false,
+  "outlier": true
+}

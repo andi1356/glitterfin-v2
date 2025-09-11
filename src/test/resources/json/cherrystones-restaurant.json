@@ -1,0 +1,15 @@
+{
+  "amount": 10000,
+  "timestamp": "2025-05-18T20:01:36-04:00",
+  "source": "REVOLUT",
+  "merchant": "Cherrystones Restaurant",
+
+  "locationData": {
+    "longitude": "-68.204408",
+    "latitude": "44.387371"
+  },
+  "category": "Restaurant",
+  "receiptData": "TEST_RECEIPT_DATA",
+  "shared": false,
+  "outlier": true
+}

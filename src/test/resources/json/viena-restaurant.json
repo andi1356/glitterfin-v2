@@ -1,0 +1,15 @@
+{
+  "amount": 10000,
+  "timestamp": "2025-05-18T20:01:36+03:00",
+  "source": "REVOLUT",
+  "merchant": "Wein Restaurant",
+
+  "locationData": {
+    "longitude": "16.367818",
+    "latitude": "48.203056"
+  },
+  "category": "Restaurant",
+  "receiptData": "TEST_RECEIPT_DATA",
+  "shared": false,
+  "outlier": true
+}

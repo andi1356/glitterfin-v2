@@ -1,0 +1,15 @@
+{
+  "amount": 0,
+  "timestamp": "2025-05-18T20:02:36-04:00",
+  "source": "REVOLUT",
+  "merchant": "Pub In NYC",
+
+  "locationData": {
+    "longitude": "-73.992441",
+    "latitude": "40.752611"
+  },
+  "category": "Pub",
+  "receiptData": "TEST_RECEIPT_DATA",
+  "shared": false,
+  "outlier": true
+}
