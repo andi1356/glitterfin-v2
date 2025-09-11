@@ -9,10 +9,7 @@ import arobu.glitterfinv2.model.repository.ExpenseEntryRepository;
 import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ExpenseEntryService {
@@ -29,18 +26,12 @@ public class ExpenseEntryService {
         this.locationService = locationService;
     }
 
-    public ExpenseEntry saveExpense(final ExpenseEntryPostDTO expenseEntryPostDTO) throws OwnerNotFoundException {
-        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityByUsername(
-                SecurityContextHolder.getContext().getAuthentication().getName());
+    public ExpenseEntry saveExpense(final ExpenseEntryPostDTO expenseEntryPostDTO, final String username) throws OwnerNotFoundException {
+        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
         Location location = locationService.getOrSaveLocationEntity(expenseEntryPostDTO.getLocationData());
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryPostDTO, owner, location);
         LOGGER.info("Persisting expense entry: {}", entity);
         return expenseEntryRepository.save(entity);
-    }
-
-    public List<ExpenseEntry> getExpensesForCurrentUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return expenseEntryRepository.findAllByOwner_Username(username);
     }
 }

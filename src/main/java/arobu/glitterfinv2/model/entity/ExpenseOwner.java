@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity(name = "owner")
-public class ExpenseOwner {
+public class ExpenseOwner{
     @Id
     private String username;
     private String userAgentId;
