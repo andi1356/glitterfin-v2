@@ -3,6 +3,7 @@ package arobu.glitterfinv2.model.dto;
 import java.time.ZonedDateTime;
 
 public class ExpenseFrontendDTO {
+    private Integer id;
     private Double amount;
     private ZonedDateTime timestamp;
     private String merchant;
@@ -11,6 +12,15 @@ public class ExpenseFrontendDTO {
     private String category;
 
     public ExpenseFrontendDTO() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public ExpenseFrontendDTO setId(Integer id) {
+        this.id = id;
+        return this;
     }
 
     public Double getAmount() {

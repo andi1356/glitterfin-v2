@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${expense.id} != null ? 'Edit Expense' : 'Add Expense'">Expense</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+<main>
+    <div class="container">
+        <h1 th:text="${expense.id} != null ? 'Edit Expense' : 'Add Expense'">Expense</h1>
+        <form th:action="@{${expense.id} != null ? '/expenses/' + ${expense.id} : '/expenses'}" th:object="${expense}" method="post">
+            <input type="hidden" th:field="*{id}" th:if="${expense.id}" />
+            <label>Amount</label>
+            <input type="number" step="0.01" th:field="*{amount}" />
+            <label>Timestamp</label>
+            <input type="text" th:field="*{timestamp}" />
+            <label>Source</label>
+            <input type="text" th:field="*{source}" />
+            <label>Merchant</label>
+            <input type="text" th:field="*{merchant}" />
+            <label>Category</label>
+            <input type="text" th:field="*{category}" />
+            <label>Latitude</label>
+            <input type="text" th:field="*{latitude}" />
+            <label>Longitude</label>
+            <input type="text" th:field="*{longitude}" />
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

@@ -45,6 +45,7 @@ public class ExpenseEntryMapper {
         ExpenseFrontendDTO expenseFrontendDTO = new ExpenseFrontendDTO();
 
         return expenseFrontendDTO
+                .setId(expense.getId())
                 .setAmount(expense.getAmount())
                 .setCategory(expense.getCategory())
                 .setLocation(expense.getLocation().getDisplayName())
