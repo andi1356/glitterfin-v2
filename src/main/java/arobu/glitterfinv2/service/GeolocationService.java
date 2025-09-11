@@ -1,7 +1,6 @@
 package arobu.glitterfinv2.service;
 
 import arobu.glitterfinv2.service.external.geocode.GeoCodeResponse;
-import arobu.glitterfinv2.service.external.geocode.GeocodeRequestErrorException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,10 +32,10 @@ public class GeolocationService {
                     .timeout(Duration.ofMillis(2000)).build();
 
             HttpResponse<String> geocodingResponseString = httpClient.send(geocodingRequest, BodyHandlers.ofString());
-            if(geocodingResponseString.statusCode() != 200) {
-                LOGGER.error("GeoCode Service returned an error response status: {}. " +
-                                "Building custom response containing only latitude and longitude.",
-                        geocodingResponseString.statusCode());
+            if(geocodingResponseString.statusCode() != 200 || geocodingResponseString.body().contains("error")) {
+                LOGGER.error("GeoCode Service returned an error; Response Status: {} Body: {} ",
+                        geocodingResponseString.statusCode(), geocodingResponseString.body());
+                LOGGER.info("Building custom response containing only latitude and longitude");
                 return new GeoCodeResponse(lat, lon);
             } else {
                 return new ObjectMapper().readValue(geocodingResponseString.body(), GeoCodeResponse.class);

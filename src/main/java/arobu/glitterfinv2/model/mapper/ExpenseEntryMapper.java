@@ -1,4 +1,4 @@
-package arobu.glitterfinv2.service.mapper;
+package arobu.glitterfinv2.model.mapper;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryPostDTO;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;

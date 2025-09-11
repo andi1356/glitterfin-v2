@@ -1,0 +1,15 @@
+{
+  "amount": 200,
+  "timestamp": "2025-05-18T20:00:36+03:00",
+  "source": "REVOLUT",
+  "merchant": "Fenice Restaurant",
+
+  "locationData": {
+    "longitude": "27.586770",
+    "latitude": "47.155721"
+  },
+  "category": "Restaurant",
+  "receiptData": "TEST_RECEIPT_DATA",
+  "shared": false,
+  "outlier": true
+}

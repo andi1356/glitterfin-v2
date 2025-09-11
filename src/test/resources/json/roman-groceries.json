@@ -1,0 +1,15 @@
+{
+  "amount": 104.54,
+  "timestamp": "2025-06-19T15:33:36+03:00",
+  "source": "CEC Bank",
+  "merchant": "Carrefour",
+
+  "locationData": {
+    "longitude": "26.922793",
+    "latitude": "46.937392"
+  },
+  "category": "Groceries",
+  "receiptData": "TEST_RECEIPT_DATA",
+  "shared": false,
+  "outlier": true
+}

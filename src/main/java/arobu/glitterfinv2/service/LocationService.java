@@ -4,7 +4,7 @@ import arobu.glitterfinv2.model.dto.LocationData;
 import arobu.glitterfinv2.model.entity.Location;
 import arobu.glitterfinv2.model.repository.LocationRepository;
 import arobu.glitterfinv2.service.external.geocode.GeoCodeResponse;
-import arobu.glitterfinv2.service.mapper.LocationMapper;
+import arobu.glitterfinv2.model.mapper.LocationMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class LocationService {
     }
 
     public Location getOrSaveLocationEntity(final LocationData locationData) {
-        GeoCodeResponse geoCodeResponse = reverseGeocode(locationData);
+        GeoCodeResponse geoCodeResponse = geolocationService.reverseGeocode(locationData.getLatitude(), locationData.getLongitude());
         LOGGER.info("GeoCode Service returned response: {}", geoCodeResponse);
 
         Location newEntity = LocationMapper.toEntity(geoCodeResponse);
@@ -44,9 +44,5 @@ public class LocationService {
                     LOGGER.info("Persisting location entity: {}", newEntity);
                     return locationRepository.save(newEntity);
                 });
-    }
-
-    public GeoCodeResponse reverseGeocode(LocationData locationData) {
-        return geolocationService.reverseGeocode(locationData.getLatitude(), locationData.getLongitude());
     }
 }
