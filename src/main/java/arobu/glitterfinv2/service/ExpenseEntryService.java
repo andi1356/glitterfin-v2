@@ -1,7 +1,9 @@
 package arobu.glitterfinv2.service;
 
+import arobu.glitterfinv2.model.dto.ExpenseEntryCrudDTO;
 import arobu.glitterfinv2.model.dto.ExpenseEntryPostDTO;
 import arobu.glitterfinv2.model.dto.ExpenseFrontendDTO;
+import arobu.glitterfinv2.model.dto.LocationData;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
@@ -13,12 +15,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
-import static java.util.Comparator.reverseOrder;
 
 @Service
 public class ExpenseEntryService {
@@ -43,6 +42,51 @@ public class ExpenseEntryService {
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryPostDTO, owner, location);
         LOGGER.info("Persisting expense entry: {}", entity);
         return expenseEntryRepository.save(entity);
+    }
+
+    public ExpenseEntry saveExpense(final ExpenseEntryCrudDTO dto) throws OwnerNotFoundException {
+        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityById(
+                SecurityContextHolder.getContext().getAuthentication().getName());
+        LocationData locationData = new LocationData()
+                .setLatitude(dto.getLatitude())
+                .setLongitude(dto.getLongitude());
+        Location location = locationService.getOrSaveLocationEntity(locationData);
+
+        ExpenseEntry entity = dto.getId() != null ?
+                expenseEntryRepository.findById(dto.getId()).orElse(new ExpenseEntry()) : new ExpenseEntry();
+
+        entity.setOwner(owner)
+                .setAmount(dto.getAmount())
+                .setTimestamp(java.time.ZonedDateTime.parse(dto.getTimestamp()))
+                .setTimezone(java.time.ZonedDateTime.parse(dto.getTimestamp()).getZone().getId())
+                .setSource(dto.getSource())
+                .setMerchant(dto.getMerchant())
+                .setCategory(dto.getCategory())
+                .setLocation(location);
+
+        LOGGER.info("Persisting expense entry: {}", entity);
+        return expenseEntryRepository.save(entity);
+    }
+
+    public ExpenseEntryCrudDTO getExpense(Integer id) {
+        ExpenseEntry expense = expenseEntryRepository.findById(id).orElseThrow();
+        return new ExpenseEntryCrudDTO()
+                .setId(expense.getId())
+                .setAmount(expense.getAmount())
+                .setTimestamp(expense.getTimestamp().toString())
+                .setSource(expense.getSource())
+                .setMerchant(expense.getMerchant())
+                .setCategory(expense.getCategory())
+                .setLatitude(expense.getLocation().getLatitude().toString())
+                .setLongitude(expense.getLocation().getLongitude().toString());
+    }
+
+    public void deleteExpense(Integer id) {
+        expenseEntryRepository.deleteById(id);
+    }
+
+    public List<ExpenseEntry> getAllExpenses() {
+        return expenseEntryRepository.findAll();
     }
 
     public List<ExpenseFrontendDTO> getExpensesForCurrentUser() {
