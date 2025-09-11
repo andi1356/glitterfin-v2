@@ -2,6 +2,7 @@ package arobu.glitterfinv2.service.mapper;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryPostDTO;
 import arobu.glitterfinv2.model.dto.ExpenseFrontendDTO;
+import arobu.glitterfinv2.model.dto.LocationData;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
@@ -45,11 +46,29 @@ public class ExpenseEntryMapper {
         ExpenseFrontendDTO expenseFrontendDTO = new ExpenseFrontendDTO();
 
         return expenseFrontendDTO
+                .setId(expense.getId())
                 .setAmount(expense.getAmount())
                 .setCategory(expense.getCategory())
                 .setLocation(expense.getLocation().getDisplayName())
                 .setMerchant(expense.getMerchant())
                 .setTimestamp(expense.getTimestamp());
+    }
+
+    public static ExpenseEntryPostDTO toPostDto(ExpenseEntry expense) {
+        LocationData locationData = new LocationData()
+                .setLatitude(expense.getLocation().getLatitude().toString())
+                .setLongitude(expense.getLocation().getLongitude().toString());
+
+        return new ExpenseEntryPostDTO()
+                .setAmount(expense.getAmount())
+                .setTimestamp(expense.getTimestamp().toString())
+                .setSource(expense.getSource())
+                .setMerchant(expense.getMerchant())
+                .setLocationData(locationData)
+                .setCategory(expense.getCategory())
+                .setReceiptData(expense.getReceiptData())
+                .setShared(expense.getShared())
+                .setOutlier(expense.getOutlier());
     }
 
     private String extractMerchant(final ExpenseEntryPostDTO dto) {

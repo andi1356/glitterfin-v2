@@ -14,7 +14,9 @@
         <div th:if="${username}" class="user-info">
             <h2>These are <span th:text="${username}">user</span>'s expenses</h2>
         </div>
-
+        <div class="actions">
+            <a href="/expenses/new">Add Expense</a>
+        </div>
 
         <table th:if="${expenses}">
             <thead>
@@ -24,6 +26,7 @@
                 <th>Merchant</th>
                 <th>Location</th>
                 <th>Category</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -33,6 +36,12 @@
                 <td th:text="${expense.merchant}">Merchant</td>
                 <td th:text="${expense.location}">Location</td>
                 <td th:text="${expense.category}">Category</td>
+                <td>
+                    <a th:href="@{/expenses/edit/{id}(id=${expense.id})}">Edit</a>
+                    <form th:action="@{/expenses/{id}/delete(id=${expense.id})}" method="post" style="display:inline">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

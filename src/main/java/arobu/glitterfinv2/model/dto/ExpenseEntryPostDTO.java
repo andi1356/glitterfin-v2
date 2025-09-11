@@ -58,4 +58,39 @@ public class ExpenseEntryPostDTO {
         this.outlier = outlier;
         return this;
     }
+
+    public ExpenseEntryPostDTO setAmount(Double amount) {
+        this.amount = amount;
+        return this;
+    }
+
+    public ExpenseEntryPostDTO setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+        return this;
+    }
+
+    public ExpenseEntryPostDTO setSource(String source) {
+        this.source = source;
+        return this;
+    }
+
+    public ExpenseEntryPostDTO setMerchant(String merchant) {
+        this.merchant = merchant;
+        return this;
+    }
+
+    public ExpenseEntryPostDTO setLocationData(LocationData locationData) {
+        this.locationData = locationData;
+        return this;
+    }
+
+    public ExpenseEntryPostDTO setCategory(String category) {
+        this.category = category;
+        return this;
+    }
+
+    public ExpenseEntryPostDTO setReceiptData(String receiptData) {
+        this.receiptData = receiptData;
+        return this;
+    }
 }
