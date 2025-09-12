@@ -11,4 +11,14 @@ public class LocationData {
     public String getLongitude() {
         return longitude;
     }
+
+    public LocationData setLatitude(String latitude) {
+        this.latitude = latitude;
+        return this;
+    }
+
+    public LocationData setLongitude(String longitude) {
+        this.longitude = longitude;
+        return this;
+    }
 }

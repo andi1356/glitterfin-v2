@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Expenses</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main>
+    <div class="container">
+        <h2>Your Expenses</h2>
+
+        <form th:action="@{/expenses}" th:object="${expense}" method="post">
+            <input type="number" step="0.01" th:field="*{amount}" placeholder="Amount" required/>
+            <input type="text" th:field="*{timestamp}" placeholder="Timestamp" required/>
+            <input type="text" th:field="*{merchant}" placeholder="Merchant" required/>
+            <input type="text" th:field="*{locationData.latitude}" placeholder="Latitude" required/>
+            <input type="text" th:field="*{locationData.longitude}" placeholder="Longitude" required/>
+            <button type="submit">Add</button>
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Timestamp</th>
+                <th>Merchant</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="exp : ${expenses}">
+                <td th:text="${exp.amount}"></td>
+                <td th:text="${exp.timestamp}"></td>
+                <td th:text="${exp.merchant}"></td>
+                <td th:text="${exp.location}"></td>
+                <td>
+                    <a th:href="@{'/expenses/' + ${exp.id}}">Edit</a>
+                    <form th:action="@{'/expenses/' + ${exp.id} + '/delete'}" method="post" style="display:inline">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
+
