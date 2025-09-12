@@ -1,6 +1,7 @@
 package arobu.glitterfinv2.model.mapper;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryPostDTO;
+import arobu.glitterfinv2.model.dto.ExpenseEntryQuickShowDTO;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
@@ -38,6 +39,15 @@ public class ExpenseEntryMapper {
         }
 
         return expense;
+    }
+
+    public static ExpenseEntryQuickShowDTO toQuickShowDTO(final ExpenseEntry entity) {
+        return new ExpenseEntryQuickShowDTO()
+                .setId(entity.getId())
+                .setAmount(entity.getAmount())
+                .setTimestamp(entity.getTimestamp())
+                .setMerchant(entity.getMerchant())
+                .setLocation(entity.getLocation() != null ? entity.getLocation().getDisplayName() : null);
     }
 
     private String extractMerchant(final ExpenseEntryPostDTO dto) {

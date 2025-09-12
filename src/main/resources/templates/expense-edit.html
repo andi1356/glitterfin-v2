@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Expense</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main>
+    <div class="container">
+        <h2>Edit Expense</h2>
+        <form th:action="@{'/expenses/' + ${expenseId}}" th:object="${expense}" method="post">
+            <input type="number" step="0.01" th:field="*{amount}" placeholder="Amount" required/>
+            <input type="text" th:field="*{timestamp}" placeholder="Timestamp" required/>
+            <input type="text" th:field="*{merchant}" placeholder="Merchant" required/>
+            <input type="text" th:field="*{locationData.latitude}" placeholder="Latitude" required/>
+            <input type="text" th:field="*{locationData.longitude}" placeholder="Longitude" required/>
+            <button type="submit">Save</button>
+        </form>
+        <a th:href="@{/expenses}">Back</a>
+    </div>
+</main>
+</body>
+</html>
+
