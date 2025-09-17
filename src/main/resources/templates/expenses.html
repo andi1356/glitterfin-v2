@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+<main>
+    <div class="container">
+        <h1>Expenses</h1>
+        <div th:if="${username}" class="user-info">
+            <h2>These are <span th:text="${username}">user</span>'s expenses</h2>
+        </div>
+
+        <form th:action="@{/expenses}" th:object="${expense}" method="post">
+            <input type="number" step="0.01" th:field="*{amount}" placeholder="Amount" required/>
+            <input type="text" th:field="*{timestamp}" placeholder="Timestamp" required/>
+            <input type="text" th:field="*{merchant}" placeholder="Merchant" required/>
+            <button type="submit">Add</button>
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Timestamp</th>
+                <th>Merchant</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="exp : ${expenses}">
+                <td th:text="${exp.amount}"></td>
+                <td th:text="${exp.timestamp}"></td>
+                <td th:text="${exp.merchant}"></td>
+                <td th:text="${exp.location}"></td>
+                <td>
+                    <a th:href="@{'/expenses/' + ${exp.id}}">Edit</a>
+                    <form th:action="@{'/expenses/' + ${exp.id} + '/delete'}" method="post" style="display:inline">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
