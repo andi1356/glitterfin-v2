@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Expense | Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/expenses.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+<main class="page">
+    <section class="form-card">
+        <div class="form-card__header">
+            <div>
+                <a class="btn-link" th:href="@{/expenses}">&larr; Back to expenses</a>
+                <h1>Edit expense</h1>
+                <p class="muted" th:if="${expense != null && expense.timestamp != null}"
+                   th:text="${'Last updated: ' + (#temporals.format(expense.timestamp, 'MMM d, yyyy HH:mm z'))}"></p>
+            </div>
+            <div class="amount-pill" th:if="${expense != null && expense.amount != null}"
+                 th:text="${'$' + #numbers.formatDecimal(expense.amount, 1, 'DEFAULT', 2, 'DEFAULT')}">$0.00</div>
+        </div>
+
+        <section class="metadata" th:if="${expense != null}">
+            <div>
+                <span class="label">Merchant</span>
+                <span class="value" th:text="${expense.merchant != null ? expense.merchant : '—'}"></span>
+            </div>
+            <div>
+                <span class="label">Location</span>
+                <span class="value" th:text="${expense.location != null ? expense.location.displayName : '—'}"></span>
+            </div>
+            <div>
+                <span class="label">Source</span>
+                <span class="value" th:text="${expense.source != null ? expense.source : '—'}"></span>
+            </div>
+        </section>
+
+        <form th:action="@{/expenses/{id}/edit(id=${expenseForm.id})}" th:object="${expenseForm}" method="post" class="form-grid">
+            <div class="form-field">
+                <label for="amount">Amount</label>
+                <input type="number" step="0.01" id="amount" th:field="*{amount}" required>
+                <div class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+            </div>
+            <div class="form-field">
+                <label for="occurredAt">Date &amp; time</label>
+                <input type="datetime-local" id="occurredAt" th:field="*{occurredAt}">
+            </div>
+            <div class="form-field">
+                <label for="category">Category</label>
+                <input type="text" id="category" th:field="*{category}" placeholder="e.g. Dining">
+            </div>
+            <div class="form-field">
+                <label for="merchant">Merchant</label>
+                <input type="text" id="merchant" th:field="*{merchant}" placeholder="Merchant name">
+            </div>
+            <div class="form-field">
+                <label for="source">Source</label>
+                <input type="text" id="source" th:field="*{source}" placeholder="Bank, card, etc.">
+            </div>
+            <div class="form-field form-field--wide">
+                <label for="description">Description</label>
+                <textarea id="description" th:field="*{description}" rows="3" placeholder="Add internal notes"></textarea>
+            </div>
+            <div class="form-field checkbox-field">
+                <input type="checkbox" id="shared" th:field="*{shared}">
+                <label for="shared">Shared expense</label>
+            </div>
+            <div class="form-field checkbox-field">
+                <input type="checkbox" id="outlier" th:field="*{outlier}">
+                <label for="outlier">Mark as outlier</label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Save changes</button>
+                <a class="btn-secondary" th:href="@{/expenses}">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>

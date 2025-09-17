@@ -1,0 +1,26 @@
+.table-card .actions {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.table-card .actions form {
+    margin: 0;
+}
+
+.table-card .actions form button {
+    padding: 0;
+}
+
+.table-card .actions a + form {
+    margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+    .table-card {
+        padding: 18px;
+    }
+
+    .table-card .actions {
+        gap: 4px;
+    }
+}

@@ -1,17 +1,14 @@
 .site-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-
-    background: #333;
-    color: white;
-    padding: 0.2rem 0 0.2rem;
-    margin-top: auto;
+    background: var(--color-surface);
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+    margin-top: 64px;
 }
 
 .footer-bottom {
-    border-top: 1px solid #555;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 24px;
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
+    color: var(--color-muted);
 }

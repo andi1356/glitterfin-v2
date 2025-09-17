@@ -5,25 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${appName}">Glitterfin</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
 </head>
 <body>
 <div th:insert="~{fragments/header :: header}"></div>
 
-<main>
-    <div class="container">
-        <h2 th:text="${message}">Welcome Message</h2>
-        <a th:href="@{/login}">Login</a>
-
-        <!-- Example of conditional rendering -->
-        <div th:if="${user}" class="user-info">
-            <p>Hello, <span th:text="${user.name}">User</span>!</p>
+<main class="page">
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Financial clarity, delivered beautifully</h1>
+            <p>Glitterfin transforms raw expense data into actionable insight so your team can stay ahead of every trend.</p>
+            <div class="hero-actions">
+                <a class="btn-primary" th:href="@{/expenses}">View expenses</a>
+                <a class="btn-secondary" th:href="@{/login}">Sign in securely</a>
+            </div>
         </div>
+        <div class="hero-actions">
+            <div class="stat-card">
+                <span class="stat-value">99.9%</span>
+                <span class="stat-label">uptime across data pipelines</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">72h</span>
+                <span class="stat-label">average onboarding time</span>
+            </div>
+        </div>
+    </section>
 
-        <!-- Example of iteration -->
-        <ul th:if="${items}">
-            <li th:each="item : ${items}" th:text="${item}">Item</li>
-        </ul>
-    </div>
+    <section class="feature-grid">
+        <article class="feature-card">
+            <h3>Audit-ready history</h3>
+            <p>Every transaction is enriched with source, location, ownership, and anomaly detection for effortless audits.</p>
+        </article>
+        <article class="feature-card">
+            <h3>Collaboration built-in</h3>
+            <p>Flag shared or outlier expenses and resolve queries directly with stakeholders inside the platform.</p>
+        </article>
+        <article class="feature-card">
+            <h3>Secure by default</h3>
+            <p>Enterprise-grade authentication and fine-grained access controls protect your organization&#39;s financial data.</p>
+        </article>
+    </section>
+
+    <section class="insight-card">
+        <div class="insight-content">
+            <h2>Why finance teams choose Glitterfin</h2>
+            <ul class="insight-list">
+                <li>Streamlined ingestion from cards, banks, and manual uploads.</li>
+                <li>Transparent audit trails that keep compliance confident.</li>
+                <li>Human-friendly dashboards and exports that keep partners aligned.</li>
+            </ul>
+        </div>
+        <div class="insight-cta">
+            <p th:if="${user != null}" class="muted">You are signed in as <strong th:text="${user.name}">User</strong>.</p>
+            <p th:if="${user == null}" class="muted">Already a customer? Sign in to continue where you left off.</p>
+            <a class="btn-primary" th:if="${user != null}" th:href="@{/expenses}">Continue to your workspace</a>
+            <a class="btn-outline" th:if="${user == null}" th:href="@{/login}">Access your account</a>
+        </div>
+    </section>
 </main>
 
 <div th:insert="~{fragments/footer :: footer}"></div>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses | Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/expenses.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+<main class="page">
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Expense Overview</h1>
+            <p>Track spending trends, spot anomalies, and keep your Glitterfin budget on target.</p>
+        </div>
+        <div class="hero-actions">
+            <a class="btn-primary" th:href="@{/}">Back to dashboard</a>
+        </div>
+    </section>
+
+    <section class="summary-cards">
+        <article class="summary-card">
+            <h2>Total Expenses</h2>
+            <p class="summary-value" th:text="${expenseCount}">0</p>
+            <span class="summary-label">records on file</span>
+        </article>
+        <article class="summary-card">
+            <h2>Total Spent</h2>
+            <p class="summary-value"
+               th:text="${'$' + #numbers.formatDecimal(totalAmount, 1, 'DEFAULT', 2, 'DEFAULT')}">$0.00</p>
+            <span class="summary-label">lifetime</span>
+        </article>
+        <article class="summary-card">
+            <h2>Average Expense</h2>
+            <p class="summary-value"
+               th:text="${expenseCount > 0 ? '$' + #numbers.formatDecimal(averageAmount, 1, 'DEFAULT', 2, 'DEFAULT') : '$0.00'}">$0.00</p>
+            <span class="summary-label">per transaction</span>
+        </article>
+    </section>
+
+    <section class="alerts">
+        <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+        <div class="alert error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+    </section>
+
+    <section class="table-card">
+        <div class="table-header">
+            <h2>Expenses</h2>
+            <p th:if="${expenseCount == 0}">No expenses found yet. Import your transactions to get started.</p>
+        </div>
+        <div class="table-wrapper" th:if="${expenseCount > 0}">
+            <table class="expenses-table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Merchant</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Source</th>
+                    <th>Location</th>
+                    <th>Shared</th>
+                    <th>Outlier</th>
+                    <th class="numeric">Amount</th>
+                    <th class="actions">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="expense : ${expenses}">
+                    <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'MMM d, yyyy HH:mm z') : '—'}"></td>
+                    <td th:text="${expense.merchant != null ? expense.merchant : '—'}"></td>
+                    <td th:text="${expense.category != null ? expense.category : '—'}"></td>
+                    <td th:text="${expense.description != null ? expense.description : '—'}"></td>
+                    <td th:text="${expense.source != null ? expense.source : '—'}"></td>
+                    <td th:text="${expense.location != null ? expense.location.displayName : '—'}"></td>
+                    <td th:text="${expense.shared ? 'Yes' : 'No'}"></td>
+                    <td th:text="${expense.outlier ? 'Yes' : 'No'}"></td>
+                    <td class="numeric"
+                        th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'DEFAULT', 2, 'DEFAULT') : '$0.00'}"></td>
+                    <td class="actions">
+                        <a class="btn-link" th:href="@{/expenses/{id}/edit(id=${expense.id})}">Edit</a>
+                        <form th:action="@{/expenses/{id}/delete(id=${expense.id})}" method="post"
+                              onsubmit="return confirm('Are you sure you want to delete this expense?');">
+                            <button type="submit" class="btn-link danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>
