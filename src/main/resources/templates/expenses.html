@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${appName} + ' | Expenses'">Glitterfin | Expenses</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/expenses.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<main>
+    <section class="expenses-container">
+        <h1>Expenses</h1>
+
+        <div th:if="${expenseMessage}" class="feedback" th:text="${expenseMessage}">
+            Expense updated successfully.
+        </div>
+
+        <div th:if="${!isAuthenticated}" class="auth-message">
+            <p>Please sign in to view and manage your expenses.</p>
+        </div>
+
+        <div th:if="${isAuthenticated}">
+            <div th:if="${#lists.isEmpty(expenses)}" class="empty-state">
+                <p>No expenses recorded yet. Start by adding a new one!</p>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(expenses)}" class="expenses-table-wrapper">
+                <table class="expenses-table">
+                    <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Merchant</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="expense : ${expenses}">
+                        <td th:text="${expense.description != null ? expense.description : '—'}">Coffee</td>
+                        <td th:text="${expense.category != null ? expense.category : '—'}">Food</td>
+                        <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Local Cafe</td>
+                        <td th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">
+                            $4.50
+                        </td>
+                        <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'MMM d, yyyy HH:mm') : '—'}">
+                            Mar 10, 2024 09:15
+                        </td>
+                        <td class="actions">
+                            <a th:href="@{/expenses/{id}/edit(id=${expense.id})}" class="btn btn-edit">Edit</a>
+                            <form th:action="@{/expenses/{id}/delete(id=${expense.id})}" method="post" class="inline-form">
+                                <button type="submit" class="btn btn-delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>

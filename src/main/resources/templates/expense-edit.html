@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${appName} + ' | Edit Expense'">Glitterfin | Edit Expense</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/expense-edit.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<main>
+    <section class="expense-edit-container">
+        <h1>Edit Expense</h1>
+
+        <div class="expense-summary">
+            <p><strong>Current Description:</strong> <span th:text="${expense.description != null ? expense.description : '—'}">Coffee</span></p>
+            <p><strong>Recorded On:</strong>
+                <span th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'MMM d, yyyy HH:mm') : '—'}">Mar 10, 2024 09:15</span>
+            </p>
+        </div>
+
+        <form th:action="@{/expenses/{id}/edit(id=${expense.id})}" th:object="${expenseForm}" method="post" class="expense-form">
+            <div class="form-row">
+                <label for="description">Description</label>
+                <input type="text" id="description" th:field="*{description}" placeholder="What was this expense for?" required>
+            </div>
+
+            <div class="form-row">
+                <label for="category">Category</label>
+                <input type="text" id="category" th:field="*{category}" placeholder="e.g., Food, Travel" required>
+            </div>
+
+            <div class="form-row">
+                <label for="merchant">Merchant</label>
+                <input type="text" id="merchant" th:field="*{merchant}" placeholder="Where did you spend?" required>
+            </div>
+
+            <div class="form-row">
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" th:field="*{amount}" step="0.01" min="0" placeholder="0.00" required>
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/expenses}" class="btn-secondary">Cancel</a>
+                <button type="submit" class="btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>
