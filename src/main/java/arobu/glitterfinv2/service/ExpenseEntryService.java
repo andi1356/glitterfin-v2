@@ -75,7 +75,7 @@ public class ExpenseEntryService {
             expenseEntry.setDescription(form.getDescription());
             expenseEntry.setCategory(form.getCategory());
             expenseEntry.setMerchant(form.getMerchant());
-            expenseEntry.setAmount(form.getAmount());
+            expenseEntry.setAmount(form.getAmount() != null ? form.getAmount().doubleValue() : null);
             expenseEntry.setSource(form.getSource());
             expenseEntry.setReceiptData(form.getReceiptData());
             expenseEntry.setDetails(form.getDetails());
