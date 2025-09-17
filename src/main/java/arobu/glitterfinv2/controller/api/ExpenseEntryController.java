@@ -33,7 +33,6 @@ public class ExpenseEntryController {
     public ResponseEntity<Map<String,String>> insertExpense(@RequestBody final ExpenseEntryApiPostDTO dto) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-
         Map<String, String> response = new HashMap<>();
         ExpenseEntry savedEntity;
         try {

@@ -1,5 +1,6 @@
 package arobu.glitterfinv2.model.dto;
 
+
 import java.math.BigDecimal;
 
 public class ExpenseEntryApiPostDTO {
