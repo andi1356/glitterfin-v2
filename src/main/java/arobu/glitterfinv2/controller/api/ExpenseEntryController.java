@@ -1,6 +1,6 @@
 package arobu.glitterfinv2.controller.api;
 
-import arobu.glitterfinv2.model.dto.ExpenseEntryPostDTO;
+import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.service.ExpenseEntryService;
 import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
@@ -29,7 +29,7 @@ public class ExpenseEntryController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String,String>> insertExpense(@RequestBody final ExpenseEntryPostDTO dto) {
+    public ResponseEntity<Map<String,String>> insertExpense(@RequestBody final ExpenseEntryApiPostDTO dto) {
         Map<String, String> response = new HashMap<>();
         ExpenseEntry savedEntity;
         try {

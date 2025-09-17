@@ -1,6 +1,6 @@
 package arobu.glitterfinv2.model.dto;
 
-public class ExpenseEntryPostDTO {
+public class ExpenseEntryApiPostDTO {
     private Double amount;
     private String timestamp;
     private String source;
@@ -45,7 +45,7 @@ public class ExpenseEntryPostDTO {
         return shared;
     }
 
-    public ExpenseEntryPostDTO setShared(Boolean shared) {
+    public ExpenseEntryApiPostDTO setShared(Boolean shared) {
         this.shared = shared;
         return this;
     }
@@ -54,7 +54,7 @@ public class ExpenseEntryPostDTO {
         return outlier;
     }
 
-    public ExpenseEntryPostDTO setOutlier(Boolean outlier) {
+    public ExpenseEntryApiPostDTO setOutlier(Boolean outlier) {
         this.outlier = outlier;
         return this;
     }

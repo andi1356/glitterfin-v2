@@ -50,7 +50,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers("/", "/index", "/index.html").permitAll()
+                        .requestMatchers("/", "/index", "/index.html", "/css/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
