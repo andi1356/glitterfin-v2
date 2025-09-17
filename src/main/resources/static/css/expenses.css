@@ -1,0 +1,259 @@
+.expenses-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.expenses-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem;
+}
+
+.expenses-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #2f1a69;
+}
+
+.subtitle {
+    color: #5f6293;
+    margin: 0.25rem 0 0;
+}
+
+.expenses-summary {
+    display: flex;
+    gap: 1rem;
+}
+
+.summary-card {
+    background: #f6f2ff;
+    border: 1px solid rgba(93, 62, 188, 0.15);
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    min-width: 150px;
+}
+
+.summary-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #6d6f99;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.summary-value {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #5b3cc4;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    border: 2px dashed rgba(93, 62, 188, 0.2);
+    border-radius: 12px;
+    background: rgba(246, 242, 255, 0.5);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.expenses-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.expenses-table thead {
+    background: #f0edff;
+    color: #463189;
+}
+
+.expenses-table th,
+.expenses-table td {
+    padding: 0.85rem 0.75rem;
+    border-bottom: 1px solid #ebe8f8;
+    text-align: left;
+}
+
+.expenses-table th.numeric,
+.expenses-table td.numeric {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.expenses-table td.description {
+    max-width: 240px;
+}
+
+.status-pill {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(93, 62, 188, 0.12);
+    color: #5b3cc4;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-pill.positive {
+    background: rgba(62, 188, 137, 0.18);
+    color: #1e7d55;
+}
+
+.status-pill.warning {
+    background: rgba(255, 196, 86, 0.25);
+    color: #9a6508;
+}
+
+.actions {
+    white-space: nowrap;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn:focus {
+    outline: 2px solid rgba(91, 60, 196, 0.4);
+    outline-offset: 2px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(91, 60, 196, 0.18);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #5b3cc4, #7d5be1);
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background: rgba(93, 62, 188, 0.12);
+    color: #5b3cc4;
+}
+
+.btn-danger {
+    background: rgba(214, 45, 79, 0.18);
+    color: #b0203a;
+}
+
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.alert.success {
+    background: rgba(65, 179, 110, 0.15);
+    color: #226a43;
+    border: 1px solid rgba(65, 179, 110, 0.3);
+}
+
+.back-link {
+    color: #5b3cc4;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.expense-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-weight: 500;
+    color: #463189;
+}
+
+.form-field input,
+.form-field textarea {
+    border: 1px solid #d9d6f2;
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.form-field textarea {
+    resize: vertical;
+}
+
+.form-switches {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.switch {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #463189;
+}
+
+.switch input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+@media (max-width: 720px) {
+    .expenses-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .expenses-summary {
+        width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

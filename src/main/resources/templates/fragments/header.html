@@ -1,6 +1,10 @@
 <header th:fragment="header" class="site-header">
     <link rel="stylesheet" th:href="@{/css/header.css}">
-    <nav>
-        <a th:href="@{/}">Home</a>
-    </nav>
+    <div class="header-inner">
+        <a class="brand" th:href="@{/}">Glitterfin</a>
+        <nav class="main-nav">
+            <a th:href="@{/}" th:classappend="${#httpServletRequest.requestURI == '/' ? ' active' : ''}">Home</a>
+            <a th:href="@{/expenses}" th:classappend="${#httpServletRequest.requestURI.startsWith('/expenses') ? ' active' : ''}">Expenses</a>
+        </nav>
+    </div>
 </header>
