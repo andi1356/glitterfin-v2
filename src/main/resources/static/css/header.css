@@ -5,6 +5,7 @@
     box-shadow: 0 2px 4px rgba(15, 23, 42, 0.2);
 }
 
+
 .site-header .header-inner {
     max-width: 1100px;
     margin: 0 auto;
@@ -12,6 +13,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1.5rem;
 }
 
 .site-header .brand {
@@ -22,12 +24,13 @@
     letter-spacing: 0.03em;
 }
 
-.site-header nav {
+
+.site-header .primary-nav {
     display: flex;
     gap: 1.5rem;
 }
 
-.site-header nav a {
+.site-header .primary-nav a {
     color: #f9fafb;
     text-decoration: none;
     font-weight: 500;
@@ -36,10 +39,57 @@
     border-bottom: 2px solid transparent;
 }
 
-.site-header nav a:hover,
-.site-header nav a:focus {
+.site-header .primary-nav a:hover,
+.site-header .primary-nav a:focus {
     color: #facc15;
     border-bottom-color: #facc15;
+}
+
+.site-header .auth-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.site-header .auth-controls a,
+.site-header .logout-button {
+    color: #f9fafb;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.site-header .login-link {
+    border: 1px solid transparent;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.site-header .login-link:hover,
+.site-header .login-link:focus {
+    background-color: rgba(250, 204, 21, 0.15);
+    border-color: #facc15;
+    color: #facc15;
+}
+
+.site-header .logout-form {
+    margin: 0;
+}
+
+.site-header .logout-button {
+    background: transparent;
+    border: 1px solid rgba(248, 250, 252, 0.4);
+    border-radius: 9999px;
+    padding: 0.35rem 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.site-header .logout-button:hover,
+.site-header .logout-button:focus {
+    background-color: rgba(248, 250, 252, 0.15);
+    border-color: #facc15;
+    color: #facc15;
 }
 
 @media (max-width: 640px) {
@@ -48,7 +98,12 @@
         gap: 0.75rem;
     }
 
-    .site-header nav {
+    .site-header .primary-nav {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .site-header .auth-controls {
         width: 100%;
         justify-content: center;
     }
