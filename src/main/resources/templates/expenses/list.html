@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle != null ? pageTitle + ' | Glitterfin' : 'Expenses | Glitterfin'}">Expenses | Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="page">
+    <div th:if="${successMessage}" class="alert alert--success" th:text="${successMessage}">Success message</div>
+    <div th:if="${errorMessage}" class="alert alert--error" th:text="${errorMessage}">Error message</div>
+
+    <section class="stats-grid">
+        <article class="stat-card">
+            <div class="stat-card__label">Total Spend</div>
+            <div class="stat-card__value" th:text="${'$' + #numbers.formatDecimal(totalAmount, 1, 'COMMA', 2, 'POINT')}">$0.00</div>
+            <div class="stat-card__trend">Consolidated spending across all accounts</div>
+        </article>
+        <article class="stat-card">
+            <div class="stat-card__label">Average per Expense</div>
+            <div class="stat-card__value" th:text="${'$' + #numbers.formatDecimal(averageAmount, 1, 'COMMA', 2, 'POINT')}">$0.00</div>
+            <div class="stat-card__trend">Based on <span th:text="${expenseCount}">0</span> recorded items</div>
+        </article>
+        <article class="stat-card">
+            <div class="stat-card__label">Expense Entries</div>
+            <div class="stat-card__value" th:text="${expenseCount}">0</div>
+            <div class="stat-card__trend">Keep your team aligned and audit-ready</div>
+        </article>
+    </section>
+
+    <section class="table-wrapper" th:if="${expenseCount > 0}">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Merchant</th>
+                <th scope="col">Category</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Location</th>
+                <th scope="col">Source</th>
+                <th scope="col">Notes</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="expense : ${expenses}">
+                <td th:text="${expense.timestamp != null ? expense.timestamp.format(T(java.time.format.DateTimeFormatter).ofPattern('MMM d, yyyy HH:mm')) : '—'}">Mar 10, 2024 14:22</td>
+                <td>
+                    <div th:text="${expense.merchant != null ? expense.merchant : 'Unknown merchant'}">Coffee Shop</div>
+                    <div class="text-muted" style="font-size: 0.8rem;" th:text="${expense.description}">Latte with client</div>
+                </td>
+                <td>
+                    <span class="badge" th:text="${expense.category != null ? expense.category : 'Uncategorized'}">Travel</span>
+                </td>
+                <td th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">$25.00</td>
+                <td th:text="${expense.location != null ? expense.location.displayName : '—'}">New York, USA</td>
+                <td th:text="${expense.source != null ? expense.source : 'Manual'}">Corporate Card</td>
+                <td th:text="${expense.details != null ? expense.details : '—'}">Receipt attached</td>
+                <td>
+                    <span class="badge" th:if="${expense.shared == true}" style="background: rgba(92,189,156,0.15); color: #1f7f5e;">Shared</span>
+                    <span class="badge" th:if="${expense.outlier == true}" style="background: rgba(242,92,145,0.15); color: var(--color-accent);">Outlier</span>
+                    <span th:if="${expense.shared != true and expense.outlier != true}" class="text-muted" style="font-size:0.85rem; color: var(--color-text-muted);">Standard</span>
+                </td>
+                <td>
+                    <div class="expense-actions">
+                        <a th:href="@{|/expenses/${expense.id}/edit|}" class="btn--table btn--edit">Edit</a>
+                        <form th:action="@{|/expenses/${expense.id}/delete|}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="btn--table btn--danger delete-expense">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="card empty-state" th:if="${expenseCount == 0}">
+        <div class="empty-state__icon">🧾</div>
+        <h2>No expenses yet</h2>
+        <p>Start capturing spending to unlock real-time visibility and richer insights.</p>
+        <a th:href="@{/secured}" class="btn btn--primary">Open capture workspace</a>
+    </div>
+</main>
+
+<script th:src="@{/js/app.js}"></script>
+<script th:src="@{/js/expenses.js}"></script>
+</body>
+</html>

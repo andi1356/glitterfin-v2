@@ -12,7 +12,8 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("appName", "Glitterfin");
-        model.addAttribute("message", "Glitterfin! Finances done with glitter");
+        model.addAttribute("message", "Finance operations designed for modern teams");
+        model.addAttribute("pageTitle", "Welcome");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
