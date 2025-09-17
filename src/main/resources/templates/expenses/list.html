@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses · Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/expenses.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<main class="container expenses-layout">
+    <section class="page-header">
+        <div>
+            <p class="eyebrow">Expense workspace</p>
+            <h1>Transaction overview</h1>
+            <p class="subtitle">Review recent activity, keep categories tidy, and spot anomalies before they escalate.</p>
+        </div>
+        <div class="header-meta" th:if="${user != null && user.authenticated}">
+            <span class="meta-label">Signed in as</span>
+            <span class="meta-value" th:text="${user.name}">Alex Smith</span>
+        </div>
+    </section>
+
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}">Expense updated successfully.</div>
+    <div class="alert danger" th:if="${errorMessage}" th:text="${errorMessage}">Something went wrong.</div>
+
+    <div class="expenses-grid">
+        <section class="card">
+            <div class="card-header">
+                <h2>Latest expenses</h2>
+            </div>
+            <div class="card-body">
+                <p class="empty-state" th:if="${!hasExpenses}">No expenses available yet. Once transactions sync they will appear here automatically.</p>
+                <div class="table-wrapper" th:if="${hasExpenses}">
+                    <table class="expense-table">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Merchant</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Source</th>
+                            <th>Location</th>
+                            <th class="numeric">Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="expense : ${expenses}" th:classappend="${editing != null and editing and editExpenseId != null and editExpenseId == expense.id} ? ' is-active' : ''">
+                            <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'MMM d, yyyy') : '—'}">May 13, 2024</td>
+                            <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Acme Supplies</td>
+                            <td th:text="${expense.category != null ? expense.category : 'Uncategorised'}">Office</td>
+                            <td th:text="${expense.description != null ? expense.description : '—'}">Office chairs</td>
+                            <td th:text="${expense.source != null ? expense.source : '—'}">Corporate Card</td>
+                            <td th:text="${expense.location != null ? expense.location.displayName : '—'}">London, UK</td>
+                            <td class="numeric" th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 2) : '—'}">$120.00</td>
+                            <td class="actions">
+                                <a class="btn-link" th:href="@{'/expenses/' + ${expense.id} + '/edit'}">Edit</a>
+                                <form th:action="@{'/expenses/' + ${expense.id} + '/delete'}" method="post">
+                                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <button type="submit" class="btn-link danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <aside class="card">
+            <div class="card-header">
+                <h2 th:text="${editing} ? 'Edit expense' : 'Expense details'">Expense details</h2>
+            </div>
+            <div class="card-body">
+                <div th:if="${editing}">
+                    <form th:object="${expenseForm}" th:action="@{'/expenses/' + ${editExpenseId} + '/edit'}" method="post" class="form">
+                        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="form-control">
+                            <label for="amount">Amount</label>
+                            <input id="amount" type="number" step="0.01" min="0" th:field="*{amount}" required>
+                            <p class="form-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Please enter a valid amount.</p>
+                        </div>
+                        <div class="form-control">
+                            <label for="category">Category</label>
+                            <input id="category" type="text" th:field="*{category}" placeholder="e.g. Operations">
+                            <p class="form-error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Invalid category.</p>
+                        </div>
+                        <div class="form-control">
+                            <label for="merchant">Merchant</label>
+                            <input id="merchant" type="text" th:field="*{merchant}" placeholder="Merchant name">
+                            <p class="form-error" th:if="${#fields.hasErrors('merchant')}" th:errors="*{merchant}">Invalid merchant.</p>
+                        </div>
+                        <div class="form-control">
+                            <label for="description">Description</label>
+                            <textarea id="description" rows="3" th:field="*{description}" placeholder="Add additional context"></textarea>
+                            <p class="form-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Invalid description.</p>
+                        </div>
+                        <div class="form-control">
+                            <label for="source">Source</label>
+                            <input id="source" type="text" th:field="*{source}" placeholder="e.g. Corporate Card">
+                            <p class="form-error" th:if="${#fields.hasErrors('source')}" th:errors="*{source}">Invalid source.</p>
+                        </div>
+                        <div class="form-row">
+                            <label class="checkbox">
+                                <input type="checkbox" th:field="*{shared}">
+                                <span>Shared expense</span>
+                            </label>
+                            <label class="checkbox">
+                                <input type="checkbox" th:field="*{outlier}">
+                                <span>Flag as outlier</span>
+                            </label>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <a class="btn btn-secondary" th:href="@{/expenses}">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="empty-state" th:unless="${editing}">
+                    <p>Select an expense to review and edit its details. You can also remove transactions directly from the list.</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>

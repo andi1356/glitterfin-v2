@@ -1,0 +1,84 @@
+.expenses-layout {
+    padding: 3rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.header-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.expenses-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.75rem;
+}
+
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.expense-table th,
+.expense-table td {
+    padding: 0.85rem 0.6rem;
+    border-bottom: 1px solid rgba(26, 28, 45, 0.06);
+    text-align: left;
+}
+
+.expense-table th {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    background: rgba(93, 95, 239, 0.04);
+}
+
+.expense-table tbody tr:hover {
+    background: rgba(93, 95, 239, 0.04);
+}
+
+.expense-table tr.is-active {
+    background: rgba(93, 95, 239, 0.12);
+}
+
+.expense-table .numeric {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+}
+
+.expense-table .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.expense-table .actions form {
+    display: inline;
+}
+
+@media (max-width: 992px) {
+    .expenses-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .expense-table th,
+    .expense-table td {
+        padding: 0.7rem 0.4rem;
+    }
+}

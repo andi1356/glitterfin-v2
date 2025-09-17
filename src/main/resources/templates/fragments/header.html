@@ -1,6 +1,22 @@
 <header th:fragment="header" class="site-header">
     <link rel="stylesheet" th:href="@{/css/header.css}">
-    <nav>
-        <a th:href="@{/}">Home</a>
-    </nav>
+    <div class="header-inner container">
+        <a class="brand" th:href="@{/}">Glitterfin</a>
+        <nav class="primary-nav">
+            <a th:href="@{/}" th:classappend="${#httpServletRequest.requestURI == '/'} ? 'is-active'">Overview</a>
+            <a th:href="@{/expenses}" th:classappend="${#httpServletRequest.requestURI.startsWith('/expenses')} ? 'is-active'">Expenses</a>
+        </nav>
+        <div class="header-actions">
+            <div class="auth" th:if="${user != null && user.authenticated}">
+                <span class="welcome" th:text="'Hello, ' + ${user.name}">Hello, Alex</span>
+                <form th:action="@{/logout}" method="post">
+                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn-link">Sign out</button>
+                </form>
+            </div>
+            <div class="auth" th:unless="${user != null && user.authenticated}">
+                <a class="btn btn-secondary" th:href="@{/login}">Sign in</a>
+            </div>
+        </div>
+    </div>
 </header>

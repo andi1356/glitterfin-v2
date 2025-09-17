@@ -10,20 +10,63 @@
 <div th:insert="~{fragments/header :: header}"></div>
 
 <main>
-    <div class="container">
-        <h2 th:text="${message}">Welcome Message</h2>
-        <a th:href="@{/login}">Login</a>
-
-        <!-- Example of conditional rendering -->
-        <div th:if="${user}" class="user-info">
-            <p>Hello, <span th:text="${user.name}">User</span>!</p>
+    <section class="hero">
+        <div class="hero-content container">
+            <div class="hero-copy">
+                <p class="eyebrow">Glitterfin platform</p>
+                <h1 th:text="${heroTitle}">Finance intelligence for modern teams</h1>
+                <p class="hero-subtitle" th:text="${heroSubtitle}">Track, understand, and optimise your spending with beautiful dashboards and actionable insights.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" th:href="@{/expenses}">View expenses</a>
+                    <a class="btn btn-secondary" th:if="${user == null || !user.authenticated}" th:href="@{/login}">Sign in</a>
+                </div>
+                <div class="hero-meta" th:if="${user != null && user.authenticated}">
+                    <span class="meta-label">Signed in as</span>
+                    <span class="meta-value" th:text="${user.name}">Alex Smith</span>
+                </div>
+            </div>
+            <div class="hero-panel">
+                <div class="panel-heading">Spending snapshot</div>
+                <div class="panel-body">
+                    <div class="metric">
+                        <span class="metric-label">This month</span>
+                        <span class="metric-value">$4,820</span>
+                        <span class="metric-sub">12% under budget</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Top category</span>
+                        <span class="metric-value">Operations</span>
+                        <span class="metric-sub">$1,540 spend</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Flagged items</span>
+                        <span class="metric-value">3</span>
+                        <span class="metric-sub">Ready for review</span>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <!-- Example of iteration -->
-        <ul th:if="${items}">
-            <li th:each="item : ${items}" th:text="${item}">Item</li>
-        </ul>
-    </div>
+    <section class="features container">
+        <h2>Everything you need to keep spend in check</h2>
+        <div class="feature-grid">
+            <article class="feature-card" th:each="feature : ${features}">
+                <h3 th:text="${feature.title}">Expense visibility</h3>
+                <p th:text="${feature.description}">Gain a clear overview of your latest purchases with rich context and categorisation.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="cta container">
+        <div class="cta-content">
+            <div>
+                <h2>Bring clarity to every transaction</h2>
+                <p>Synchronise card feeds, upload receipts, and keep every stakeholder in the loop with a single financial workspace.</p>
+            </div>
+            <a class="btn btn-primary" th:href="@{/expenses}">Go to expense dashboard</a>
+        </div>
+    </section>
 </main>
 
 <div th:insert="~{fragments/footer :: footer}"></div>
