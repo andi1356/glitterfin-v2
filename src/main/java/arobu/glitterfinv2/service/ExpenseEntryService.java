@@ -12,8 +12,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ExpenseEntryService {
 
@@ -29,18 +27,12 @@ public class ExpenseEntryService {
         this.locationService = locationService;
     }
 
-    public ExpenseEntry saveExpense(final ExpenseEntryApiPostDTO expenseEntryApiPostDTO) throws OwnerNotFoundException {
-        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityByUsername(
-                SecurityContextHolder.getContext().getAuthentication().getName());
+    public ExpenseEntry saveExpense(final ExpenseEntryApiPostDTO expenseEntryApiPostDTO, final String username) throws OwnerNotFoundException {
+        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
         Location location = locationService.getOrSaveLocationEntity(expenseEntryApiPostDTO.getLocationData());
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryApiPostDTO, owner, location);
         LOGGER.info("Persisting expense entry: {}", entity);
         return expenseEntryRepository.save(entity);
     }
-
-    public List<ExpenseEntry> getExpensesForCurrentUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return expenseEntryRepository.findAllByOwner_Username(username);
-    }\
 }
