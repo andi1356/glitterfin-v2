@@ -43,6 +43,28 @@ public class ExpenseViewController {
         return "expenses";
     }
 
+    @GetMapping("/{id}")
+    public String viewExpense(@PathVariable("id") Integer expenseId,
+                              Model model,
+                              Authentication authentication,
+                              RedirectAttributes redirectAttributes) {
+        if (!isUserAuthenticated(authentication)) {
+            return "redirect:/login";
+        }
+
+        Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpenseForUser(expenseId, authentication.getName());
+
+        if (expenseEntry.isEmpty()) {
+            redirectAttributes.addFlashAttribute("expenseMessage", "Unable to locate the requested expense.");
+            return "redirect:/expenses";
+        }
+
+        model.addAttribute("appName", "Glitterfin");
+        model.addAttribute("expense", expenseEntry.get());
+
+        return "expense-detail";
+    }
+
     @GetMapping("/{id}/edit")
     public String editExpense(@PathVariable("id") Integer expenseId,
                               Model model,

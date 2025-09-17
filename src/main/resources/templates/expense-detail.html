@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${appName} + ' | Expense Details'">Glitterfin | Expense Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/expense-detail.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<main>
+    <section class="expense-detail" th:if="${expense != null}">
+        <a class="back-link" th:href="@{/expenses}">
+            <span aria-hidden="true">&larr;</span>
+            Back to expenses
+        </a>
+
+        <header class="expense-detail__header">
+            <h1 th:text="${expense.description != null ? expense.description : 'Expense details'}">Expense details</h1>
+            <div class="expense-detail__actions">
+                <a class="btn btn-edit" th:href="@{/expenses/{id}/edit(id=${expense.id})}">Edit expense</a>
+            </div>
+        </header>
+
+        <div class="expense-detail__summary">
+            <div class="summary-item">
+                <span class="summary-label">Amount</span>
+                <span class="summary-value"
+                      th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">
+                    $0.00
+                </span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">When</span>
+                <span class="summary-value" th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'MMM d, yyyy HH:mm') : '—'}">
+                    Mar 10, 2024 09:15
+                </span>
+                <span class="summary-helper" th:if="${expense.timezone != null}" th:text="${expense.timezone}">UTC</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Category</span>
+                <span class="summary-value" th:text="${expense.category != null ? expense.category : '—'}">Food</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Merchant</span>
+                <span class="summary-value" th:text="${expense.merchant != null ? expense.merchant : '—'}">Local Cafe</span>
+            </div>
+        </div>
+
+        <div class="expense-detail__grid">
+            <article class="detail-card">
+                <h2>General information</h2>
+                <dl>
+                    <div class="detail-row">
+                        <dt>Source</dt>
+                        <dd th:text="${expense.source != null ? expense.source : '—'}">Bank import</dd>
+                    </div>
+                    <div class="detail-row">
+                        <dt>Shared expense</dt>
+                        <dd th:text="${expense.shared != null && expense.shared ? 'Yes' : 'No'}">No</dd>
+                    </div>
+                    <div class="detail-row">
+                        <dt>Flagged as outlier</dt>
+                        <dd th:text="${expense.outlier != null && expense.outlier ? 'Yes' : 'No'}">No</dd>
+                    </div>
+                    <div class="detail-row">
+                        <dt>Receipt data</dt>
+                        <dd th:text="${expense.receiptData != null ? expense.receiptData : '—'}">receipt-12345</dd>
+                    </div>
+                </dl>
+            </article>
+
+            <article class="detail-card">
+                <h2>Details</h2>
+                <p th:text="${expense.details != null ? expense.details : 'No additional details provided.'}">
+                    Notes about this expense will appear here.
+                </p>
+            </article>
+
+            <article class="detail-card" th:if="${expense.location != null}">
+                <h2>Location</h2>
+                <dl>
+                    <div class="detail-row">
+                        <dt>Display name</dt>
+                        <dd th:text="${expense.location.displayName != null ? expense.location.displayName : '—'}">123 Main Street</dd>
+                    </div>
+                    <div class="detail-row">
+                        <dt>City</dt>
+                        <dd th:text="${expense.location.city != null ? expense.location.city : '—'}">Springfield</dd>
+                    </div>
+                    <div class="detail-row">
+                        <dt>Country</dt>
+                        <dd th:text="${expense.location.country != null ? expense.location.country : '—'}">USA</dd>
+                    </div>
+                    <div class="detail-row" th:if="${expense.location.latitude != null && expense.location.longitude != null}">
+                        <dt>Coordinates</dt>
+                        <dd th:text="${expense.location.latitude + ', ' + expense.location.longitude}">0, 0</dd>
+                    </div>
+                </dl>
+            </article>
+        </div>
+    </section>
+</main>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>

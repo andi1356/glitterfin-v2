@@ -55,8 +55,23 @@
     font-size: 0.95rem;
 }
 
-.expenses-table tbody tr:hover {
+.expenses-table tbody tr[data-href] {
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.expenses-table tbody tr[data-href]:hover {
     background: #f8fafc;
+}
+
+.expenses-table tbody tr[data-href]:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: -3px;
+    background: #eff6ff;
+}
+
+.expenses-table tbody tr[data-href] td.actions {
+    cursor: default;
 }
 
 .expenses-table td.actions {

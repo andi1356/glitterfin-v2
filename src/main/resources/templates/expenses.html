@@ -40,7 +40,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="expense : ${expenses}">
+                    <tr th:each="expense : ${expenses}"
+                        th:attr="data-href=@{/expenses/{id}(id=${expense.id})}, data-expense-name=${expense.description != null ? expense.description : 'Expense #' + expense.id}">
                         <td th:text="${expense.description != null ? expense.description : '—'}">Coffee</td>
                         <td th:text="${expense.category != null ? expense.category : '—'}">Food</td>
                         <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Local Cafe</td>
@@ -68,5 +69,6 @@
 </main>
 
 <div th:insert="~{fragments/footer :: footer}"></div>
+<script th:src="@{/js/expenses.js}"></script>
 </body>
 </html>
