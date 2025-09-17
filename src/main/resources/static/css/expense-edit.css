@@ -91,7 +91,8 @@
 }
 
 .btn-primary,
-.btn-secondary {
+.btn-secondary,
+.btn-delete {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -114,12 +115,25 @@
     color: #1f2937;
 }
 
+.btn-delete {
+    background: #dc2626;
+    color: #ffffff;
+}
+
 .btn-primary:hover,
 .btn-secondary:hover,
+.btn-delete:hover,
 .btn-primary:focus,
-.btn-secondary:focus {
+.btn-secondary:focus,
+.btn-delete:focus {
     transform: translateY(-1px);
     box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+}
+
+.delete-form {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
 }
 
 @media (max-width: 640px) {
@@ -131,5 +145,9 @@
     .form-actions {
         flex-direction: column-reverse;
         align-items: stretch;
+    }
+
+    .delete-form {
+        justify-content: stretch;
     }
 }
