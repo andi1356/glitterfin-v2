@@ -1,6 +1,6 @@
 package arobu.glitterfinv2.model.mapper;
 
-import arobu.glitterfinv2.model.dto.ExpenseEntryPostDTO;
+import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
@@ -12,7 +12,7 @@ public class ExpenseEntryMapper {
     private static final String TEXT_DELIMITING_CHARACTERS = "||";
     private static final String REGEX_EXPRESSION = "\\|\\|";
 
-    public static ExpenseEntry toEntity(final ExpenseEntryPostDTO dto, ExpenseOwner owner, Location location) {
+    public static ExpenseEntry toEntity(final ExpenseEntryApiPostDTO dto, ExpenseOwner owner, Location location) {
 
         ExpenseEntry expense = new ExpenseEntry();
 
@@ -40,7 +40,7 @@ public class ExpenseEntryMapper {
         return expense;
     }
 
-    private String extractMerchant(final ExpenseEntryPostDTO dto) {
+    private String extractMerchant(final ExpenseEntryApiPostDTO dto) {
         String merchant = dto.getMerchant();
         if (merchant.contains(TEXT_DELIMITING_CHARACTERS)) {
             return merchant.split(REGEX_EXPRESSION)[0].trim();
@@ -49,7 +49,7 @@ public class ExpenseEntryMapper {
         }
     }
 
-    private String extractDescription(final ExpenseEntryPostDTO dto) {
+    private String extractDescription(final ExpenseEntryApiPostDTO dto) {
         String merchant = dto.getMerchant();
         if (merchant.contains(TEXT_DELIMITING_CHARACTERS)) {
             return merchant.split(REGEX_EXPRESSION)[1].trim();

@@ -1,6 +1,6 @@
 package arobu.glitterfinv2.service;
 
-import arobu.glitterfinv2.model.dto.ExpenseEntryPostDTO;
+import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
@@ -29,12 +29,12 @@ public class ExpenseEntryService {
         this.locationService = locationService;
     }
 
-    public ExpenseEntry saveExpense(final ExpenseEntryPostDTO expenseEntryPostDTO) throws OwnerNotFoundException {
+    public ExpenseEntry saveExpense(final ExpenseEntryApiPostDTO expenseEntryApiPostDTO) throws OwnerNotFoundException {
         ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityByUsername(
                 SecurityContextHolder.getContext().getAuthentication().getName());
-        Location location = locationService.getOrSaveLocationEntity(expenseEntryPostDTO.getLocationData());
+        Location location = locationService.getOrSaveLocationEntity(expenseEntryApiPostDTO.getLocationData());
 
-        ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryPostDTO, owner, location);
+        ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryApiPostDTO, owner, location);
         LOGGER.info("Persisting expense entry: {}", entity);
         return expenseEntryRepository.save(entity);
     }
@@ -42,5 +42,5 @@ public class ExpenseEntryService {
     public List<ExpenseEntry> getExpensesForCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return expenseEntryRepository.findAllByOwner_Username(username);
-    }
+    }\
 }
