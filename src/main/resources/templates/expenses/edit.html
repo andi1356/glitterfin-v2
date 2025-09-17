@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit expense • Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<main class="page-wrapper">
+    <section class="card">
+        <div class="form-header">
+            <div>
+                <p class="eyebrow">Edit expense</p>
+                <h1 th:text="${expense.merchant}">Merchant</h1>
+                <p class="lead">Update the details below and save your changes.</p>
+            </div>
+            <a class="btn btn-ghost" th:href="@{/expenses}">Back</a>
+        </div>
+
+        <form class="form-grid" th:action="@{|/expenses/${expense.id}/edit|}" th:object="${expenseForm}" method="post">
+            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <div class="form-field">
+                <label for="amount">Amount</label>
+                <input id="amount" type="number" step="0.01" min="0" th:field="*{amount}" required>
+            </div>
+
+            <div class="form-field">
+                <label for="source">Source</label>
+                <input id="source" type="text" th:field="*{source}" placeholder="Card, bank transfer...">
+            </div>
+
+            <div class="form-field">
+                <label for="merchant">Merchant</label>
+                <input id="merchant" type="text" th:field="*{merchant}" required>
+            </div>
+
+            <div class="form-field">
+                <label for="category">Category</label>
+                <input id="category" type="text" th:field="*{category}" placeholder="Meals, Travel, Software...">
+            </div>
+
+            <div class="form-field">
+                <label for="description">Description</label>
+                <textarea id="description" th:field="*{description}" rows="3"></textarea>
+            </div>
+
+            <div class="form-field">
+                <label for="details">Details</label>
+                <textarea id="details" th:field="*{details}" rows="3"></textarea>
+            </div>
+
+            <div class="form-check">
+                <input id="shared" type="checkbox" th:field="*{shared}">
+                <label for="shared">Shared expense</label>
+            </div>
+
+            <div class="form-check">
+                <input id="outlier" type="checkbox" th:field="*{outlier}">
+                <label for="outlier">Mark as outlier</label>
+            </div>
+
+            <div class="form-field">
+                <label>Location</label>
+                <p class="field-note" th:text="${expense.location != null ? expense.location.displayName : 'Not provided'}">
+                    Not provided
+                </p>
+            </div>
+
+            <div class="form-field">
+                <label>Recorded at</label>
+                <p class="field-note" th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'dd MMM yyyy HH:mm z') : 'Not available'}">
+                    Not available
+                </p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                <a class="btn btn-ghost" th:href="@{/expenses}">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+
+</body>
+</html>

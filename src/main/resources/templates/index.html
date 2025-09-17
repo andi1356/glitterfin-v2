@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,26 +9,56 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div th:replace="fragments/header :: header"></div>
 
-<main>
-    <div class="container">
-        <h2 th:text="${message}">Welcome Message</h2>
-        <a th:href="@{/login}">Login</a>
-
-        <!-- Example of conditional rendering -->
-        <div th:if="${user}" class="user-info">
-            <p>Hello, <span th:text="${user.name}">User</span>!</p>
+<main class="page-wrapper">
+    <section class="card hero">
+        <p class="eyebrow">Personal finance, reimagined</p>
+        <h1 th:text="${appName}" class="hero-title">Glitterfin</h1>
+        <p class="hero-subtitle" th:text="${message}">
+            Glitterfin! Finances done with glitter
+        </p>
+        <div class="cta-group">
+            <a class="btn btn-primary" th:href="@{/expenses}">View expenses</a>
+            <a class="btn btn-ghost" th:href="@{/login}" sec:authorize="!isAuthenticated()">Sign in</a>
+            <a class="btn btn-ghost" th:href="@{/expenses}" sec:authorize="isAuthenticated()">Continue tracking</a>
         </div>
+        <div class="hero-metrics" sec:authorize="isAuthenticated()">
+            <div class="metric">
+                <span class="metric-label">Logged in as</span>
+                <span class="metric-value" sec:text="${#authentication.name}">User</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Last sync</span>
+                <span class="metric-value">Moments ago</span>
+            </div>
+        </div>
+    </section>
 
-        <!-- Example of iteration -->
-        <ul th:if="${items}">
-            <li th:each="item : ${items}" th:text="${item}">Item</li>
-        </ul>
-    </div>
+    <section class="card feature-grid">
+        <article class="feature">
+            <h2>Clear visibility</h2>
+            <p>Stay in control with an intuitive dashboard that brings every expense into focus.</p>
+        </article>
+        <article class="feature">
+            <h2>Effortless collaboration</h2>
+            <p>Share expense reports with stakeholders and make informed decisions together.</p>
+        </article>
+        <article class="feature">
+            <h2>Actionable insights</h2>
+            <p>Spot trends instantly with smart categorisation and location insights on every purchase.</p>
+        </article>
+    </section>
+
+    <section class="card secondary">
+        <h2>Getting started is simple</h2>
+        <ol class="steps">
+            <li>Connect your spending sources and let Glitterfin do the heavy lifting.</li>
+            <li>Review, edit, and annotate expenses with full context.</li>
+            <li>Export reports or drill into details with a single click.</li>
+        </ol>
+    </section>
 </main>
 
-<!--<div th:insert="~{fragments/footer :: footer}"></div>-->
-
-<!--<script th:src="@{/js/app.js}"></script>-->
 </body>
 </html>

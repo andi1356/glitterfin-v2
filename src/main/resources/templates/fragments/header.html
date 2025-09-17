@@ -1,7 +1,27 @@
-<header th:fragment="header">
-    <nav>
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/about}">About</a>
-        <a th:href="@{/contact}">Contact</a>
-    </nav>
+<header th:fragment="header" class="site-header"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div class="header-content">
+        <a class="brand" th:href="@{/}">
+            <span class="brand-mark">GF</span>
+            <span class="brand-name">Glitterfin</span>
+        </a>
+
+        <nav class="primary-nav">
+            <a th:href="@{/}"
+               th:classappend="${#httpServletRequest.requestURI == '/' ? ' is-active' : ''}">Overview</a>
+            <a th:href="@{/expenses}"
+               th:classappend="${#httpServletRequest.requestURI.startsWith('/expenses') ? ' is-active' : ''}">Expenses</a>
+            <a th:href="@{/secured}"
+               th:classappend="${#httpServletRequest.requestURI.startsWith('/secured') ? ' is-active' : ''}">Insights</a>
+        </nav>
+
+        <div class="header-actions">
+            <span class="user-badge" sec:authorize="isAuthenticated()" sec:text="${#authentication.name}">
+                Account
+            </span>
+            <a class="btn btn-ghost" sec:authorize="isAuthenticated()" th:href="@{/logout}">Sign out</a>
+            <a class="btn btn-primary" sec:authorize="!isAuthenticated()" th:href="@{/login}">Sign in</a>
+        </div>
+    </div>
 </header>

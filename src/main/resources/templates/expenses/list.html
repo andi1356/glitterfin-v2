@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses • Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<main class="page-wrapper">
+    <section class="page-heading">
+        <div>
+            <p class="eyebrow">Expense management</p>
+            <h1>All expenses</h1>
+            <p class="lead">Review, edit, or remove expenses to keep your books up to date.</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/}">Back to overview</a>
+    </section>
+
+    <div th:if="${feedbackMessage}" th:class="${feedbackType == 'error'} ? 'alert alert-error' : 'alert alert-success'"
+         th:text="${feedbackMessage}">
+    </div>
+
+    <section class="card">
+        <div th:if="${#lists.isEmpty(expenses)}" class="empty-state">
+            <h2>No expenses yet</h2>
+            <p>Add transactions via the API or import tool to see them listed here.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(expenses)}" class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th scope="col">Merchant</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Timestamp</th>
+                    <th scope="col" class="actions-header">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="expense : ${expenses}">
+                    <td>
+                        <div class="table-primary" th:text="${expense.merchant}">Merchant</div>
+                        <div class="table-secondary" th:text="${expense.description}">Description</div>
+                    </td>
+                    <td>
+                        <span th:text="${#numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                    </td>
+                    <td>
+                        <span class="badge" th:text="${expense.category != null ? expense.category : 'Uncategorised'}">Category</span>
+                    </td>
+                    <td>
+                        <span th:text="${expense.location != null ? expense.location.displayName : '—'}">Location</span>
+                    </td>
+                    <td>
+                        <span th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'dd MMM yyyy HH:mm') : '—'}">Timestamp</span>
+                    </td>
+                    <td>
+                        <div class="action-group">
+                            <a class="btn btn-secondary" th:href="@{|/expenses/${expense.id}/edit|}">Edit</a>
+                            <form th:action="@{|/expenses/${expense.id}/delete|}" method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this expense?');">
+                                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
