@@ -43,7 +43,8 @@
     color: #1f2937;
 }
 
-.form-row input {
+.form-row input,
+.form-row textarea {
     padding: 0.75rem 1rem;
     border-radius: 10px;
     border: 1px solid #cbd5f5;
@@ -51,10 +52,36 @@
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-row input:focus {
+.form-row textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-row input:focus,
+.form-row textarea:focus {
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     outline: none;
+}
+
+.checkbox-row {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.checkbox-row .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.checkbox-row input[type="checkbox"] {
+    width: 1.1rem;
+    height: 1.1rem;
 }
 
 .form-actions {
