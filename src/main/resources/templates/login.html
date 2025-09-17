@@ -1,19 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in • Glitterfin</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
-<body>
-<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+<body class="auth-body">
+<div th:insert="~{fragments/header :: header}"></div>
+
+<main class="auth-main">
+    <section class="auth-card" role="main">
+        <h1 class="auth-title">Welcome back</h1>
+        <p class="auth-subtitle">Sign in to manage your Glitterfin expenses.</p>
+
+        <div th:if="${param.error}" class="auth-alert auth-alert--error" role="alert">
+            Invalid username or password. Please try again.
+        </div>
+        <div th:if="${param.logout}" class="auth-alert auth-alert--success" role="status">
+            You have been logged out successfully.
+        </div>
+
+        <form th:action="@{/login}" method="post" class="auth-form">
+            <div class="form-field">
+                <label for="username">Email</label>
+                <input id="username" name="username" type="text" autocomplete="username" required
+                       th:value="${param.username}">
+            </div>
+            <div class="form-field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="auth-submit">Sign in</button>
+        </form>
+    </section>
+</main>
 </body>
 </html>

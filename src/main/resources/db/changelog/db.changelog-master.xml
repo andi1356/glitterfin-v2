@@ -10,5 +10,6 @@
     <include file="db/changelog/changes/003-update-location-table.sql"/>
     <include file="db/changelog/changes/004-drop-test-table.sql"/>
     <include file="db/changelog/changes/005-alter-owner-make-username-as-id.sql"/>
+    <include file="db/changelog/changes/006-alter-expense-amount-column-to-numeric-type.sql"/>
 
 </databaseChangeLog>

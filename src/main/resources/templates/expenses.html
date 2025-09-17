@@ -36,7 +36,6 @@
                         <th>Merchant</th>
                         <th>Amount</th>
                         <th>Date</th>
-                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -48,17 +47,8 @@
                         <td th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">
                             $4.50
                         </td>
-                        <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'MMM d, yyyy HH:mm') : '—'}">
+                        <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEE MMM d yy | HH:mm') : '—'}">
                             Mar 10, 2024 09:15
-                        </td>
-                        <td class="actions">
-                            <a th:href="@{/expenses/{id}/edit(id=${expense.id})}" class="btn btn-edit">Edit</a>
-                            <form th:action="@{/expenses/{id}/delete(id=${expense.id})}"
-                                  method="post"
-                                  class="inline-form"
-                                  onsubmit="return confirm('Are you sure you want to delete this expense? This action cannot be undone.');">
-                                <button type="submit" class="btn btn-delete">Delete</button>
-                            </form>
                         </td>
                     </tr>
                     </tbody>

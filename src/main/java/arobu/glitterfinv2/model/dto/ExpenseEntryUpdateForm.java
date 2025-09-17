@@ -3,7 +3,6 @@ package arobu.glitterfinv2.model.dto;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.DateTimeException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -30,7 +29,7 @@ public class ExpenseEntryUpdateForm {
         form.setDescription(expenseEntry.getDescription());
         form.setCategory(expenseEntry.getCategory());
         form.setMerchant(expenseEntry.getMerchant());
-        form.setAmount(normalizeAmount(expenseEntry.getAmount()));
+        form.setAmount(expenseEntry.getAmount());
 
         if (expenseEntry.getTimestamp() != null) {
             ZonedDateTime timestamp = expenseEntry.getTimestamp();
@@ -60,14 +59,6 @@ public class ExpenseEntryUpdateForm {
         }
 
         return expenseEntry.getTimestamp().getZone();
-    }
-
-    private static BigDecimal normalizeAmount(Double amount) {
-        if (amount == null) {
-            return null;
-        }
-
-        return BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP);
     }
 
     public String getDescription() {
