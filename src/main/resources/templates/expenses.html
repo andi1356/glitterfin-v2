@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${appName} + ' | Expenses'">Glitterfin | Expenses</title>
+    <title>Glitterfin | Expenses</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/expenses.css}">
 </head>
@@ -41,14 +41,14 @@
                     <tbody>
                     <tr th:each="expense : ${expenses}"
                         th:attr="data-href=@{/expenses/{id}(id=${expense.id})}, data-expense-name=${expense.description != null ? expense.description : 'Expense #' + expense.id}">
-                        <td th:text="${expense.description != null ? expense.description : '—'}">Coffee</td>
-                        <td th:text="${expense.category != null ? expense.category : '—'}">Food</td>
-                        <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Local Cafe</td>
+                        <td th:text="${expense.description != null ? expense.description : '—'}">Description</td>
+                        <td th:text="${expense.category != null ? expense.category : '—'}">Category</td>
+                        <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
                         <td th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">
-                            $4.50
+                            $
                         </td>
                         <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEE MMM d yy | HH:mm') : '—'}">
-                            Mar 10, 2024 09:15
+                            Timestamp
                         </td>
                     </tr>
                     </tbody>

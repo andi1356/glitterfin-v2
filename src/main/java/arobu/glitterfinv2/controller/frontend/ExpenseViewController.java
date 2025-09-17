@@ -36,7 +36,6 @@ public class ExpenseViewController {
                 ? expenseEntryService.getExpensesForUser(authentication.getName())
                 : Collections.emptyList();
 
-        model.addAttribute("appName", "Glitterfin");
         model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("expenses", expenses);
 
@@ -59,7 +58,6 @@ public class ExpenseViewController {
             return "redirect:/expenses";
         }
 
-        model.addAttribute("appName", "Glitterfin");
         model.addAttribute("expense", expenseEntry.get());
 
         return "expense-detail";
@@ -81,7 +79,6 @@ public class ExpenseViewController {
             return "redirect:/expenses";
         }
 
-        model.addAttribute("appName", "Glitterfin");
         model.addAttribute("expense", expenseEntry.get());
         model.addAttribute("expenseForm", ExpenseEntryUpdateForm.fromExpenseEntry(expenseEntry.get()));
 

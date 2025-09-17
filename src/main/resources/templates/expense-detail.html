@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${appName} + ' | Expense Details'">Glitterfin | Expense Details</title>
+    <title>Glitterfin | Expense Details</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/expense-detail.css}">
 </head>
@@ -34,18 +34,18 @@
             </div>
             <div class="summary-item">
                 <span class="summary-label">When</span>
-                <span class="summary-value" th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'MMM d, yyyy HH:mm') : '—'}">
-                    Mar 10, 2024 09:15
+                <span class="summary-value" th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEE, MMM d yyyy   HH:mm') : '—'}">
+                    Timestamp
                 </span>
                 <span class="summary-helper" th:if="${expense.timezone != null}" th:text="${expense.timezone}">UTC</span>
             </div>
             <div class="summary-item">
                 <span class="summary-label">Category</span>
-                <span class="summary-value" th:text="${expense.category != null ? expense.category : '—'}">Food</span>
+                <span class="summary-value" th:text="${expense.category != null ? expense.category : '—'}">Category</span>
             </div>
             <div class="summary-item">
                 <span class="summary-label">Merchant</span>
-                <span class="summary-value" th:text="${expense.merchant != null ? expense.merchant : '—'}">Local Cafe</span>
+                <span class="summary-value" th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</span>
             </div>
         </div>
 
@@ -55,7 +55,7 @@
                 <dl>
                     <div class="detail-row">
                         <dt>Source</dt>
-                        <dd th:text="${expense.source != null ? expense.source : '—'}">Bank import</dd>
+                        <dd th:text="${expense.source != null ? expense.source : '—'}">Source</dd>
                     </div>
                     <div class="detail-row">
                         <dt>Shared expense</dt>
