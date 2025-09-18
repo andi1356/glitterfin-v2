@@ -2,6 +2,7 @@ package arobu.glitterfinv2.model.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 @Entity(name = "expense")
@@ -13,7 +14,7 @@ public class ExpenseEntry {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private ExpenseOwner owner;
-    private Double amount;
+    private BigDecimal amount;
     private ZonedDateTime timestamp;
     private String timezone;
     private String source;
@@ -47,11 +48,11 @@ public class ExpenseEntry {
         return this;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public ExpenseEntry setAmount(Double amount) {
+    public ExpenseEntry setAmount(BigDecimal amount) {
         this.amount = amount;
         return this;
     }
