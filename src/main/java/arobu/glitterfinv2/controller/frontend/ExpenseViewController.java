@@ -3,7 +3,6 @@ package arobu.glitterfinv2.controller.frontend;
 import arobu.glitterfinv2.model.dto.ExpenseEntryUpdateForm;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.service.ExpenseEntryService;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,14 +28,9 @@ public class ExpenseViewController {
 
     @GetMapping
     public String expenses(Model model, Authentication authentication) {
-        boolean isAuthenticated = isUserAuthenticated(authentication);
-
-        List<ExpenseEntry> expenses = isAuthenticated
-                ? expenseEntryService.getExpensesForUser(authentication.getName())
-                : Collections.emptyList();
+        List<ExpenseEntry> expenses = expenseEntryService.getExpensesForUser(authentication.getName());
 
         model.addAttribute("appName", "Glitterfin");
-        model.addAttribute("isAuthenticated", isAuthenticated);
         model.addAttribute("expenses", expenses);
 
         return "expenses";
@@ -48,10 +41,6 @@ public class ExpenseViewController {
                               Model model,
                               Authentication authentication,
                               RedirectAttributes redirectAttributes) {
-        if (!isUserAuthenticated(authentication)) {
-            return "redirect:/login";
-        }
-
         Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpenseForUser(expenseId, authentication.getName());
 
         if (expenseEntry.isEmpty()) {
@@ -70,10 +59,6 @@ public class ExpenseViewController {
                               Model model,
                               Authentication authentication,
                               RedirectAttributes redirectAttributes) {
-        if (!isUserAuthenticated(authentication)) {
-            return "redirect:/login";
-        }
-
         Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpenseForUser(expenseId, authentication.getName());
 
         if (expenseEntry.isEmpty()) {
@@ -93,10 +78,6 @@ public class ExpenseViewController {
                                 @ModelAttribute("expenseForm") ExpenseEntryUpdateForm expenseForm,
                                 Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
-        if (!isUserAuthenticated(authentication)) {
-            return "redirect:/login";
-        }
-
         boolean updated = expenseEntryService
                 .updateExpenseForUser(expenseId, authentication.getName(), expenseForm)
                 .isPresent();
@@ -113,10 +94,6 @@ public class ExpenseViewController {
     public String deleteExpense(@PathVariable("id") Integer expenseId,
                                 Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
-        if (!isUserAuthenticated(authentication)) {
-            return "redirect:/login";
-        }
-
         boolean deleted = expenseEntryService.deleteExpenseForUser(expenseId, authentication.getName());
         String message = deleted
                 ? "Expense deleted successfully."
@@ -126,9 +103,4 @@ public class ExpenseViewController {
         return "redirect:/expenses";
     }
 
-    private boolean isUserAuthenticated(Authentication authentication) {
-        return authentication != null
-                && authentication.isAuthenticated()
-                && !(authentication instanceof AnonymousAuthenticationToken);
-    }
 }
