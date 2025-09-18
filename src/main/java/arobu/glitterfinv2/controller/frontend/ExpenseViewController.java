@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,11 +26,22 @@ public class ExpenseViewController {
 
     @GetMapping
     public String expenses(Model model, Authentication authentication) {
-        List<ExpenseEntry> expenses = expenseEntryService.getExpensesForUser(authentication.getName());
+        List<ExpenseEntry> expenses = expenseEntryService.getExpenses(authentication.getName());
 
         model.addAttribute("expenses", expenses);
 
         return "expenses";
+    }
+
+    @GetMapping("/new")
+    public String newExpense(Model model) {
+        ExpenseEntryUpdateForm form = new ExpenseEntryUpdateForm();
+        form.setTimezone(ZonedDateTime.now().getOffset().getId());
+
+        model.addAttribute("expenseForm", form);
+        model.addAttribute("isEdit", false);
+
+        return "expense-form";
     }
 
     @GetMapping("/{id}")
@@ -38,7 +50,7 @@ public class ExpenseViewController {
                               Authentication authentication,
                               RedirectAttributes redirectAttributes) {
 
-        Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpenseForUser(expenseId, authentication.getName());
+        Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, authentication.getName());
 
         if (expenseEntry.isEmpty()) {
             redirectAttributes.addFlashAttribute("expenseMessage", "Unable to locate the requested expense.");
@@ -56,7 +68,7 @@ public class ExpenseViewController {
                               Authentication authentication,
                               RedirectAttributes redirectAttributes) {
 
-        Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpenseForUser(expenseId, authentication.getName());
+        Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, authentication.getName());
 
         if (expenseEntry.isEmpty()) {
             redirectAttributes.addFlashAttribute("expenseMessage", "Unable to locate the requested expense.");
@@ -65,8 +77,26 @@ public class ExpenseViewController {
 
         model.addAttribute("expense", expenseEntry.get());
         model.addAttribute("expenseForm", ExpenseEntryMapper.toExpenseEntryUpdateForm(expenseEntry.get()));
+        model.addAttribute("isEdit", true);
 
-        return "expense-edit";
+        return "expense-form";
+    }
+
+    @PostMapping
+    public String createExpense(@ModelAttribute("expenseForm") ExpenseEntryUpdateForm expenseForm,
+                                Authentication authentication,
+                                RedirectAttributes redirectAttributes) {
+
+        boolean created = expenseEntryService
+                .createExpense(authentication.getName(), expenseForm)
+                .isPresent();
+
+        String message = created
+                ? "Expense added successfully."
+                : "Unable to add the expense. Please verify the details and try again.";
+        redirectAttributes.addFlashAttribute("expenseMessage", message);
+
+        return "redirect:/expenses";
     }
 
     @PostMapping("/{id}/edit")
@@ -76,7 +106,7 @@ public class ExpenseViewController {
                                 RedirectAttributes redirectAttributes) {
 
         boolean updated = expenseEntryService
-                .updateExpenseForUser(expenseId, authentication.getName(), expenseForm)
+                .updateExpense(expenseId, authentication.getName(), expenseForm)
                 .isPresent();
 
         String message = updated
@@ -92,7 +122,7 @@ public class ExpenseViewController {
                                 Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
 
-        boolean deleted = expenseEntryService.deleteExpenseForUser(expenseId, authentication.getName());
+        boolean deleted = expenseEntryService.deleteExpense(expenseId, authentication.getName());
         String message = deleted
                 ? "Expense deleted successfully."
                 : "Unable to delete the expense. It may have already been removed.";

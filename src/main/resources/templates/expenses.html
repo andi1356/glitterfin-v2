@@ -12,7 +12,10 @@
 
 <main>
     <section class="expenses-container">
-        <h1>Expenses</h1>
+        <div class="expenses-header">
+            <h1>Expenses</h1>
+            <a th:href="@{/expenses/new}" class="btn btn-primary add-expense-button">Add Expense</a>
+        </div>
 
         <div th:if="${expenseMessage}" class="feedback" th:text="${expenseMessage}">
             Expense Action Message

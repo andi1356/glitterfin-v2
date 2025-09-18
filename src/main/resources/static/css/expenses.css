@@ -7,6 +7,19 @@
     box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
 }
 
+.expenses-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.expenses-header h1 {
+    margin: 0;
+}
+
 .expenses-container h1 {
     margin-top: 0;
     margin-bottom: 1.5rem;
@@ -95,6 +108,16 @@
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.add-expense-button {
+    font-size: 0.95rem;
+    padding: 0.6rem 1.2rem;
+}
+
 .btn:hover,
 .btn:focus {
     transform: translateY(-1px);
@@ -115,6 +138,16 @@
     .expenses-container {
         padding: 1.5rem;
         margin: 1.5rem;
+    }
+
+    .expenses-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .expenses-header .add-expense-button {
+        width: 100%;
+        text-align: center;
     }
 
     .expenses-table {

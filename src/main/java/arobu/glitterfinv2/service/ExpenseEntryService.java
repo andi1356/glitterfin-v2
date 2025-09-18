@@ -44,23 +44,59 @@ public class ExpenseEntryService {
         return expenseEntryRepository.save(entity);
     }
 
-    public List<ExpenseEntry> getExpensesForUser(final String username) {
+
+    public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryUpdateForm form) {
+        if (form == null) {
+            LOGGER.warn("Attempted to create expense for user {} with empty form", username);
+            return Optional.empty();
+        }
+
+        ExpenseOwner owner  = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
+
+        ExpenseEntry newExpense = new ExpenseEntry()
+                .setOwner(owner)
+                .setDescription(form.getDescription())
+                .setCategory(form.getCategory())
+                .setMerchant(form.getMerchant())
+                .setAmount(form.getAmount())
+                .setSource(form.getSource())
+                .setReceiptData(form.getReceiptData())
+                .setDetails(form.getDetails())
+                .setShared(Boolean.TRUE.equals(form.getShared()))
+                .setOutlier(Boolean.TRUE.equals(form.getOutlier()));
+
+        applyTimestampUpdates(newExpense, form);
+
+        if (newExpense.getAmount() == null
+                || newExpense.getTimestamp() == null
+                || newExpense.getTimezone() == null
+                || newExpense.getSource() == null || newExpense.getSource().isBlank()
+                || newExpense.getMerchant() == null || newExpense.getMerchant().isBlank()) {
+            LOGGER.warn("Missing required fields when creating expense for user {}", username);
+            return Optional.empty();
+        }
+
+        LOGGER.info("Creating expense for user {}", username);
+        return Optional.of(expenseEntryRepository.save(newExpense));
+    }
+
+    public List<ExpenseEntry> getExpenses(final String username) {
         LOGGER.info("Fetching expenses for user: {}", username);
         return expenseEntryRepository.findAllByOwner_Username(username);
     }
 
-    public Optional<ExpenseEntry> getExpenseForUser(final Integer expenseId, final String username) {
+    public Optional<ExpenseEntry> getExpense(final Integer expenseId, final String username) {
         LOGGER.info("Fetching expense {} for user {}", expenseId, username);
         return expenseEntryRepository.findByIdAndOwner_Username(expenseId, username);
     }
 
-    public Optional<ExpenseEntry> updateExpenseForUser(final Integer expenseId, final String username, final ExpenseEntryUpdateForm form) {
+    public Optional<ExpenseEntry> updateExpense(final Integer expenseId, final String username, final ExpenseEntryUpdateForm form) {
         if (form == null) {
             LOGGER.warn("Attempted to update expense {} for user {} with empty form", expenseId, username);
             return Optional.empty();
         }
 
-        return getExpenseForUser(expenseId, username).map(expenseEntry -> {
+        return getExpense(expenseId, username).map(expenseEntry -> {
             expenseEntry.setDescription(form.getDescription());
             expenseEntry.setCategory(form.getCategory());
             expenseEntry.setMerchant(form.getMerchant());
@@ -84,8 +120,8 @@ public class ExpenseEntryService {
         });
     }
 
-    public boolean deleteExpenseForUser(final Integer expenseId, final String username) {
-        Optional<ExpenseEntry> expenseEntry = getExpenseForUser(expenseId, username);
+    public boolean deleteExpense(final Integer expenseId, final String username) {
+        Optional<ExpenseEntry> expenseEntry = getExpense(expenseId, username);
 
         if (expenseEntry.isEmpty()) {
             LOGGER.warn("Attempted to delete missing expense {} for user {}", expenseId, username);

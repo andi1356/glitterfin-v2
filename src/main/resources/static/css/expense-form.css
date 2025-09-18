@@ -1,4 +1,4 @@
-.expense-edit-container {
+.expense-form-container {
     max-width: 680px;
     margin: 2.5rem auto;
     padding: 2.25rem;
@@ -7,7 +7,7 @@
     box-shadow: 0 15px 35px rgba(15, 23, 42, 0.1);
 }
 
-.expense-edit-container h1 {
+.expense-form-container h1 {
     margin-top: 0;
     font-size: 2.1rem;
     color: #1f2937;
@@ -63,6 +63,11 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     outline: none;
 }
+
+.form-row input:required {
+    border-left: 1px solid red;
+}
+
 
 .checkbox-row {
     flex-direction: row;
@@ -137,7 +142,7 @@
 }
 
 @media (max-width: 640px) {
-    .expense-edit-container {
+    .expense-form-container {
         margin: 1.5rem;
         padding: 1.5rem;
     }
