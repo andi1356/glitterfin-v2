@@ -15,14 +15,9 @@
         <h1>Expenses</h1>
 
         <div th:if="${expenseMessage}" class="feedback" th:text="${expenseMessage}">
-            Expense updated successfully.
+            Expense Action Message
         </div>
 
-        <div th:if="${!isAuthenticated}" class="auth-message">
-            <p>Please sign in to view and manage your expenses.</p>
-        </div>
-
-        <div th:if="${isAuthenticated}">
             <div th:if="${#lists.isEmpty(expenses)}" class="empty-state">
                 <p>No expenses recorded yet. Start by adding a new one!</p>
             </div>
@@ -44,17 +39,12 @@
                         <td th:text="${expense.description != null ? expense.description : '—'}">Description</td>
                         <td th:text="${expense.category != null ? expense.category : '—'}">Category</td>
                         <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
-                        <td th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">
-                            $
-                        </td>
-                        <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEE MMM d yy | HH:mm') : '—'}">
-                            Timestamp
-                        </td>
+                        <td th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
+                        <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEE MMM d yy | HH:mm') : '—'}">Timestamp</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-        </div>
     </section>
 </main>
 

@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,22 +45,12 @@ public class ExpenseEntryService {
     }
 
     public List<ExpenseEntry> getExpensesForUser(final String username) {
-        if (username == null || username.isBlank()) {
-            LOGGER.debug("Requested expenses for empty username");
-            return Collections.emptyList();
-        }
-
-        LOGGER.debug("Fetching expenses for user: {}", username);
+        LOGGER.info("Fetching expenses for user: {}", username);
         return expenseEntryRepository.findAllByOwner_Username(username);
     }
 
     public Optional<ExpenseEntry> getExpenseForUser(final Integer expenseId, final String username) {
-        if (expenseId == null || username == null || username.isBlank()) {
-            LOGGER.debug("Attempted to fetch expense with invalid data. id: {}, username: {}", expenseId, username);
-            return Optional.empty();
-        }
-
-        LOGGER.debug("Fetching expense {} for user {}", expenseId, username);
+        LOGGER.info("Fetching expense {} for user {}", expenseId, username);
         return expenseEntryRepository.findByIdAndOwner_Username(expenseId, username);
     }
 

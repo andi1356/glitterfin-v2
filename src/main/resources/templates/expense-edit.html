@@ -28,17 +28,17 @@
         <form th:action="@{/expenses/{id}/edit(id=${expense.id})}" th:object="${expenseForm}" method="post" class="expense-form">
             <div class="form-row">
                 <label for="description">Description</label>
-                <input type="text" id="description" th:field="*{description}" placeholder="What was this expense for?" required>
+                <input type="text" id="description" th:field="*{description}" placeholder="What was this expense for?">
             </div>
 
             <div class="form-row">
                 <label for="category">Category</label>
-                <input type="text" id="category" th:field="*{category}" placeholder="e.g., Food, Travel" required>
+                <input type="text" id="category" th:field="*{category}" placeholder="e.g. Groceries, Restaurants">
             </div>
 
             <div class="form-row">
                 <label for="merchant">Merchant</label>
-                <input type="text" id="merchant" th:field="*{merchant}" placeholder="Where did you spend?" required>
+                <input type="text" id="merchant" th:field="*{merchant}" placeholder="The merchant where you spend">
             </div>
 
             <div class="form-row">
@@ -53,12 +53,12 @@
 
             <div class="form-row">
                 <label for="timezone">Timezone</label>
-                <input type="text" id="timezone" th:field="*{timezone}" placeholder="e.g., UTC or America/New_York">
+                <input type="text" id="timezone" th:field="*{timezone}" placeholder="e.g. UTC or +03:00" required>
             </div>
 
             <div class="form-row">
                 <label for="source">Source</label>
-                <input type="text" id="source" th:field="*{source}" placeholder="How was this recorded?">
+                <input type="text" id="source" th:field="*{source}" placeholder="e.g. CEC Card, Revolut, CASH" required>
             </div>
 
             <div class="form-row">

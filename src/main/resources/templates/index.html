@@ -14,12 +14,10 @@
         <h2>Glitterfin! Finances done with glitter</h2>
         <a th:href="@{/login}">Login</a>
 
-        <!-- Example of conditional rendering -->
-        <div th:if="${user}" class="user-info">
+        <div th:if="${user.getName() != 'anonymousUser'}" class="user-info">
             <p>Hello, <span th:text="${user.name}">User</span>!</p>
         </div>
 
-        <!-- Example of iteration -->
         <ul th:if="${items}">
             <li th:each="item : ${items}" th:text="${item}">Item</li>
         </ul>

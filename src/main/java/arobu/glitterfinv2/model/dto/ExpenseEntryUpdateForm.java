@@ -1,16 +1,8 @@
 package arobu.glitterfinv2.model.dto;
 
-import arobu.glitterfinv2.model.entity.ExpenseEntry;
-
 import java.math.BigDecimal;
-import java.time.DateTimeException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class ExpenseEntryUpdateForm {
-
-    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     private String description;
     private String category;
@@ -23,43 +15,6 @@ public class ExpenseEntryUpdateForm {
     private String details;
     private Boolean shared;
     private Boolean outlier;
-
-    public static ExpenseEntryUpdateForm fromExpenseEntry(ExpenseEntry expenseEntry) {
-        ExpenseEntryUpdateForm form = new ExpenseEntryUpdateForm();
-        form.setDescription(expenseEntry.getDescription());
-        form.setCategory(expenseEntry.getCategory());
-        form.setMerchant(expenseEntry.getMerchant());
-        form.setAmount(expenseEntry.getAmount());
-
-        if (expenseEntry.getTimestamp() != null) {
-            ZonedDateTime timestamp = expenseEntry.getTimestamp();
-            ZoneId zoneId = resolveZone(expenseEntry);
-            form.setTimestamp(timestamp.withZoneSameInstant(zoneId).format(TIMESTAMP_FORMATTER));
-            form.setTimezone(zoneId.getId());
-        } else {
-            form.setTimezone(expenseEntry.getTimezone());
-        }
-
-        form.setSource(expenseEntry.getSource());
-        form.setReceiptData(expenseEntry.getReceiptData());
-        form.setDetails(expenseEntry.getDetails());
-        form.setShared(expenseEntry.getShared());
-        form.setOutlier(expenseEntry.getOutlier());
-
-        return form;
-    }
-
-    private static ZoneId resolveZone(ExpenseEntry expenseEntry) {
-        if (expenseEntry.getTimezone() != null && !expenseEntry.getTimezone().isBlank()) {
-            try {
-                return ZoneId.of(expenseEntry.getTimezone());
-            } catch (DateTimeException ignored) {
-                // fall through to the timestamp zone
-            }
-        }
-
-        return expenseEntry.getTimestamp().getZone();
-    }
 
     public String getDescription() {
         return description;
