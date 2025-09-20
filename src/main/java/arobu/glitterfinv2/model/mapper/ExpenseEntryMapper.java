@@ -41,6 +41,9 @@ public class ExpenseEntryMapper {
         form.setShared(expenseEntry.getShared());
         form.setOutlier(expenseEntry.getOutlier());
 
+        form.setLatitude(expenseEntry.getLocation().getLatitude());
+        form.setLongitude(expenseEntry.getLocation().getLongitude());
+
         return form;
     }
 

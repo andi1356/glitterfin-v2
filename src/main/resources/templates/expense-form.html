@@ -65,7 +65,7 @@
             </div>
 
             <div class="form-row">
-                <label for="source">Source *</label>
+                <label for="source">Source</label>
                 <input type="text" id="source" th:field="*{source}" placeholder="e.g. CEC Card, Revolut, CASH" required>
             </div>
 
@@ -90,8 +90,19 @@
                 </label>
             </div>
 
+
+            <div class="form-row">
+                <label for="latitude" >Latitude</label>
+                <input type="text" id="latitude" th:field="*{latitude}">
+            </div>
+
+            <div class="form-row">
+                <label for="longitude" >Longitude</label>
+                <input type="text" id="longitude" th:field="*{longitude}">
+            </div>
+
             <div class="form-actions">
-                <a th:href="@{/expenses}" class="btn-secondary">Cancel</a>
+                <a th:href="@{/expenses/{id}(id=${expense.id})}" class="btn-secondary">Cancel</a>
                 <button type="submit" class="btn-primary" th:text="${isEdit} ? 'Save Changes' : 'Create Expense'">Save/Create Button</button>
             </div>
         </form>

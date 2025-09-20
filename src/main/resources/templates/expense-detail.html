@@ -18,11 +18,15 @@
         </a>
 
         <header class="expense-detail__header">
-            <h1 th:text="${expense.description != null ? expense.description : 'Expense details'}">Expense details</h1>
+            <h1 th:text="${expense.description}">Expense description NO</h1>
             <div class="expense-detail__actions">
                 <a class="btn btn-edit" th:href="@{/expenses/{id}/edit(id=${expense.id})}">Edit expense</a>
             </div>
         </header>
+
+        <div th:if="${expenseMessage}" class="feedback" th:text="${expenseMessage}">
+            Expense Action Message
+        </div>
 
         <div class="expense-detail__summary">
             <div class="summary-item">

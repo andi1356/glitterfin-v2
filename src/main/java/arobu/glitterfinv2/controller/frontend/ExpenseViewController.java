@@ -114,7 +114,7 @@ public class ExpenseViewController {
                 : "Unable to update the expense. Please try again.";
         redirectAttributes.addFlashAttribute("expenseMessage", message);
 
-        return "redirect:/expenses";
+        return "redirect:/expenses/" + expenseId;
     }
 
     @PostMapping("/{id}/delete")

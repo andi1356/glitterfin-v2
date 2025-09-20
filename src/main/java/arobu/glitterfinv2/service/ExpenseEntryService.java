@@ -2,6 +2,7 @@ package arobu.glitterfinv2.service;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
 import arobu.glitterfinv2.model.dto.ExpenseEntryUpdateForm;
+import arobu.glitterfinv2.model.dto.LocationData;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
@@ -10,18 +11,29 @@ import arobu.glitterfinv2.model.repository.ExpenseEntryRepository;
 import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.nonNull;
 
 @Service
 public class ExpenseEntryService {
+
+    @Value("${receipt-folder-path}")
+    private String RECEIPT_FOLDER_PATH;
 
     Logger LOGGER = LogManager.getLogger(ExpenseEntryService.class);
 
@@ -40,10 +52,22 @@ public class ExpenseEntryService {
         Location location = locationService.getOrSaveLocationEntity(expenseEntryApiPostDTO.getLocationData());
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryApiPostDTO, owner, location);
+
+        if (nonNull(entity.getReceiptData())) {
+            byte[] data = Base64.getDecoder().decode(entity.getReceiptData());
+            try {
+                String filename = entity.getTimestamp().toString() + ".jpg";
+                Files.write(Path.of(RECEIPT_FOLDER_PATH, filename), data);
+                entity.setReceiptData(filename);
+            } catch (IOException e) {
+                LOGGER.error("Receipt file not saved for expense entry with timestamp: {} due to error {}",
+                        entity.getTimestamp(), e.getMessage());
+            }
+        }
+
         LOGGER.info("Persisting expense entry: {}", entity);
         return expenseEntryRepository.save(entity);
     }
-
 
     public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryUpdateForm form) {
         if (form == null) {
@@ -52,6 +76,8 @@ public class ExpenseEntryService {
         }
 
         ExpenseOwner owner  = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
+        Location location = locationService.getOrSaveLocationEntity(
+                new LocationData(form.getLatitude().toString(), form.getLongitude().toString()));
 
         ExpenseEntry newExpense = new ExpenseEntry()
                 .setOwner(owner)
@@ -63,7 +89,8 @@ public class ExpenseEntryService {
                 .setReceiptData(form.getReceiptData())
                 .setDetails(form.getDetails())
                 .setShared(Boolean.TRUE.equals(form.getShared()))
-                .setOutlier(Boolean.TRUE.equals(form.getOutlier()));
+                .setOutlier(Boolean.TRUE.equals(form.getOutlier()))
+                .setLocation(location);
 
         applyTimestampUpdates(newExpense, form);
 
@@ -104,6 +131,11 @@ public class ExpenseEntryService {
             expenseEntry.setSource(form.getSource());
             expenseEntry.setReceiptData(form.getReceiptData());
             expenseEntry.setDetails(form.getDetails());
+            if (!Objects.equals(form.getLatitude(), expenseEntry.getLocation().getLatitude()) ||
+                    !Objects.equals(form.getLongitude(), expenseEntry.getLocation().getLongitude())) {
+                expenseEntry.setLocation(locationService.getOrSaveLocationEntity(
+                        new LocationData(form.getLatitude().toString(), form.getLongitude().toString())));
+            }
 
             if (form.getShared() != null) {
                 expenseEntry.setShared(form.getShared());
