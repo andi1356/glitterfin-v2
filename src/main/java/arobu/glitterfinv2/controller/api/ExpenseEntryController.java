@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +31,12 @@ public class ExpenseEntryController {
 
     @PostMapping
     public ResponseEntity<Map<String,String>> insertExpense(@RequestBody final ExpenseEntryApiPostDTO dto) {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Map<String, String> response = new HashMap<>();
         ExpenseEntry savedEntity;
         try {
-            savedEntity = expenseEntryService.saveExpense(dto);
+            savedEntity = expenseEntryService.saveExpense(dto, username);
         } catch (OwnerNotFoundException e) {
             LOGGER.error("Owner not found for expense {}",dto, e);
             response.put("status", "failure");
@@ -44,7 +47,7 @@ public class ExpenseEntryController {
         response.put("status", "success");
         response.put("expense", savedEntity.toString());
 
-        LOGGER.info(response.toString());
+        LOGGER.info("Successfully persisted entity with id: {}", savedEntity.getId());
 
         return ResponseEntity.ok(response);
     }

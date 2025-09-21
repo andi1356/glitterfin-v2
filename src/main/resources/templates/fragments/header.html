@@ -1,7 +1,18 @@
-<header th:fragment="header">
-    <nav>
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/about}">About</a>
-        <a th:href="@{/contact}">Contact</a>
-    </nav>
+<header th:fragment="header" class="site-header" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <div class="header-inner">
+        <a th:href="@{/}" class="brand">Glitterfin</a>
+        <nav class="primary-nav">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/expenses}">Expenses</a>
+            <a th:href="@{/login}">Login</a>
+        </nav>
+        <div class="auth-controls">
+            <a sec:authorize="isAnonymous()" th:href="@{/login}" class="login-link">Login</a>
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="logout-form">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+    </div>
 </header>

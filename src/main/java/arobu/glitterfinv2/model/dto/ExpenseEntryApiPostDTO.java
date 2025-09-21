@@ -1,7 +1,10 @@
 package arobu.glitterfinv2.model.dto;
 
+
+import java.math.BigDecimal;
+
 public class ExpenseEntryApiPostDTO {
-    private Double amount;
+    private BigDecimal amount;
     private String timestamp;
     private String source;
     private String merchant;
@@ -13,7 +16,7 @@ public class ExpenseEntryApiPostDTO {
     private Boolean shared;
     private Boolean outlier;
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 

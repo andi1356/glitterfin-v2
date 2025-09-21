@@ -1,0 +1,161 @@
+.expenses-container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+.expenses-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.expenses-header h1 {
+    margin: 0;
+}
+
+.expenses-container h1 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: #1f2937;
+}
+
+.auth-message,
+.empty-state,
+.feedback {
+    padding: 1.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    color: #475569;
+    text-align: center;
+}
+
+.feedback {
+    background: #ecfdf5;
+    border-color: #bbf7d0;
+    color: #166534;
+    margin-bottom: 1.5rem;
+}
+
+.expenses-table-wrapper {
+    overflow-x: auto;
+}
+
+.expenses-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+}
+
+.expenses-table thead {
+    background: #1f2937;
+    color: #f9fafb;
+}
+
+.expenses-table th,
+.expenses-table td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+}
+
+.expenses-table tbody tr[data-href] {
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.expenses-table tbody tr[data-href]:hover {
+    background: #f8fafc;
+}
+
+.expenses-table tbody tr[data-href]:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: -3px;
+    background: #eff6ff;
+}
+
+.expenses-table tbody tr[data-href] td.actions {
+    cursor: default;
+}
+
+.expenses-table td.actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.inline-form {
+    margin: 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.add-expense-button {
+    font-size: 0.95rem;
+    padding: 0.6rem 1.2rem;
+}
+
+.btn:hover,
+.btn:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(15, 23, 42, 0.12);
+}
+
+.btn-edit {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.btn-delete {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .expenses-container {
+        padding: 1.5rem;
+        margin: 1.5rem;
+    }
+
+    .expenses-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .expenses-header .add-expense-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .expenses-table {
+        min-width: 100%;
+    }
+
+    .expenses-table td.actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
