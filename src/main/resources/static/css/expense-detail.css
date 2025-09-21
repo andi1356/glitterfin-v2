@@ -166,3 +166,47 @@ dl {
         grid-template-columns: 1fr;
     }
 }
+
+.receipt-card {
+    padding-bottom: 0.75rem;
+}
+
+
+.receipt-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+
+.receipt-img {
+    width: 100%;
+    max-width: 100%;
+    max-height: 420px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    display: block;
+}
+
+
+/* Make images look clickable (they open in a new tab) */
+.receipt-container a {
+    display: inline-block;
+    text-decoration: none;
+}
+
+
+.receipt-placeholder {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+
+@media (max-width: 640px) {
+    .receipt-img {
+        max-height: 320px;
+    }
+}

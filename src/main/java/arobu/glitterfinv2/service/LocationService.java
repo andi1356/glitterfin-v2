@@ -45,4 +45,8 @@ public class LocationService {
                     return locationRepository.save(newEntity);
                 });
     }
+
+    public Location getEmptyLocation() {
+        return locationRepository.getLocationsByLatitudeAndLongitude(0D,0D);
+    }
 }

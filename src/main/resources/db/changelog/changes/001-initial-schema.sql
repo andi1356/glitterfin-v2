@@ -33,7 +33,7 @@ CREATE TABLE expense (
     source    VARCHAR(255)   NOT NULL,
     merchant  VARCHAR(255)  NOT NULL,
 
-    location_id   INT,
+    location_id   INT NOT NULL,
     category      VARCHAR(255),
     receipt_data  VARCHAR,
     description   VARCHAR(255),

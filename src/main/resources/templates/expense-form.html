@@ -102,7 +102,7 @@
             </div>
 
             <div class="form-actions">
-                <a th:href="@{/expenses/{id}(id=${expense.id})}" class="btn-secondary">Cancel</a>
+                <a th:href="${isEdit} ? @{/expenses/{id}(id=${expense.id})} : @{/expenses}" class="btn-secondary">Cancel</a>
                 <button type="submit" class="btn-primary" th:text="${isEdit} ? 'Save Changes' : 'Create Expense'">Save/Create Button</button>
             </div>
         </form>

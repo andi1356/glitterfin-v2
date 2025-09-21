@@ -74,12 +74,17 @@ public class ExpenseEntryService {
             LOGGER.warn("Attempted to create expense for user {} with empty form", username);
             return Optional.empty();
         }
+        ExpenseEntry newExpense = new ExpenseEntry();
 
         ExpenseOwner owner  = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
-        Location location = locationService.getOrSaveLocationEntity(
-                new LocationData(form.getLatitude().toString(), form.getLongitude().toString()));
+        if (nonNull(form.getLatitude()) && nonNull(form.getLongitude())) {
+            newExpense.setLocation(locationService.getOrSaveLocationEntity(
+                    new LocationData(form.getLatitude().toString(), form.getLongitude().toString())));
+        } else {
+            newExpense.setLocation(locationService.getEmptyLocation());
+        }
 
-        ExpenseEntry newExpense = new ExpenseEntry()
+        newExpense
                 .setOwner(owner)
                 .setDescription(form.getDescription())
                 .setCategory(form.getCategory())
@@ -89,8 +94,7 @@ public class ExpenseEntryService {
                 .setReceiptData(form.getReceiptData())
                 .setDetails(form.getDetails())
                 .setShared(Boolean.TRUE.equals(form.getShared()))
-                .setOutlier(Boolean.TRUE.equals(form.getOutlier()))
-                .setLocation(location);
+                .setOutlier(Boolean.TRUE.equals(form.getOutlier()));
 
         applyTimestampUpdates(newExpense, form);
 
@@ -108,7 +112,7 @@ public class ExpenseEntryService {
     }
 
     public List<ExpenseEntry> getExpenses(final String username) {
-        LOGGER.info("Fetching expenses for user: {}", username);
+        LOGGER.info("Fetching all expenses for user: {}", username);
         return expenseEntryRepository.findAllByOwner_Username(username);
     }
 

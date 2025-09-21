@@ -1,1 +1,2 @@
 INSERT INTO owner VALUES ('curl/8.7.1', '$2a$10$0ZpJN07UGzOuG5XYShcrT.wFhU0Sh2.5ZXqubK1UjChqkAsiMgAgm', 'TBD', 'andi-dev-mbair', '$2a$10$FD51H8JjUfctppzTan.IY.ZIpO6axzqorTvWBeHSUk0Mlr1S8XVs6');
+INSERT INTO location (display_name, latitude, longitude) VALUES ('NO LOCATION', 0.0, 0.0);
