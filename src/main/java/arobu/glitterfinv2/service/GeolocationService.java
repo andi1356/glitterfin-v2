@@ -40,8 +40,12 @@ public class GeolocationService {
             } else {
                 return new ObjectMapper().readValue(geocodingResponseString.body(), GeoCodeResponse.class);
             }
-        } catch (IOException | InterruptedException e) {
-            LOGGER.error(e.getMessage());
+        } catch (IOException e) {
+            LOGGER.error("Httpclient request to GeoCode service returned an error. Cause: {}", e.getCause());
+            return new GeoCodeResponse(lat, lon);
+        } catch (InterruptedException e) {
+            LOGGER.error("Mapping the GeoCode response to internal GeoCodeResponse model failed. Cause: {}",
+                    e.getCause());
             return new GeoCodeResponse(lat, lon);
         }
     }

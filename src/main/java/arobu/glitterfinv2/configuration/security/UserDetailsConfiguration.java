@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 public class UserDetailsConfiguration {
@@ -48,15 +47,6 @@ public class UserDetailsConfiguration {
         DaoAuthenticationProvider p = new DaoAuthenticationProvider(uds);
         p.setPasswordEncoder(encoder);
         return p;
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return (request, response, exception) -> {
-            LOGGER.info("Login successful for user: {} from IP: {}",
-                    request.getParameter("username"), request.getRemoteAddr());
-            response.sendRedirect("/finances");
-        };
     }
 
     @Bean
