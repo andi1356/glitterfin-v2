@@ -108,10 +108,10 @@
         <article class="detail-card receipt-card" th:if="${expense.receiptData != null && expense.receiptData != ''}">
             <h2>Receipt</h2>
             <a th:if="${expense.receiptData != null}"
-               th:href="@{'/media/receipts/' + ${expense.receiptData}}" target="_blank" rel="noopener">
+               th:href="@{'/data/receipts/' + ${expense.receiptData}}" target="_blank" rel="noopener">
                 <div class="receipt-container">
                     <img class="receipt-img"
-                         th:src="${'/media/receipts/' + expense.receiptData}"
+                         th:src="${'/data/receipts/' + expense.receiptData}"
                          th:alt="${'Receipt ' + expense.receiptData}" />
                 </div>
             </a>
