@@ -43,7 +43,7 @@
                         <td th:text="${expense.category != null ? expense.category : '—'}">Category</td>
                         <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
                         <td th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
-                        <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEE MMM d yyyy | HH:mm') : '—'}">Timestamp</td>
+                        <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEEE, MMM d yyyy | HH:mm') : '—'}">Timestamp</td>
                     </tr>
                     </tbody>
                 </table>

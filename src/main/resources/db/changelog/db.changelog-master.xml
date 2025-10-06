@@ -6,7 +6,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
 
     <include file="db/changelog/changes/001-initial-schema.sql"/>
-    <include file="db/changelog/changes/002-add-arobu-test-user-curl.sql"/>
+    <include file="/db/changelog/changes/002-add-arobu-test-user-curl-and-no-location-entry.sql"/>
     <include file="/db/changelog/changes/003-alter-owner-make-username-as-id.sql"/>
 
 </databaseChangeLog>
