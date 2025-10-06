@@ -28,7 +28,7 @@ public class MvcConfig implements WebMvcConfigurer {
             resourceLocation = resourceLocation + "/";
         }
 
-        registry.addResourceHandler("/data/receipts/**")
+        registry.addResourceHandler(receiptFolderPath + "/**")
                 .addResourceLocations(resourceLocation);
     }
 }

@@ -1,7 +1,6 @@
 .env.prod
 .env.dev
 tools/enc_password_file
-/src/main/resources/static/data/*
 
 logs
 

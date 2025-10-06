@@ -61,7 +61,7 @@ public class ExpenseEntryService {
                 entity.setReceiptData(filename);
             } catch (IOException e) {
                 LOGGER.error("Receipt file not saved for expense entry with timestamp: {} due to error {}",
-                        entity.getTimestamp(), e.getMessage());
+                        entity.getTimestamp(), e);
             }
         }
 
