@@ -19,6 +19,8 @@ services:
         limits:
           memory: 1G
           cpus: '1.0'
+    volumes:
+      - data_volume_prod:/app/data
     depends_on:
       db-prod:
         condition: service_healthy
@@ -54,6 +56,8 @@ services:
       context: .
       args:
         BUILD_ENV: dev
+    volumes:
+      - data_volume_dev:/app/data
     profiles:
       - dev
       - app-dev
@@ -81,6 +85,8 @@ services:
 volumes:
   db_volume_prod: {}
   db_volume_dev: {}
+  data_volume_prod: {}
+  data_volume_dev: {}
 
 networks:
   public:
