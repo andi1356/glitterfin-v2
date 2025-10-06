@@ -12,7 +12,6 @@
 <main>
     <div class="container">
         <h2>Glitterfin! Finances done with glitter</h2>
-        <a th:href="@{/login}">Login</a>
 
         <div th:if="${user.getName() != 'anonymousUser'}" class="user-info">
             <p>Hello, <span th:text="${user.name}">User</span>!</p>
