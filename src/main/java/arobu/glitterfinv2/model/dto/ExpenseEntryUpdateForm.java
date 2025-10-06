@@ -15,6 +15,8 @@ public class ExpenseEntryUpdateForm {
     private String details;
     private Boolean shared;
     private Boolean outlier;
+    private Double latitude;
+    private Double longitude;
 
     public String getDescription() {
         return description;
@@ -102,5 +104,23 @@ public class ExpenseEntryUpdateForm {
 
     public void setOutlier(Boolean outlier) {
         this.outlier = outlier;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public ExpenseEntryUpdateForm setLatitude(Double latitude) {
+        this.latitude = latitude;
+        return this;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public ExpenseEntryUpdateForm setLongitude(Double longitude) {
+        this.longitude = longitude;
+        return this;
     }
 }

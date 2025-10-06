@@ -161,17 +161,7 @@ public class ExpenseEntry {
         return "ExpenseEntry{" +
                 "id=" + id +
                 ", owner=" + owner +
-                ", amount=" + amount +
                 ", timestamp=" + timestamp +
-                ", source='" + source + '\'' +
-                ", merchant='" + merchant + '\'' +
-                ", location=" + location +
-                ", category='" + category + '\'' +
-                ", receiptData='" + receiptData + '\'' +
-                ", description='" + description + '\'' +
-                ", details='" + details + '\'' +
-                ", shared=" + shared +
-                ", outlier=" + outlier +
                 '}';
     }
 }

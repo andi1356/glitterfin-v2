@@ -10,7 +10,8 @@ FROM amazoncorretto:21.0.8-alpine3.22
 RUN addgroup -S glitterfin-group && adduser -S -G glitterfin-group glitterfin-user
 WORKDIR /app
 COPY --from=build /app/target/*.jar glitterfin.jar
-RUN chown -R glitterfin-user:glitterfin-group /app
+RUN mkdir -p /app/data/receipts \
+    && chown -R glitterfin-user:glitterfin-group /app
 USER glitterfin-user
 ARG BUILD_ENV
 ENV BUILD_ENV=${BUILD_ENV}

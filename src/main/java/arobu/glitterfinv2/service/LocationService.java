@@ -24,7 +24,7 @@ public class LocationService {
 
     public Location getOrSaveLocationEntity(final LocationData locationData) {
         GeoCodeResponse geoCodeResponse = geolocationService.reverseGeocode(locationData.getLatitude(), locationData.getLongitude());
-        LOGGER.info("GeoCode Service returned response: {}", geoCodeResponse);
+        LOGGER.info("GeoLocationService returned response: {}", geoCodeResponse);
 
         Location newEntity = LocationMapper.toEntity(geoCodeResponse);
 
@@ -44,5 +44,9 @@ public class LocationService {
                     LOGGER.info("Persisting location entity: {}", newEntity);
                     return locationRepository.save(newEntity);
                 });
+    }
+
+    public Location getEmptyLocation() {
+        return locationRepository.getLocationsByLatitudeAndLongitude(0D,0D);
     }
 }

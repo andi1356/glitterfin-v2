@@ -2,6 +2,7 @@ package arobu.glitterfinv2.service;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
 import arobu.glitterfinv2.model.dto.ExpenseEntryUpdateForm;
+import arobu.glitterfinv2.model.dto.LocationData;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
@@ -10,18 +11,29 @@ import arobu.glitterfinv2.model.repository.ExpenseEntryRepository;
 import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.nonNull;
 
 @Service
 public class ExpenseEntryService {
+
+    @Value("${receipt-folder-path}")
+    private String RECEIPT_FOLDER_PATH;
 
     Logger LOGGER = LogManager.getLogger(ExpenseEntryService.class);
 
@@ -40,20 +52,39 @@ public class ExpenseEntryService {
         Location location = locationService.getOrSaveLocationEntity(expenseEntryApiPostDTO.getLocationData());
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryApiPostDTO, owner, location);
+
+        if (nonNull(entity.getReceiptData())) {
+            byte[] data = Base64.getDecoder().decode(entity.getReceiptData());
+            try {
+                String filename = entity.getTimestamp().toString() + ".jpg";
+                Files.write(Path.of(RECEIPT_FOLDER_PATH, filename), data);
+                entity.setReceiptData(filename);
+            } catch (IOException e) {
+                LOGGER.error("Receipt file not saved for expense entry with timestamp: {} due to error {}",
+                        entity.getTimestamp(), e);
+            }
+        }
+
         LOGGER.info("Persisting expense entry: {}", entity);
         return expenseEntryRepository.save(entity);
     }
-
 
     public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryUpdateForm form) {
         if (form == null) {
             LOGGER.warn("Attempted to create expense for user {} with empty form", username);
             return Optional.empty();
         }
+        ExpenseEntry newExpense = new ExpenseEntry();
 
         ExpenseOwner owner  = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
+        if (nonNull(form.getLatitude()) && nonNull(form.getLongitude())) {
+            newExpense.setLocation(locationService.getOrSaveLocationEntity(
+                    new LocationData(form.getLatitude().toString(), form.getLongitude().toString())));
+        } else {
+            newExpense.setLocation(locationService.getEmptyLocation());
+        }
 
-        ExpenseEntry newExpense = new ExpenseEntry()
+        newExpense
                 .setOwner(owner)
                 .setDescription(form.getDescription())
                 .setCategory(form.getCategory())
@@ -81,7 +112,7 @@ public class ExpenseEntryService {
     }
 
     public List<ExpenseEntry> getExpenses(final String username) {
-        LOGGER.info("Fetching expenses for user: {}", username);
+        LOGGER.info("Fetching all expenses for user: {}", username);
         return expenseEntryRepository.findAllByOwner_Username(username);
     }
 
@@ -104,6 +135,11 @@ public class ExpenseEntryService {
             expenseEntry.setSource(form.getSource());
             expenseEntry.setReceiptData(form.getReceiptData());
             expenseEntry.setDetails(form.getDetails());
+            if (!Objects.equals(form.getLatitude(), expenseEntry.getLocation().getLatitude()) ||
+                    !Objects.equals(form.getLongitude(), expenseEntry.getLocation().getLongitude())) {
+                expenseEntry.setLocation(locationService.getOrSaveLocationEntity(
+                        new LocationData(form.getLatitude().toString(), form.getLongitude().toString())));
+            }
 
             if (form.getShared() != null) {
                 expenseEntry.setShared(form.getShared());

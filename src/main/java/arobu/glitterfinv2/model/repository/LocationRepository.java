@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Integer> {
     Optional<Location> findLocationByGeocodePlaceId(Integer geocodePlaceId);
+
+    Location getLocationsByLatitudeAndLongitude(Double latitude, Double longitude);
 }
