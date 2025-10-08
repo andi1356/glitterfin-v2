@@ -4,8 +4,7 @@
         <a th:href="@{/}" class="brand">Glitterfin</a>
         <nav class="primary-nav">
             <a th:href="@{/}">Home</a>
-            <a th:href="@{/expenses}">Expenses</a>
-            <a th:href="@{/login}">Login</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/expenses}">Expenses</a>
         </nav>
         <div class="auth-controls">
             <a sec:authorize="isAnonymous()" th:href="@{/login}" class="login-link">Login</a>
