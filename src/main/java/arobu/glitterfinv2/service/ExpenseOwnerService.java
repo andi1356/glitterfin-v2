@@ -11,6 +11,7 @@ import java.util.Optional;
 @Service
 public class ExpenseOwnerService {
     ExpenseOwnerRepository expenseOwnerRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
     public ExpenseOwnerService(ExpenseOwnerRepository expenseOwnerRepository) {
         this.expenseOwnerRepository = expenseOwnerRepository;
@@ -22,14 +23,8 @@ public class ExpenseOwnerService {
     }
 
     public Optional<ExpenseOwner> getExpenseOwner(String userAgentId, String apiKey) {
-        ExpenseOwner expenseOwner = expenseOwnerRepository
-                .getExpenseOwnerByUserAgentId(userAgentId);
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        if (passwordEncoder.matches(apiKey, expenseOwner.getApiToken())) {
-            return Optional.of(expenseOwner);
-        } else {
-            return Optional.empty();
-        }
+        return expenseOwnerRepository
+                .getExpenseOwnerByUserAgentId(userAgentId)
+                .filter(owner -> passwordEncoder.matches(apiKey, owner.getApiToken()));
     }
 }
