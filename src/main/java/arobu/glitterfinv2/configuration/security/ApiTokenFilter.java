@@ -61,6 +61,11 @@ public class ApiTokenFilter extends OncePerRequestFilter {
                                 request.getRemoteAddr(), request.getHeader("User-Agent"));
 
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        try {
+                            response.getOutputStream().write(("Invalid API use for user-agent: " + userAgentId).getBytes());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
 
             filterChain.doFilter(request, response);
