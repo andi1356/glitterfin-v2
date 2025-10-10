@@ -13,5 +13,5 @@ public interface ExpenseOwnerRepository extends JpaRepository<ExpenseOwner, Stri
 
     Optional<ExpenseOwner> findByUsername(String username);
 
-    ExpenseOwner getExpenseOwnerByUserAgentId(String userAgentId);
+    Optional<ExpenseOwner> getExpenseOwnerByUserAgentId(String userAgentId);
 }

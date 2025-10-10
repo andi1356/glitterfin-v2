@@ -1,8 +1,11 @@
+### SECURITY ###
 .env.prod
 .env.dev
 tools/enc_password_file
 
+### LOCAL DEVELOPMENT ##
 logs
+data/
 
 HELP.md
 target/
@@ -37,3 +40,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### macOs ##
+*.DS_STORE

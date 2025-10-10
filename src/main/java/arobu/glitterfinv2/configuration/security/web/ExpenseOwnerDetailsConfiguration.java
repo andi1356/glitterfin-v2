@@ -1,45 +1,20 @@
-package arobu.glitterfinv2.configuration.security;
+package arobu.glitterfinv2.configuration.security.web;
 
-import arobu.glitterfinv2.model.entity.ExpenseOwner;
-import arobu.glitterfinv2.service.ExpenseOwnerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
-public class UserDetailsConfiguration {
+public class ExpenseOwnerDetailsConfiguration {
 
-    Logger LOGGER = LogManager.getLogger(UserDetailsConfiguration.class);
-
-    private final ExpenseOwnerService expenseOwnerService;
-
-    public UserDetailsConfiguration(ExpenseOwnerService expenseOwnerService) {
-        this.expenseOwnerService = expenseOwnerService;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> {
-            ExpenseOwner user = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
-            return User.withUsername(user.getUsername())
-                    .password(user.getPassword())
-                    .roles("USER")
-                    .build();
-        };
-    }
+    Logger LOGGER = LogManager.getLogger(ExpenseOwnerDetailsConfiguration.class);
 
     @Bean
     public AuthenticationProvider authenticationProvider(
@@ -56,5 +31,10 @@ public class UserDetailsConfiguration {
                     request.getParameter("username"), request.getRemoteAddr());
             response.sendRedirect("/login?error");
         };
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(10);
     }
 }
