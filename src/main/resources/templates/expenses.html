@@ -146,11 +146,11 @@
                     <tbody>
                     <tr th:each="expense : ${expenses}"
                         th:attr="data-href=@{/expenses/{id}(id=${expense.id})}, data-expense-name=${expense.description != null ? expense.description : 'Expense #' + expense.id}, data-sort-amount=${expense.amount != null ? expense.amount : ''}, data-sort-date=${expense.timestamp != null ? #temporals.format(expense.timestamp, 'yyyy-MM-dd''T''HH:mm:ss') : ''}">
-                        <td th:text="${expense.description != null ? expense.description : '—'}">Description</td>
-                        <td th:text="${expense.category != null ? expense.category : '—'}">Category</td>
-                        <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
-                        <td th:text="${expense.amount != null ? '?RON ' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
-                        <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEEE, MMM d yyyy | HH:mm') : '—'}">Timestamp</td>
+                        <td data-label="Description" th:text="${expense.description != null ? expense.description : '—'}">Description</td>
+                        <td data-label="Category" th:text="${expense.category != null ? expense.category : '—'}">Category</td>
+                        <td data-label="Merchant" th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
+                        <td data-label="Amount" th:text="${expense.amount != null ? '?RON ' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
+                        <td data-label="Date" th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEEE, MMM d yyyy | HH:mm') : '—'}">Date</td>
                     </tr>
                     </tbody>
                 </table>

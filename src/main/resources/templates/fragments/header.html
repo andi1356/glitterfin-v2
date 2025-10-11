@@ -1,8 +1,17 @@
 <header th:fragment="header" class="site-header" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
     <link rel="stylesheet" th:href="@{/css/header.css}">
+    <script defer th:src="@{/js/header-menu.js}"></script>
     <div class="header-inner">
         <a th:href="@{/}" class="brand">Glitterfin</a>
-        <nav class="primary-nav">
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="menu-icon" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        </button>
+        <nav class="primary-nav" aria-label="Primary navigation">
             <a th:href="@{/}">Home</a>
             <a sec:authorize="isAuthenticated()" th:href="@{/expenses}">Expenses</a>
         </nav>
@@ -12,6 +21,22 @@
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <button type="submit" class="logout-button">Logout</button>
             </form>
+        </div>
+    </div>
+    <div class="menu-backdrop" aria-hidden="true"></div>
+    <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div class="mobile-menu-content">
+            <nav class="mobile-nav" aria-label="Mobile navigation">
+                <a th:href="@{/}">Home</a>
+                <a sec:authorize="isAuthenticated()" th:href="@{/expenses}">Expenses</a>
+            </nav>
+            <div class="mobile-auth-controls">
+                <a sec:authorize="isAnonymous()" th:href="@{/login}" class="login-link">Login</a>
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="logout-form">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            </div>
         </div>
     </div>
 </header>
