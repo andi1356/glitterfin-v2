@@ -8,6 +8,9 @@
     <link rel="stylesheet" th:href="@{/css/expenses.css}">
 </head>
 <body>
+<script th:src="@{/js/expenses-row-navigation.js}"></script>
+<script th:src="@{/js/expenses-table-controls.js}"></script>
+
 <div th:insert="~{fragments/header :: header}"></div>
 
 <main>
@@ -156,7 +159,5 @@
 </main>
 
 <div th:insert="~{fragments/footer :: footer}"></div>
-<script th:src="@{/js/expenses.js}"></script>
-<script th:src="@{/js/expenses-table-controls.js}"></script>
 </body>
 </html>
