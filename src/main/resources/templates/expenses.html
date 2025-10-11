@@ -8,6 +8,9 @@
     <link rel="stylesheet" th:href="@{/css/expenses.css}">
 </head>
 <body>
+<script th:src="@{/js/expenses-row-navigation.js}"></script>
+<script th:src="@{/js/expenses-table-controls.js}"></script>
+
 <div th:insert="~{fragments/header :: header}"></div>
 
 <main>
@@ -29,20 +32,124 @@
                 <table class="expenses-table">
                     <thead>
                     <tr>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Merchant</th>
-                        <th>Amount</th>
-                        <th>Date</th>
+                        <th class="table-header">
+                            <div class="header-content">
+                                <span>Description</span>
+                                <button
+                                    type="button"
+                                    class="sort-toggle"
+                                    data-column="0"
+                                    data-type="text"
+                                    data-label="description">
+                                    ↕
+                                </button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="header-content">
+                                <span>Category</span>
+                                <button
+                                    type="button"
+                                    class="sort-toggle"
+                                    data-column="1"
+                                    data-type="text"
+                                    data-label="category">
+                                    ↕
+                                </button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="header-content">
+                                <span>Merchant</span>
+                                <button
+                                    type="button"
+                                    class="sort-toggle"
+                                    data-column="2"
+                                    data-type="text"
+                                    data-label="merchant">
+                                    ↕
+                                </button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="header-content">
+                                <span>Amount</span>
+                                <button
+                                    type="button"
+                                    class="sort-toggle"
+                                    data-column="3"
+                                    data-type="number"
+                                    data-sort-key="sortAmount"
+                                    data-label="amount">
+                                    ↕
+                                </button>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="header-content">
+                                <span>Date</span>
+                                <button
+                                    type="button"
+                                    class="sort-toggle"
+                                    data-column="4"
+                                    data-type="date"
+                                    data-sort-key="sortDate"
+                                    data-label="date">
+                                    ↕
+                                </button>
+                            </div>
+                        </th>
+                    </tr>
+                    <tr class="filters">
+                        <th>
+                            <input
+                                type="text"
+                                class="filter-input"
+                                data-column="0"
+                                placeholder="Filter"
+                                aria-label="Filter by description">
+                        </th>
+                        <th>
+                            <input
+                                type="text"
+                                class="filter-input"
+                                data-column="1"
+                                placeholder="Filter"
+                                aria-label="Filter by category">
+                        </th>
+                        <th>
+                            <input
+                                type="text"
+                                class="filter-input"
+                                data-column="2"
+                                placeholder="Filter"
+                                aria-label="Filter by merchant">
+                        </th>
+                        <th>
+                            <input
+                                type="text"
+                                class="filter-input"
+                                data-column="3"
+                                placeholder="Filter"
+                                aria-label="Filter by amount">
+                        </th>
+                        <th>
+                            <input
+                                type="text"
+                                class="filter-input"
+                                data-column="4"
+                                placeholder="Filter"
+                                aria-label="Filter by date">
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="expense : ${expenses}"
-                        th:attr="data-href=@{/expenses/{id}(id=${expense.id})}, data-expense-name=${expense.description != null ? expense.description : 'Expense #' + expense.id}">
+                        th:attr="data-href=@{/expenses/{id}(id=${expense.id})}, data-expense-name=${expense.description != null ? expense.description : 'Expense #' + expense.id}, data-sort-amount=${expense.amount != null ? expense.amount : ''}, data-sort-date=${expense.timestamp != null ? #temporals.format(expense.timestamp, 'yyyy-MM-dd''T''HH:mm:ss') : ''}">
                         <td th:text="${expense.description != null ? expense.description : '—'}">Description</td>
                         <td th:text="${expense.category != null ? expense.category : '—'}">Category</td>
                         <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
-                        <td th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
+                        <td th:text="${expense.amount != null ? '?RON ' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
                         <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEEE, MMM d yyyy | HH:mm') : '—'}">Timestamp</td>
                     </tr>
                     </tbody>
@@ -52,6 +159,5 @@
 </main>
 
 <div th:insert="~{fragments/footer :: footer}"></div>
-<script th:src="@{/js/expenses.js}"></script>
 </body>
 </html>

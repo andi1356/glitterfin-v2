@@ -60,12 +60,62 @@
     color: #f9fafb;
 }
 
-.expenses-table th,
-.expenses-table td {
+.expenses-table thead .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.expenses-table thead .sort-toggle {
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.25rem;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.expenses-table thead .sort-toggle:focus {
+    outline: 2px solid #93c5fd;
+    outline-offset: 1px;
+}
+
+.expenses-table thead tr.filters th {
+    background: #f1f5f9;
+    color: #1f2937;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+}
+
+.expenses-table thead tr.filters .filter-input {
+    width: 90%;
+    padding: 0.2rem 0.3rem;
+    border-radius: 6px;
+    border: 1px solid #cbd5f5;
+    font-size: 0.85rem;
+    color: #1f2937;
+    background: #ffffff;
+}
+
+.expenses-table thead tr.filters .filter-input:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 1px;
+}
+
+.expenses-table th{
     padding: 0.85rem 1rem;
     text-align: left;
+    font-size: 1rem;
+}
+
+.expenses-table td {
+    padding: 0.5rem 1rem;
+    text-align: left;
     border-bottom: 1px solid #e2e8f0;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
 }
 
 .expenses-table tbody tr[data-href] {
