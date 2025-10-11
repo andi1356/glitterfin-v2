@@ -200,12 +200,83 @@
         text-align: center;
     }
 
+    .expenses-table-wrapper {
+        overflow: visible;
+    }
+
     .expenses-table {
-        min-width: 100%;
+        display: block;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .expenses-table thead {
+        display: block;
+    }
+
+    .expenses-table thead tr:first-child {
+        display: none;
+    }
+
+    .expenses-table thead tr.filters {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .expenses-table thead tr.filters th {
+        padding: 0;
+        background: transparent;
+    }
+
+    .expenses-table thead tr.filters .filter-input {
+        width: 100%;
+    }
+
+    .expenses-table tbody {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .expenses-table tbody tr {
+        display: grid;
+        gap: 0.75rem;
+        padding: 1.25rem;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+
+    .expenses-table tbody tr[data-href]:hover {
+        background: #ffffff;
+    }
+
+    .expenses-table td {
+        display: grid;
+        grid-template-columns: minmax(6.5rem, auto) 1fr;
+        gap: 0.5rem;
+        padding: 0;
+        border: none;
+        font-size: 0.95rem;
+        word-break: break-word;
+    }
+
+    .expenses-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #1f2937;
     }
 
     .expenses-table td.actions {
-        flex-direction: column;
+        display: flex;
+        flex-wrap: wrap;
         align-items: flex-start;
+        gap: 0.5rem;
     }
 }
