@@ -197,6 +197,9 @@
 
     .expenses-header .add-expense-button {
         width: 100%;
+        box-sizing: border-box;
+        display: inline-flex;
+        justify-content: center;
         text-align: center;
     }
 
@@ -212,6 +215,8 @@
 
     .expenses-table thead {
         display: block;
+        background: transparent;
+        color: #1f2937;
     }
 
     .expenses-table thead tr:first-child {
