@@ -60,6 +60,29 @@
     color: #f9fafb;
 }
 
+.expenses-table thead tr.filters th {
+    background: #111827;
+    border-bottom: 1px solid #334155;
+    padding: 0.65rem 1rem;
+}
+
+.expenses-table thead .column-filter {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #475569;
+    background: #f8fafc;
+    color: #1f2937;
+    font-size: 0.9rem;
+}
+
+.expenses-table thead .column-filter:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 1px;
+    border-color: #2563eb;
+    background: #ffffff;
+}
+
 .expenses-table th,
 .expenses-table td {
     padding: 0.85rem 1rem;
@@ -71,6 +94,49 @@
 .expenses-table tbody tr[data-href] {
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.expenses-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.expenses-table th.sortable:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: -3px;
+}
+
+.expenses-table th.sortable .sort-indicator {
+    display: inline-block;
+    width: 0.75rem;
+    margin-left: 0.35rem;
+    text-align: center;
+}
+
+.expenses-table th.sortable[data-sort-direction="asc"] .sort-indicator::before {
+    content: '\25B2';
+    font-size: 0.65rem;
+}
+
+.expenses-table th.sortable[data-sort-direction="desc"] .sort-indicator::before {
+    content: '\25BC';
+    font-size: 0.65rem;
+}
+
+.expenses-table tbody tr.is-hidden {
+    display: none;
+}
+
+.filter-empty-state {
+    margin-top: 1rem;
+    padding: 1rem;
+    text-align: center;
+    border: 1px dashed #cbd5f5;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.95rem;
 }
 
 .expenses-table tbody tr[data-href]:hover {

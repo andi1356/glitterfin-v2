@@ -29,24 +29,64 @@
                 <table class="expenses-table">
                     <thead>
                     <tr>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Merchant</th>
-                        <th>Amount</th>
-                        <th>Date</th>
+                        <th scope="col" class="sortable" data-sort-key="description" data-sort-type="text" tabindex="0" aria-sort="none">
+                            <span>Description</span>
+                            <span class="sort-indicator" aria-hidden="true"></span>
+                        </th>
+                        <th scope="col" class="sortable" data-sort-key="category" data-sort-type="text" tabindex="0" aria-sort="none">
+                            <span>Category</span>
+                            <span class="sort-indicator" aria-hidden="true"></span>
+                        </th>
+                        <th scope="col" class="sortable" data-sort-key="merchant" data-sort-type="text" tabindex="0" aria-sort="none">
+                            <span>Merchant</span>
+                            <span class="sort-indicator" aria-hidden="true"></span>
+                        </th>
+                        <th scope="col" class="sortable" data-sort-key="amount" data-sort-type="number" tabindex="0" aria-sort="none">
+                            <span>Amount</span>
+                            <span class="sort-indicator" aria-hidden="true"></span>
+                        </th>
+                        <th scope="col" class="sortable" data-sort-key="date" data-sort-type="date" tabindex="0" aria-sort="none">
+                            <span>Date</span>
+                            <span class="sort-indicator" aria-hidden="true"></span>
+                        </th>
+                    </tr>
+                    <tr class="filters">
+                        <th>
+                            <input type="text" class="column-filter" data-filter="description" placeholder="Filter description" aria-label="Filter description">
+                        </th>
+                        <th>
+                            <input type="text" class="column-filter" data-filter="category" placeholder="Filter category" aria-label="Filter category">
+                        </th>
+                        <th>
+                            <input type="text" class="column-filter" data-filter="merchant" placeholder="Filter merchant" aria-label="Filter merchant">
+                        </th>
+                        <th>
+                            <input type="text" class="column-filter" data-filter="amount" placeholder="Filter amount" aria-label="Filter amount">
+                        </th>
+                        <th>
+                            <input type="text" class="column-filter" data-filter="date" placeholder="Filter date" aria-label="Filter date">
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="expense : ${expenses}"
                         th:attr="data-href=@{/expenses/{id}(id=${expense.id})}, data-expense-name=${expense.description != null ? expense.description : 'Expense #' + expense.id}">
-                        <td th:text="${expense.description != null ? expense.description : '—'}">Description</td>
-                        <td th:text="${expense.category != null ? expense.category : '—'}">Category</td>
-                        <td th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
-                        <td th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
-                        <td th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEEE, MMM d yyyy | HH:mm') : '—'}">Timestamp</td>
+                        <td data-column="description"
+                            th:text="${expense.description != null ? expense.description : '—'}">Description</td>
+                        <td data-column="category"
+                            th:text="${expense.category != null ? expense.category : '—'}">Category</td>
+                        <td data-column="merchant"
+                            th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
+                        <td data-column="amount"
+                            th:attr="data-sort=${expense.amount != null ? expense.amount : ''}"
+                            th:text="${expense.amount != null ? '$' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
+                        <td data-column="date"
+                            th:attr="data-sort=${expense.timestamp != null ? #temporals.format(expense.timestamp, 'yyyy-MM-dd\'T\'HH:mm:ss') : ''}"
+                            th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEEE, MMM d yyyy | HH:mm') : '—'}">Timestamp</td>
                     </tr>
                     </tbody>
                 </table>
+                <div class="filter-empty-state" hidden>No expenses match the current filters.</div>
             </div>
     </section>
 </main>
