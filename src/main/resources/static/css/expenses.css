@@ -1,7 +1,7 @@
 .expenses-container {
     max-width: 1100px;
-    margin: 2rem auto;
-    padding: 2rem;
+    margin: 1.5rem auto;
+    padding: 1.5rem;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
@@ -186,8 +186,8 @@
 
 @media (max-width: 768px) {
     .expenses-container {
-        padding: 1.5rem;
-        margin: 1.5rem;
+        padding: 1.25rem;
+        margin: 1rem;
     }
 
     .expenses-header {
