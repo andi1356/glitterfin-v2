@@ -29,11 +29,51 @@
                 <table class="expenses-table">
                     <thead>
                     <tr>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Merchant</th>
-                        <th>Amount</th>
-                        <th>Date</th>
+                        <th>
+                            <div class="column-header">
+                                <button type="button" class="column-sort" data-column="0" data-type="text" aria-sort="none">
+                                    <span>Description</span>
+                                    <span class="sort-indicator" aria-hidden="true">⇅</span>
+                                </button>
+                                <input type="text" class="column-filter" data-column="0" placeholder="Filter description" aria-label="Filter by description">
+                            </div>
+                        </th>
+                        <th>
+                            <div class="column-header">
+                                <button type="button" class="column-sort" data-column="1" data-type="text" aria-sort="none">
+                                    <span>Category</span>
+                                    <span class="sort-indicator" aria-hidden="true">⇅</span>
+                                </button>
+                                <input type="text" class="column-filter" data-column="1" placeholder="Filter category" aria-label="Filter by category">
+                            </div>
+                        </th>
+                        <th>
+                            <div class="column-header">
+                                <button type="button" class="column-sort" data-column="2" data-type="text" aria-sort="none">
+                                    <span>Merchant</span>
+                                    <span class="sort-indicator" aria-hidden="true">⇅</span>
+                                </button>
+                                <input type="text" class="column-filter" data-column="2" placeholder="Filter merchant" aria-label="Filter by merchant">
+                            </div>
+                        </th>
+                        <th>
+                            <div class="column-header">
+                                <button type="button" class="column-sort" data-column="3" data-type="number" aria-sort="none">
+                                    <span>Amount</span>
+                                    <span class="sort-indicator" aria-hidden="true">⇅</span>
+                                </button>
+                                <input type="text" class="column-filter" data-column="3" placeholder="Filter amount" aria-label="Filter by amount">
+                            </div>
+                        </th>
+                        <th>
+                            <div class="column-header">
+                                <button type="button" class="column-sort" data-column="4" data-type="date" aria-sort="none">
+                                    <span>Date</span>
+                                    <span class="sort-indicator" aria-hidden="true">⇅</span>
+                                </button>
+                                <input type="text" class="column-filter" data-column="4" placeholder="Filter date" aria-label="Filter by date">
+                            </div>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
