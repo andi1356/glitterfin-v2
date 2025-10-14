@@ -34,26 +34,28 @@
                     <tr>
                         <th class="table-header">
                             <div class="header-content">
-                                <span>Description</span>
+                                <span>Date</span>
                                 <button
                                     type="button"
                                     class="sort-toggle"
                                     data-column="0"
-                                    data-type="text"
-                                    data-label="description">
+                                    data-type="date"
+                                    data-sort-key="sortDate"
+                                    data-label="date">
                                     ↕
                                 </button>
                             </div>
                         </th>
                         <th>
                             <div class="header-content">
-                                <span>Category</span>
+                                <span>Amount</span>
                                 <button
                                     type="button"
                                     class="sort-toggle"
                                     data-column="1"
-                                    data-type="text"
-                                    data-label="category">
+                                    data-type="number"
+                                    data-sort-key="sortAmount"
+                                    data-label="amount">
                                     ↕
                                 </button>
                             </div>
@@ -73,28 +75,26 @@
                         </th>
                         <th>
                             <div class="header-content">
-                                <span>Amount</span>
+                                <span>Category</span>
                                 <button
                                     type="button"
                                     class="sort-toggle"
                                     data-column="3"
-                                    data-type="number"
-                                    data-sort-key="sortAmount"
-                                    data-label="amount">
+                                    data-type="text"
+                                    data-label="category">
                                     ↕
                                 </button>
                             </div>
                         </th>
                         <th>
                             <div class="header-content">
-                                <span>Date</span>
+                                <span>Description</span>
                                 <button
                                     type="button"
                                     class="sort-toggle"
                                     data-column="4"
-                                    data-type="date"
-                                    data-sort-key="sortDate"
-                                    data-label="date">
+                                    data-type="text"
+                                    data-label="description">
                                     ↕
                                 </button>
                             </div>
@@ -106,16 +106,16 @@
                                 type="text"
                                 class="filter-input"
                                 data-column="0"
-                                placeholder="Filter by Description"
-                                aria-label="Filter by description">
+                                placeholder="Filter by Date"
+                                aria-label="Filter by Date">
                         </th>
                         <th>
                             <input
                                 type="text"
                                 class="filter-input"
                                 data-column="1"
-                                placeholder="Filter by Category"
-                                aria-label="Filter by Category">
+                                placeholder="Filter by Amount"
+                                aria-label="Filter by Amount">
                         </th>
                         <th>
                             <input
@@ -130,27 +130,27 @@
                                 type="text"
                                 class="filter-input"
                                 data-column="3"
-                                placeholder="Filter by Amount"
-                                aria-label="Filter by Amount">
+                                placeholder="Filter by Category"
+                                aria-label="Filter by Category">
                         </th>
                         <th>
                             <input
                                 type="text"
                                 class="filter-input"
                                 data-column="4"
-                                placeholder="Filter by Date"
-                                aria-label="Filter by Date">
+                                placeholder="Filter by Description"
+                                aria-label="Filter by description">
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="expense : ${expenses}"
                         th:attr="data-href=@{/expenses/{id}(id=${expense.id})}, data-expense-name=${expense.description != null ? expense.description : 'Expense #' + expense.id}, data-sort-amount=${expense.amount != null ? expense.amount : ''}, data-sort-date=${expense.timestamp != null ? #temporals.format(expense.timestamp, 'yyyy-MM-dd''T''HH:mm:ss') : ''}">
-                        <td data-label="Description" th:text="${expense.description != null ? expense.description : '—'}">Description</td>
-                        <td data-label="Category" th:text="${expense.category != null ? expense.category : '—'}">Category</td>
-                        <td data-label="Merchant" th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
-                        <td data-label="Amount" th:text="${expense.amount != null ? '?RON ' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
                         <td data-label="Date" th:text="${expense.timestamp != null ? #temporals.format(expense.timestamp, 'EEEE, MMM d yyyy | HH:mm') : '—'}">Date</td>
+                        <td data-label="Amount" th:text="${expense.amount != null ? '?RON ' + #numbers.formatDecimal(expense.amount, 1, 'COMMA', 2, 'POINT') : '—'}">Amount</td>
+                        <td data-label="Merchant" th:text="${expense.merchant != null ? expense.merchant : '—'}">Merchant</td>
+                        <td data-label="Category" th:text="${expense.category != null ? expense.category : '—'}">Category</td>
+                        <td data-label="Description" th:text="${expense.description != null ? expense.description : '—'}">Description</td>
                     </tr>
                     </tbody>
                 </table>
