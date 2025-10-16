@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Entity(name = "expense")
 public class ExpenseEntry {
@@ -163,5 +164,16 @@ public class ExpenseEntry {
                 ", owner=" + owner +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ExpenseEntry that)) return false;
+        return Objects.equals(id, that.id) && Objects.equals(owner, that.owner) && Objects.equals(amount, that.amount) && Objects.equals(timestamp, that.timestamp) && Objects.equals(timezone, that.timezone) && Objects.equals(source, that.source) && Objects.equals(merchant, that.merchant) && Objects.equals(location, that.location) && Objects.equals(category, that.category) && Objects.equals(receiptData, that.receiptData) && Objects.equals(description, that.description) && Objects.equals(details, that.details) && Objects.equals(shared, that.shared) && Objects.equals(outlier, that.outlier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, owner, amount, timestamp, timezone, source, merchant, location, category, receiptData, description, details, shared, outlier);
     }
 }
