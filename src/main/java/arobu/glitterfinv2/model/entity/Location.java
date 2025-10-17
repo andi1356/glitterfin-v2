@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 public class Location {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     Integer id;
     @Column(unique = true)
     Integer geocodePlaceId;

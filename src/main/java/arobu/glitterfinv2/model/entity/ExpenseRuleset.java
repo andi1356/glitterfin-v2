@@ -7,14 +7,17 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Objects;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
+
 @Entity
 public class ExpenseRuleset {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OnDelete(action = CASCADE)
     private ExpenseCondition condition;
 
     @Enumerated(EnumType.STRING)

@@ -6,22 +6,23 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 public class ExpenseCondition {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     ExpenseField expenseField;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     Predicate predicate;
 
-    @Column(nullable = false)
     String value;
+
+    Integer priority;
 
     public Integer getId() {
         return id;
@@ -59,14 +60,23 @@ public class ExpenseCondition {
         return this;
     }
 
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public ExpenseCondition setPriority(Integer priority) {
+        this.priority = priority;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ExpenseCondition that)) return false;
-        return Objects.equals(id, that.id) && expenseField == that.expenseField && predicate == that.predicate && Objects.equals(value, that.value);
+        return Objects.equals(id, that.id) && expenseField == that.expenseField && predicate == that.predicate && Objects.equals(value, that.value) && Objects.equals(priority, that.priority);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, expenseField, predicate, value);
+        return Objects.hash(id, expenseField, predicate, value, priority);
     }
 }
