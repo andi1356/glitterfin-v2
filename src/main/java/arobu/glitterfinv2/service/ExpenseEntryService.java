@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,11 +41,13 @@ public class ExpenseEntryService {
     private final ExpenseEntryRepository expenseEntryRepository;
     private final ExpenseOwnerService expenseOwnerService;
     private final LocationService locationService;
+    private final ExpenseRulesetService expenseRulesetService;
 
-    public ExpenseEntryService(ExpenseEntryRepository expenseEntryRepository, ExpenseOwnerService expenseOwnerService, LocationService locationService) {
+    public ExpenseEntryService(ExpenseEntryRepository expenseEntryRepository, ExpenseOwnerService expenseOwnerService, LocationService locationService, ExpenseRulesetService expenseRulesetService) {
         this.expenseEntryRepository = expenseEntryRepository;
         this.expenseOwnerService = expenseOwnerService;
         this.locationService = locationService;
+        this.expenseRulesetService = expenseRulesetService;
     }
 
     public ExpenseEntry saveExpense(final ExpenseEntryApiPostDTO expenseEntryApiPostDTO, final String username) throws OwnerNotFoundException {
@@ -53,20 +56,28 @@ public class ExpenseEntryService {
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryApiPostDTO, owner, location);
 
-        if (nonNull(entity.getReceiptData())) {
-            byte[] data = Base64.getDecoder().decode(entity.getReceiptData());
+        ExpenseEntry processedEntity = expenseRulesetService.applyRules(entity)
+                .onErrorResume(error -> {
+                    LOGGER.error("Failed to apply ruleset when saving expense for user {}", username, error);
+                    return Mono.just(entity);
+                })
+                .defaultIfEmpty(entity)
+                .block();
+
+        if (nonNull(processedEntity.getReceiptData())) {
+            byte[] data = Base64.getDecoder().decode(processedEntity.getReceiptData());
             try {
-                String filename = entity.getTimestamp().toString() + ".jpg";
+                String filename = processedEntity.getTimestamp().toString() + ".jpg";
                 Files.write(Path.of(RECEIPT_FOLDER_PATH, filename), data);
-                entity.setReceiptData(filename);
+                processedEntity.setReceiptData(filename);
             } catch (IOException e) {
                 LOGGER.error("Receipt file not saved for expense entry with timestamp: {} due to error {}",
-                        entity.getTimestamp(), e);
+                        processedEntity.getTimestamp(), e);
             }
         }
 
-        LOGGER.info("Persisting expense entry: {}", entity);
-        return expenseEntryRepository.save(entity);
+        LOGGER.info("Persisting expense entry: {}", processedEntity);
+        return expenseEntryRepository.save(processedEntity);
     }
 
     public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryUpdateForm form) {
@@ -107,8 +118,16 @@ public class ExpenseEntryService {
             return Optional.empty();
         }
 
+        ExpenseEntry processedExpense = expenseRulesetService.applyRules(newExpense)
+                .onErrorResume(error -> {
+                    LOGGER.error("Failed to apply ruleset when creating expense for user {}", username, error);
+                    return Mono.just(newExpense);
+                })
+                .defaultIfEmpty(newExpense)
+                .block();
+
         LOGGER.info("Creating expense for user {}", username);
-        return Optional.of(expenseEntryRepository.save(newExpense));
+        return Optional.of(expenseEntryRepository.save(processedExpense));
     }
 
     public List<ExpenseEntry> getExpenses(final String username) {
@@ -151,8 +170,16 @@ public class ExpenseEntryService {
 
             applyTimestampUpdates(expenseEntry, form);
 
+            ExpenseEntry processedExpense = expenseRulesetService.applyRules(expenseEntry)
+                    .onErrorResume(error -> {
+                        LOGGER.error("Failed to apply ruleset when updating expense {} for user {}", expenseId, username, error);
+                        return Mono.just(expenseEntry);
+                    })
+                    .defaultIfEmpty(expenseEntry)
+                    .block();
+
             LOGGER.info("Updating expense {} for user {}", expenseId, username);
-            return expenseEntryRepository.save(expenseEntry);
+            return expenseEntryRepository.save(processedExpense);
         });
     }
 
