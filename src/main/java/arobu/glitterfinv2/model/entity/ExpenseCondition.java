@@ -2,25 +2,25 @@ package arobu.glitterfinv2.model.entity;
 
 import arobu.glitterfinv2.model.entity.meta.ExpenseField;
 import arobu.glitterfinv2.model.entity.meta.Predicate;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
 import java.util.Objects;
+
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 public class ExpenseCondition {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     Integer id;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Enumerated(STRING)
     ExpenseField expenseField;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Enumerated(STRING)
     Predicate predicate;
-
-    @Column(nullable = false)
     String value;
 
     public Integer getId() {
@@ -68,5 +68,15 @@ public class ExpenseCondition {
     @Override
     public int hashCode() {
         return Objects.hash(id, expenseField, predicate, value);
+    }
+
+    @Override
+    public String toString() {
+        return "ExpenseCondition{" +
+                "id=" + id +
+                ", expenseField=" + expenseField +
+                ", predicate=" + predicate +
+                ", value='" + value + '\'' +
+                '}';
     }
 }

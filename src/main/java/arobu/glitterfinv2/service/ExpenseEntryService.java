@@ -40,11 +40,13 @@ public class ExpenseEntryService {
     private final ExpenseEntryRepository expenseEntryRepository;
     private final ExpenseOwnerService expenseOwnerService;
     private final LocationService locationService;
+    private final ExpenseRulesetService expenseRulesetService;
 
-    public ExpenseEntryService(ExpenseEntryRepository expenseEntryRepository, ExpenseOwnerService expenseOwnerService, LocationService locationService) {
+    public ExpenseEntryService(ExpenseEntryRepository expenseEntryRepository, ExpenseOwnerService expenseOwnerService, LocationService locationService, ExpenseRulesetService expenseRulesetService) {
         this.expenseEntryRepository = expenseEntryRepository;
         this.expenseOwnerService = expenseOwnerService;
         this.locationService = locationService;
+        this.expenseRulesetService = expenseRulesetService;
     }
 
     public ExpenseEntry saveExpense(final ExpenseEntryApiPostDTO expenseEntryApiPostDTO, final String username) throws OwnerNotFoundException {
@@ -53,6 +55,14 @@ public class ExpenseEntryService {
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryApiPostDTO, owner, location);
 
+        decodeReceiptDataIfPresent(entity);
+
+        ExpenseEntry enrichedExpense = expenseRulesetService.applyRulesets(entity);
+
+        return expenseEntryRepository.save(enrichedExpense);
+    }
+
+    private void decodeReceiptDataIfPresent(ExpenseEntry entity) {
         if (nonNull(entity.getReceiptData())) {
             byte[] data = Base64.getDecoder().decode(entity.getReceiptData());
             try {
@@ -64,9 +74,6 @@ public class ExpenseEntryService {
                         entity.getTimestamp(), e);
             }
         }
-
-        LOGGER.info("Persisting expense entry: {}", entity);
-        return expenseEntryRepository.save(entity);
     }
 
     public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryUpdateForm form) {
