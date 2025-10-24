@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -19,8 +18,6 @@ public class GeoCodeResponse {
     private String lon;
 
     private Map<String, Object> address;
-    @JsonProperty("boundingbox")
-    private List<String> boundingBox;
 
     public GeoCodeResponse() {
     }
@@ -52,10 +49,6 @@ public class GeoCodeResponse {
         return address;
     }
 
-    public List<String> getBoundingBox() {
-        return boundingBox;
-    }
-
     @Override
     public String toString() {
         return "GeoCodeResponse{" +
@@ -64,7 +57,6 @@ public class GeoCodeResponse {
                 ", lat='" + lat + '\'' +
                 ", lon='" + lon + '\'' +
                 ", address=" + address +
-                ", boundingBox=" + boundingBox +
                 '}';
     }
 }
