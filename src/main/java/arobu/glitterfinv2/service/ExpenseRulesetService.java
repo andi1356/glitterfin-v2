@@ -3,7 +3,6 @@ package arobu.glitterfinv2.service;
 import arobu.glitterfinv2.model.entity.ExpenseCondition;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseRulesetAudit;
-import arobu.glitterfinv2.model.entity.meta.ExpenseField;
 import arobu.glitterfinv2.model.repository.ExpenseConditionRepository;
 import arobu.glitterfinv2.model.repository.ExpenseRuleRepository;
 import arobu.glitterfinv2.model.repository.ExpenseRulesetAuditRepository;
@@ -40,14 +39,20 @@ public class ExpenseRulesetService {
                 .forEach(rule -> {
                     LOG.info("Applying ruleset: {}", rule);
                     expenseCopy.set(rule.getPopulatingField(), rule.getValue());
-                    auditRepository.save(new ExpenseRulesetAudit(rule.getCondition(), rule));
+                    auditRepository.save(new ExpenseRulesetAudit(rule.getCondition(), rule, expenseCopy));
                 });
 
         return expenseCopy;
     }
 
     public boolean matches(ExpenseCondition condition, ExpenseEntry expense) {
-        ExpenseField field = condition.getExpenseField();
-        return expense.get(field).matches(condition.getValue());
+        String expenseFieldValue = expense.get(condition.getExpenseField()).toLowerCase();
+        return switch (condition.getPredicate()) {
+            case IS -> expenseFieldValue.equals(condition.getValue());
+            case CONTAINS -> expenseFieldValue.contains(condition.getValue());
+            case STARTS_WITH -> expenseFieldValue.startsWith(condition.getValue());
+            case ENDS_WITH -> expenseFieldValue.endsWith(condition.getValue());
+            case REGEX -> expenseFieldValue.matches(condition.getValue());
+        };
     }
 }

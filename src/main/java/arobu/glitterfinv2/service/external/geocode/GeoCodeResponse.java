@@ -1,11 +1,13 @@
 package arobu.glitterfinv2.service.external.geocode;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GeoCodeResponse {
     @JsonProperty("place_id")
     private int placeId;
@@ -16,9 +18,6 @@ public class GeoCodeResponse {
     private String lat;
     private String lon;
 
-    private String licence;
-    private String osm_type;
-    private String osm_id;
     private Map<String, Object> address;
     @JsonProperty("boundingbox")
     private List<String> boundingBox;
@@ -53,18 +52,6 @@ public class GeoCodeResponse {
         return address;
     }
 
-    public String getLicence() {
-        return licence;
-    }
-
-    public String getOsm_type() {
-        return osm_type;
-    }
-
-    public String getOsm_id() {
-        return osm_id;
-    }
-
     public List<String> getBoundingBox() {
         return boundingBox;
     }
@@ -76,9 +63,6 @@ public class GeoCodeResponse {
                 ", displayName='" + displayName + '\'' +
                 ", lat='" + lat + '\'' +
                 ", lon='" + lon + '\'' +
-                ", licence='" + licence + '\'' +
-                ", osm_type='" + osm_type + '\'' +
-                ", osm_id='" + osm_id + '\'' +
                 ", address=" + address +
                 ", boundingBox=" + boundingBox +
                 '}';

@@ -5,4 +5,5 @@ public enum Predicate {
     CONTAINS,
     STARTS_WITH,
     ENDS_WITH,
+    REGEX
 }

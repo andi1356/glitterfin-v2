@@ -19,14 +19,17 @@ public class ExpenseRulesetAudit {
     private ExpenseCondition condition;
     @OneToOne
     private ExpenseRule rule;
+    @OneToOne
+    private ExpenseEntry expense;
     private ZonedDateTime appliedAt;
 
     public ExpenseRulesetAudit() {
     }
 
-    public ExpenseRulesetAudit(ExpenseCondition condition, ExpenseRule rule) {
+    public ExpenseRulesetAudit(ExpenseCondition condition, ExpenseRule rule, ExpenseEntry expense) {
         this.condition = condition;
         this.rule = rule;
+        this.expense = expense;
         this.appliedAt = ZonedDateTime.now();
     }
 
@@ -52,6 +55,15 @@ public class ExpenseRulesetAudit {
         return this;
     }
 
+    public ExpenseEntry getExpense() {
+        return expense;
+    }
+
+    public ExpenseRulesetAudit setExpense(ExpenseEntry expense) {
+        this.expense = expense;
+        return this;
+    }
+
     public ZonedDateTime getAppliedAt() {
         return appliedAt;
     }
@@ -64,12 +76,12 @@ public class ExpenseRulesetAudit {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ExpenseRulesetAudit that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(condition, that.condition) && Objects.equals(rule, that.rule) && Objects.equals(appliedAt, that.appliedAt);
+        return Objects.equals(id, that.id) && Objects.equals(condition, that.condition) && Objects.equals(rule, that.rule) && Objects.equals(expense, that.expense) && Objects.equals(appliedAt, that.appliedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, condition, rule, appliedAt);
+        return Objects.hash(id, condition, rule, expense, appliedAt);
     }
 
     @Override
@@ -78,6 +90,7 @@ public class ExpenseRulesetAudit {
                 "id=" + id +
                 ", condition=" + condition +
                 ", rule=" + rule +
+                ", expense=" + expense +
                 ", appliedAt=" + appliedAt +
                 '}';
     }

@@ -57,7 +57,9 @@ public class ExpenseEntryService {
 
         decodeReceiptDataIfPresent(entity);
 
-        ExpenseEntry enrichedExpense = expenseRulesetService.applyRulesets(entity);
+        ExpenseEntry savedEntity = expenseEntryRepository.save(entity);
+
+        ExpenseEntry enrichedExpense = expenseRulesetService.applyRulesets(savedEntity);
 
         return expenseEntryRepository.save(enrichedExpense);
     }
