@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ExpenseRuleRepository extends JpaRepository<ExpenseRule, Integer> {
     List<ExpenseRule> findAllByConditionIdIn(Collection<Integer> conditionIds);
+    boolean existsByConditionId(Integer conditionId);
 }

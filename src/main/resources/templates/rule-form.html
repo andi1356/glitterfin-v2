@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Glitterfin | ' + (${isEdit} ? 'Edit Rule' : 'Add Rule')">Glitterfin | Rule</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/rulesets.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<main>
+    <section class="ruleset-form-container">
+        <div class="ruleset-form-header">
+            <div>
+                <h1 th:text="${isEdit} ? 'Edit Rule' : 'Add Rule'">Rule</h1>
+                <p class="ruleset-description">Choose the condition to watch and the field to populate.</p>
+            </div>
+            <div class="ruleset-tabs" role="tablist">
+                <a th:href="@{/rulesets/conditions}"
+                   th:classappend="${activeTab} == 'conditions' ? ' active'"
+                   class="tab-link"
+                   role="tab">Conditions</a>
+                <a th:href="@{/rulesets/rules}"
+                   th:classappend="${activeTab} == 'rules' ? ' active'"
+                   class="tab-link"
+                   role="tab">Rules</a>
+            </div>
+        </div>
+
+        <form th:action="${isEdit} ? @{/rulesets/rules/{id}/edit(id=${rule.id})} : @{/rulesets/rules}"
+              th:object="${ruleForm}"
+              method="post"
+              class="ruleset-form">
+            <div class="form-row">
+                <label for="conditionId">Condition</label>
+                <select id="conditionId" th:field="*{conditionId}" required>
+                    <option value="" disabled th:selected="${ruleForm.conditionId == null}">Select a condition</option>
+                    <option th:each="condition : ${conditions}"
+                            th:value="${condition.id}"
+                            th:text="${#strings.capitalize(#strings.replace(condition.expenseField.name().toLowerCase(), '_', ' '))} + ' ' + #strings.capitalize(#strings.replace(condition.predicate.name().toLowerCase(), '_', ' ')) + ' \"' + condition.value + '\"'">
+                        Condition
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="populatingField">Field to populate</label>
+                <select id="populatingField" th:field="*{populatingField}" required>
+                    <option th:each="field : ${updatableFields}"
+                            th:value="${field}"
+                            th:text="${#strings.capitalize(#strings.replace(field.name().toLowerCase(), '_', ' '))}">
+                        Field
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="value">Value</label>
+                <input type="text" id="value" th:field="*{value}" placeholder="Value to assign" required>
+            </div>
+
+            <div class="form-row">
+                <label for="priority">Priority</label>
+                <input type="number" id="priority" th:field="*{priority}" min="0" placeholder="Optional">
+                <p class="field-hint">Lower numbers run first. Leave blank to apply last.</p>
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/rulesets/rules}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary" th:text="${isEdit} ? 'Save Changes' : 'Create Rule'">
+                    Save
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>
