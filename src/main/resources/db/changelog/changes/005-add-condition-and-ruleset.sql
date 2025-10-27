@@ -10,12 +10,13 @@ CREATE TABLE expense_condition
 CREATE TABLE expense_rule
 (
     id                SERIAL,
-    condition_id      INTEGER NOT NULL,
+    condition_id      INTEGER NULL,
     populating_field  VARCHAR(255) NOT NULL,
     value             VARCHAR(255) NOT NULL,
     priority          INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id),
-    FOREIGN KEY (condition_id) REFERENCES expense_condition
+    FOREIGN KEY (condition_id) REFERENCES expense_condition,
+    UNIQUE(condition_id, populating_field, priority)
 );
 
 CREATE TABLE expense_ruleset_audit (

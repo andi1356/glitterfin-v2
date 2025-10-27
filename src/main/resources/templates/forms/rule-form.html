@@ -17,16 +17,6 @@
                 <h1 th:text="${isEdit} ? 'Edit Rule' : 'Add Rule'">Rule</h1>
                 <p class="ruleset-description">Choose the condition to watch and the field to populate.</p>
             </div>
-            <div class="ruleset-tabs" role="tablist">
-                <a th:href="@{/rulesets/conditions}"
-                   th:classappend="${activeTab} == 'conditions' ? ' active'"
-                   class="tab-link"
-                   role="tab">Conditions</a>
-                <a th:href="@{/rulesets/rules}"
-                   th:classappend="${activeTab} == 'rules' ? ' active'"
-                   class="tab-link"
-                   role="tab">Rules</a>
-            </div>
         </div>
 
         <form th:action="${isEdit} ? @{/rulesets/rules/{id}/edit(id=${rule.id})} : @{/rulesets/rules}"
@@ -39,7 +29,7 @@
                     <option value="" disabled th:selected="${ruleForm.conditionId == null}">Select a condition</option>
                     <option th:each="condition : ${conditions}"
                             th:value="${condition.id}"
-                            th:text="${#strings.capitalize(#strings.replace(condition.expenseField.name().toLowerCase(), '_', ' '))} + ' ' + #strings.capitalize(#strings.replace(condition.predicate.name().toLowerCase(), '_', ' ')) + ' \"' + condition.value + '\"'">
+                            th:text="${#strings.capitalize(#strings.replace(condition.expenseField.name().toLowerCase(), '_', ' ')) + ' ' + #strings.capitalize(#strings.replace(condition.predicate.name().toUpperCase(), '_', ' ')) + ' &quot;' + condition.value + '&quot;'}">
                         Condition
                     </option>
                 </select>
@@ -50,7 +40,7 @@
                 <select id="populatingField" th:field="*{populatingField}" required>
                     <option th:each="field : ${updatableFields}"
                             th:value="${field}"
-                            th:text="${#strings.capitalize(#strings.replace(field.name().toLowerCase(), '_', ' '))}">
+                            th:text="${field}">
                         Field
                     </option>
                 </select>
@@ -63,8 +53,8 @@
 
             <div class="form-row">
                 <label for="priority">Priority</label>
-                <input type="number" id="priority" th:field="*{priority}" min="0" placeholder="Optional">
-                <p class="field-hint">Lower numbers run first. Leave blank to apply last.</p>
+                <input type="number" id="priority" th:field="*{priority}" min='1'>
+                <p class="field-hint">Lower numbers run first. Leave blank to default to 1.</p>
             </div>
 
             <div class="form-actions">

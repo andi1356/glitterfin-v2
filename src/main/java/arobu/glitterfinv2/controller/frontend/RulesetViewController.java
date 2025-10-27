@@ -1,21 +1,17 @@
 package arobu.glitterfinv2.controller.frontend;
 
-import arobu.glitterfinv2.model.dto.ExpenseConditionForm;
-import arobu.glitterfinv2.model.dto.ExpenseRuleForm;
 import arobu.glitterfinv2.model.entity.ExpenseCondition;
 import arobu.glitterfinv2.model.entity.ExpenseRule;
 import arobu.glitterfinv2.model.entity.meta.ExpenseField;
 import arobu.glitterfinv2.model.entity.meta.ExpenseRulesetUpdatableField;
 import arobu.glitterfinv2.model.entity.meta.Predicate;
+import arobu.glitterfinv2.model.form.ExpenseConditionForm;
+import arobu.glitterfinv2.model.form.ExpenseRuleForm;
 import arobu.glitterfinv2.service.ExpenseConditionService;
 import arobu.glitterfinv2.service.ExpenseRuleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -48,8 +44,7 @@ public class RulesetViewController {
         model.addAttribute("fields", ExpenseField.values());
         model.addAttribute("predicates", Predicate.values());
         model.addAttribute("isEdit", false);
-        model.addAttribute("activeTab", "conditions");
-        return "condition-form";
+        return "forms/condition-form";
     }
 
     @GetMapping("/conditions/{id}/edit")
@@ -67,8 +62,7 @@ public class RulesetViewController {
         model.addAttribute("fields", ExpenseField.values());
         model.addAttribute("predicates", Predicate.values());
         model.addAttribute("isEdit", true);
-        model.addAttribute("activeTab", "conditions");
-        return "condition-form";
+        return "forms/condition-form";
     }
 
     @PostMapping("/conditions")
@@ -123,8 +117,7 @@ public class RulesetViewController {
         model.addAttribute("conditions", conditions);
         model.addAttribute("updatableFields", ExpenseRulesetUpdatableField.values());
         model.addAttribute("isEdit", false);
-        model.addAttribute("activeTab", "rules");
-        return "rule-form";
+        return "forms/rule-form";
     }
 
     @GetMapping("/rules/{id}/edit")
@@ -146,8 +139,7 @@ public class RulesetViewController {
         model.addAttribute("conditions", conditions);
         model.addAttribute("updatableFields", ExpenseRulesetUpdatableField.values());
         model.addAttribute("isEdit", true);
-        model.addAttribute("activeTab", "rules");
-        return "rule-form";
+        return "forms/rule-form";
     }
 
     @PostMapping("/rules")

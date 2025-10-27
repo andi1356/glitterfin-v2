@@ -1,7 +1,7 @@
 package arobu.glitterfinv2.service;
 
-import arobu.glitterfinv2.model.dto.ExpenseRuleForm;
 import arobu.glitterfinv2.model.entity.ExpenseRule;
+import arobu.glitterfinv2.model.form.ExpenseRuleForm;
 import arobu.glitterfinv2.model.repository.ExpenseConditionRepository;
 import arobu.glitterfinv2.model.repository.ExpenseRuleRepository;
 import org.springframework.data.domain.Sort;
@@ -24,7 +24,7 @@ public class ExpenseRuleService {
 
     public List<ExpenseRule> getRules() {
         Sort sort = Sort.by(
-                Sort.Order.asc("priority").with(Sort.NullHandling.NULLS_LAST),
+                Sort.Order.asc("priority"),
                 Sort.Order.asc("id")
         );
         return ruleRepository.findAll(sort);

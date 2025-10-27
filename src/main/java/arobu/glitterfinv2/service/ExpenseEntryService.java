@@ -1,11 +1,11 @@
 package arobu.glitterfinv2.service;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
-import arobu.glitterfinv2.model.dto.ExpenseEntryUpdateForm;
 import arobu.glitterfinv2.model.dto.LocationData;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
+import arobu.glitterfinv2.model.form.ExpenseEntryForm;
 import arobu.glitterfinv2.model.mapper.ExpenseEntryMapper;
 import arobu.glitterfinv2.model.repository.ExpenseEntryRepository;
 import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
@@ -78,7 +78,7 @@ public class ExpenseEntryService {
         }
     }
 
-    public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryUpdateForm form) {
+    public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryForm form) {
         if (form == null) {
             LOGGER.warn("Attempted to create expense for user {} with empty form", username);
             return Optional.empty();
@@ -130,7 +130,7 @@ public class ExpenseEntryService {
         return expenseEntryRepository.findByIdAndOwner_Username(expenseId, username);
     }
 
-    public Optional<ExpenseEntry> updateExpense(final Integer expenseId, final String username, final ExpenseEntryUpdateForm form) {
+    public Optional<ExpenseEntry> updateExpense(final Integer expenseId, final String username, final ExpenseEntryForm form) {
         if (form == null) {
             LOGGER.warn("Attempted to update expense {} for user {} with empty form", expenseId, username);
             return Optional.empty();
@@ -178,7 +178,7 @@ public class ExpenseEntryService {
         return true;
     }
 
-    private void applyTimestampUpdates(ExpenseEntry expenseEntry, ExpenseEntryUpdateForm form) {
+    private void applyTimestampUpdates(ExpenseEntry expenseEntry, ExpenseEntryForm form) {
         String timestampValue = form.getTimestamp();
         String timezoneValue = form.getTimezone();
 

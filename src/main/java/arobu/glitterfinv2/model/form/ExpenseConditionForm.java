@@ -1,4 +1,4 @@
-package arobu.glitterfinv2.model.dto;
+package arobu.glitterfinv2.model.form;
 
 import arobu.glitterfinv2.model.entity.ExpenseCondition;
 import arobu.glitterfinv2.model.entity.meta.ExpenseField;

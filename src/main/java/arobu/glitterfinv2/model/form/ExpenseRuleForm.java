@@ -1,4 +1,4 @@
-package arobu.glitterfinv2.model.dto;
+package arobu.glitterfinv2.model.form;
 
 import arobu.glitterfinv2.model.entity.ExpenseRule;
 import arobu.glitterfinv2.model.entity.meta.ExpenseRulesetUpdatableField;
@@ -8,7 +8,7 @@ public class ExpenseRuleForm {
     private Integer conditionId;
     private ExpenseRulesetUpdatableField populatingField;
     private String value;
-    private Integer priority;
+    private Integer priority = 1;
 
     public Integer getConditionId() {
         return conditionId;

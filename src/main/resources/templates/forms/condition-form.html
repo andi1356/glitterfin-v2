@@ -17,16 +17,6 @@
                 <h1 th:text="${isEdit} ? 'Edit Condition' : 'Add Condition'">Condition</h1>
                 <p class="ruleset-description">Match an expense field against a predicate and value.</p>
             </div>
-            <div class="ruleset-tabs" role="tablist">
-                <a th:href="@{/rulesets/conditions}"
-                   th:classappend="${activeTab} == 'conditions' ? ' active'"
-                   class="tab-link"
-                   role="tab">Conditions</a>
-                <a th:href="@{/rulesets/rules}"
-                   th:classappend="${activeTab} == 'rules' ? ' active'"
-                   class="tab-link"
-                   role="tab">Rules</a>
-            </div>
         </div>
 
         <form th:action="${isEdit} ? @{/rulesets/conditions/{id}/edit(id=${condition.id})} : @{/rulesets/conditions}"
@@ -49,7 +39,7 @@
                 <select id="predicate" th:field="*{predicate}" required>
                     <option th:each="predicateOption : ${predicates}"
                             th:value="${predicateOption}"
-                            th:text="${#strings.capitalize(#strings.replace(predicateOption.name().toLowerCase(), '_', ' '))}">
+                            th:text="${#strings.replace(predicateOption.name().toUpperCase(), '_', ' ')}">
                         Predicate
                     </option>
                 </select>
@@ -57,7 +47,7 @@
 
             <div class="form-row">
                 <label for="value">Value</label>
-                <input type="text" id="value" th:field="*{value}" placeholder="e.g. coffee" required>
+                <input type="text" id="value" th:field="*{value}" placeholder="e.g. restaurant" required>
                 <p class="field-hint">Values are compared in a case-insensitive manner.</p>
             </div>
 

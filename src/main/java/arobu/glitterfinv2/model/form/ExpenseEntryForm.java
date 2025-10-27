@@ -1,8 +1,8 @@
-package arobu.glitterfinv2.model.dto;
+package arobu.glitterfinv2.model.form;
 
 import java.math.BigDecimal;
 
-public class ExpenseEntryUpdateForm {
+public class ExpenseEntryForm {
 
     private String description;
     private String category;
@@ -110,7 +110,7 @@ public class ExpenseEntryUpdateForm {
         return latitude;
     }
 
-    public ExpenseEntryUpdateForm setLatitude(Double latitude) {
+    public ExpenseEntryForm setLatitude(Double latitude) {
         this.latitude = latitude;
         return this;
     }
@@ -119,7 +119,7 @@ public class ExpenseEntryUpdateForm {
         return longitude;
     }
 
-    public ExpenseEntryUpdateForm setLongitude(Double longitude) {
+    public ExpenseEntryForm setLongitude(Double longitude) {
         this.longitude = longitude;
         return this;
     }

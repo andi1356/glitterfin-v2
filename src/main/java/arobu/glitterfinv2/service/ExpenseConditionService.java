@@ -1,8 +1,8 @@
 package arobu.glitterfinv2.service;
 
-import arobu.glitterfinv2.model.dto.ExpenseConditionForm;
 import arobu.glitterfinv2.model.entity.ExpenseCondition;
 import arobu.glitterfinv2.model.entity.meta.Predicate;
+import arobu.glitterfinv2.model.form.ExpenseConditionForm;
 import arobu.glitterfinv2.model.repository.ExpenseConditionRepository;
 import arobu.glitterfinv2.model.repository.ExpenseRuleRepository;
 import org.springframework.data.domain.Sort;
@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static arobu.glitterfinv2.model.entity.meta.Predicate.REGEX;
+import static java.util.Objects.nonNull;
 
 @Service
 public class ExpenseConditionService {
@@ -36,12 +39,12 @@ public class ExpenseConditionService {
         return conditionRepository.findById(id);
     }
 
-    public ExpenseCondition createCondition(ExpenseConditionForm form) {
+    public void createCondition(ExpenseConditionForm form) {
         ExpenseCondition condition = new ExpenseCondition()
                 .setExpenseField(form.getExpenseField())
                 .setPredicate(form.getPredicate())
                 .setValue(normalize(form.getPredicate(), form.getValue()));
-        return conditionRepository.save(condition);
+        conditionRepository.save(condition);
     }
 
     public Optional<ExpenseCondition> updateCondition(Integer id, ExpenseConditionForm form) {
@@ -71,7 +74,7 @@ public class ExpenseConditionService {
             return "";
         }
         String trimmed = value.trim();
-        if (predicate != null && predicate != Predicate.REGEX) {
+        if (nonNull(predicate) && predicate != REGEX) {
             return trimmed.toLowerCase();
         }
         return trimmed;

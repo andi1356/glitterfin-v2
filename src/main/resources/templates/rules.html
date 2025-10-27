@@ -56,12 +56,12 @@
                 <tr th:each="rule : ${rules}">
                     <td>
                         <span class="condition-pill" th:text="${#strings.capitalize(#strings.replace(rule.condition.expenseField.name().toLowerCase(), '_', ' '))}"></span>
-                        <span class="condition-pill" th:text="${#strings.capitalize(#strings.replace(rule.condition.predicate.name().toLowerCase(), '_', ' '))}"></span>
+                        <span class="condition-pill" th:text="${#strings.capitalize(#strings.replace(rule.condition.predicate.name().toUpperCase(), '_', ' '))}"></span>
                         <span class="condition-value" th:text="${rule.condition.value}"></span>
                     </td>
                     <td th:text="${#strings.capitalize(#strings.replace(rule.populatingField.name().toLowerCase(), '_', ' '))}">Field</td>
                     <td th:text="${rule.value}">Value</td>
-                    <td th:text="${rule.priority != null ? rule.priority : '—'}">Priority</td>
+                    <td th:text="${rule.priority}">Priority</td>
                     <td class="actions">
                         <a th:href="@{/rulesets/rules/{id}/edit(id=${rule.id})}" class="btn btn-secondary">Edit</a>
                         <form th:action="@{/rulesets/rules/{id}/delete(id=${rule.id})}"
