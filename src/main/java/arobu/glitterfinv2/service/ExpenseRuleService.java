@@ -38,26 +38,27 @@ public class ExpenseRuleService {
     }
 
     public String createRule(ExpenseRuleForm form) {
-        conditionRepository.findById(form.getConditionId())
-                .map(condition -> ruleRepository.findByConditionAndPopulatingFieldAndPriority(condition, form.getPopulatingField(), form.getPriority())
-                        .map(rule ->
-                                join("Rule uniqueness restriction hit. Recommendation is to increment priority.",
-                                        " Condition: ", rule.getCondition().toString(),
-                                        ", Populating Field: ", rule.getPopulatingField().toString(),
-                                        ", Priority: ", rule.getPriority().toString())));
-
         Optional<ExpenseCondition> condition = conditionRepository.findById(form.getConditionId());
         if (condition.isEmpty()) {
             return "Unable to create the rule. Condition was null";
         } else {
-            return ruleRepository
-                    .findByConditionAndPopulatingFieldAndPriority(condition.get(), form.getPopulatingField(), form.getPriority())
-                    .map(existingRule ->
-                            join("Rule uniqueness restriction hit. Check fields; ",
-                                    " Condition: ", existingRule.getCondition().toString(),
-                                    ", Populating Field: ", existingRule.getPopulatingField().toString(),
-                                    ", Priority: ", existingRule.getPriority().toString()))
-                    .orElse("Expense Rule created.");
+            Optional<ExpenseRule> existingDuplicateExpenseRule = ruleRepository
+                    .findByConditionAndPopulatingFieldAndPriority(condition.get(), form.getPopulatingField(), form.getPriority());
+            if (existingDuplicateExpenseRule.isPresent()) {
+                final var expenseRule = existingDuplicateExpenseRule.get();
+                return join("Rule uniqueness restriction hit. Check fields; ",
+                                    " Condition: ", expenseRule.getCondition().toString(),
+                                    ", Populating Field: ", expenseRule.getPopulatingField().toString(),
+                                    ", Priority: ", expenseRule.getPriority().toString());
+            } else {
+                final var rule = new ExpenseRule()
+                        .setCondition(condition.get())
+                        .setPopulatingField(form.getPopulatingField())
+                        .setValue(normalize(form.getValue()))
+                        .setPriority(form.getPriority());
+                ruleRepository.save(rule);
+                return "Expense Rule created.";
+            }
         }
     }
 
