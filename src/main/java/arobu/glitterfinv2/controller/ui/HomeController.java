@@ -1,4 +1,4 @@
-package arobu.glitterfinv2.controller.frontend;
+package arobu.glitterfinv2.controller.ui;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,0 +1,255 @@
+.ruleset-container {
+    max-width: 1000px;
+    margin: 1.5rem auto;
+    padding: 1.75rem;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+.ruleset-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.ruleset-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #1f2937;
+}
+
+.ruleset-description {
+    margin: 0.35rem 0 0;
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+.ruleset-tabs {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem;
+    background: #f1f5f9;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+}
+
+.ruleset-form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.tab-link {
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.tab-link.active {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.tab-link:not(.active):hover {
+    background: rgba(37, 99, 235, 0.15);
+}
+
+.feedback,
+.empty-state {
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid #dbeafe;
+    background: #eff6ff;
+    color: #1e3a8a;
+    margin-bottom: 1.25rem;
+}
+
+.empty-state {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+    color: #475569;
+    text-align: center;
+}
+
+.ruleset-table-wrapper {
+    overflow-x: auto;
+}
+
+.ruleset-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ruleset-table thead {
+    background: #1f2937;
+    color: #f8fafc;
+}
+
+.ruleset-table th,
+.ruleset-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+}
+
+.ruleset-table .actions-header {
+    text-align: right;
+}
+
+.ruleset-table .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #1f2937;
+}
+
+.btn-delete {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.btn:hover,
+.btn:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.15);
+}
+
+.ruleset-form-container {
+    max-width: 720px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+}
+
+.ruleset-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.form-row label {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.form-row input,
+.form-row select {
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #cbd5f5;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    outline: none;
+}
+
+.field-hint {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.condition-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.6rem;
+    margin-right: 0.35rem;
+    background: #e0e7ff;
+    color: #312e81;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.condition-value {
+    display: inline-block;
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .ruleset-container {
+        margin: 1rem;
+        padding: 1.25rem;
+    }
+
+    .ruleset-form-container {
+        margin: 1.25rem;
+        padding: 1.5rem;
+    }
+
+    .ruleset-header,
+    .ruleset-form-header,
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-actions {
+        gap: 0.75rem;
+    }
+
+    .ruleset-table .actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

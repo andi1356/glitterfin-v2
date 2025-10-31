@@ -2,6 +2,8 @@ package arobu.glitterfinv2.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 public class Location {
     @Id
@@ -146,5 +148,16 @@ public class Location {
                 ", road='" + road + '\'' +
                 ", houseNumber='" + houseNumber + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Location location)) return false;
+        return Objects.equals(id, location.id) && Objects.equals(geocodePlaceId, location.geocodePlaceId) && Objects.equals(countryCode, location.countryCode) && Objects.equals(postcode, location.postcode) && Objects.equals(displayName, location.displayName) && Objects.equals(latitude, location.latitude) && Objects.equals(longitude, location.longitude) && Objects.equals(country, location.country) && Objects.equals(county, location.county) && Objects.equals(city, location.city) && Objects.equals(road, location.road) && Objects.equals(houseNumber, location.houseNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, geocodePlaceId, countryCode, postcode, displayName, latitude, longitude, country, county, city, road, houseNumber);
     }
 }

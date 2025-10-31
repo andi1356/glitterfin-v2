@@ -41,11 +41,10 @@ public class GeolocationService {
                 return new ObjectMapper().readValue(geocodingResponseString.body(), GeoCodeResponse.class);
             }
         } catch (IOException e) {
-            LOGGER.error("Httpclient request to GeoCode service returned an error. Cause: {}", e.getCause());
+            LOGGER.error("Httpclient request to GeoCode service returned an error: {}", e);
             return new GeoCodeResponse(lat, lon);
         } catch (InterruptedException e) {
-            LOGGER.error("Mapping the GeoCode response to internal GeoCodeResponse model failed. Cause: {}",
-                    e.getCause());
+            LOGGER.error("Mapping the GeoCode response to internal GeoCodeResponse model failed: {}", e);
             return new GeoCodeResponse(lat, lon);
         }
     }

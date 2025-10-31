@@ -1,7 +1,7 @@
-package arobu.glitterfinv2.controller.frontend;
+package arobu.glitterfinv2.controller.ui;
 
-import arobu.glitterfinv2.model.dto.ExpenseEntryUpdateForm;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
+import arobu.glitterfinv2.model.form.ExpenseEntryForm;
 import arobu.glitterfinv2.model.mapper.ExpenseEntryMapper;
 import arobu.glitterfinv2.service.ExpenseEntryService;
 import org.springframework.security.core.Authentication;
@@ -26,7 +26,7 @@ public class ExpenseViewController {
 
     @GetMapping
     public String expenses(Model model, Authentication authentication) {
-        List<ExpenseEntry> expenses = expenseEntryService.getExpenses(authentication.getName());
+        List<ExpenseEntry> expenses = expenseEntryService.getAllExpenses(authentication.getName());
 
         model.addAttribute("expenses", expenses);
 
@@ -34,21 +34,21 @@ public class ExpenseViewController {
     }
 
     @GetMapping("/new")
-    public String newExpense(Model model) {
-        ExpenseEntryUpdateForm form = new ExpenseEntryUpdateForm();
+    public String newExpenseUI(Model model) {
+        ExpenseEntryForm form = new ExpenseEntryForm();
         form.setTimezone(ZonedDateTime.now().getOffset().getId());
 
         model.addAttribute("expenseForm", form);
         model.addAttribute("isEdit", false);
 
-        return "expense-form";
+        return "forms/expense-form";
     }
 
     @GetMapping("/{id}")
-    public String viewExpense(@PathVariable("id") Integer expenseId,
-                              Model model,
-                              Authentication authentication,
-                              RedirectAttributes redirectAttributes) {
+    public String viewExpenseUI(@PathVariable("id") Integer expenseId,
+                                Model model,
+                                Authentication authentication,
+                                RedirectAttributes redirectAttributes) {
 
         Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, authentication.getName());
 
@@ -63,10 +63,10 @@ public class ExpenseViewController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editExpense(@PathVariable("id") Integer expenseId,
-                              Model model,
-                              Authentication authentication,
-                              RedirectAttributes redirectAttributes) {
+    public String editExpenseUI(@PathVariable("id") Integer expenseId,
+                                Model model,
+                                Authentication authentication,
+                                RedirectAttributes redirectAttributes) {
 
         Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, authentication.getName());
 
@@ -76,14 +76,14 @@ public class ExpenseViewController {
         }
 
         model.addAttribute("expense", expenseEntry.get());
-        model.addAttribute("expenseForm", ExpenseEntryMapper.toExpenseEntryUpdateForm(expenseEntry.get()));
+        model.addAttribute("expenseForm", ExpenseEntryMapper.toExpenseEntryForm(expenseEntry.get()));
         model.addAttribute("isEdit", true);
 
-        return "expense-form";
+        return "forms/expense-form";
     }
 
     @PostMapping
-    public String createExpense(@ModelAttribute("expenseForm") ExpenseEntryUpdateForm expenseForm,
+    public String createExpense(@ModelAttribute("expenseForm") ExpenseEntryForm expenseForm,
                                 Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
 
@@ -101,7 +101,7 @@ public class ExpenseViewController {
 
     @PostMapping("/{id}/edit")
     public String updateExpense(@PathVariable("id") Integer expenseId,
-                                @ModelAttribute("expenseForm") ExpenseEntryUpdateForm expenseForm,
+                                @ModelAttribute("expenseForm") ExpenseEntryForm expenseForm,
                                 Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
 

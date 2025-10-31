@@ -50,7 +50,7 @@ public class SecurityFilterChainsConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers("/", "/index", "/index.html", "/css/*").permitAll()
+                        .requestMatchers("/", "/index", "/index.html", "/css/*", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

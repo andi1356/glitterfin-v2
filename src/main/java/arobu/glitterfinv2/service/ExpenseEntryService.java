@@ -1,11 +1,11 @@
 package arobu.glitterfinv2.service;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
-import arobu.glitterfinv2.model.dto.ExpenseEntryUpdateForm;
 import arobu.glitterfinv2.model.dto.LocationData;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
+import arobu.glitterfinv2.model.form.ExpenseEntryForm;
 import arobu.glitterfinv2.model.mapper.ExpenseEntryMapper;
 import arobu.glitterfinv2.model.repository.ExpenseEntryRepository;
 import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Comparator.comparing;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -40,11 +41,13 @@ public class ExpenseEntryService {
     private final ExpenseEntryRepository expenseEntryRepository;
     private final ExpenseOwnerService expenseOwnerService;
     private final LocationService locationService;
+    private final ExpenseRulesetService expenseRulesetService;
 
-    public ExpenseEntryService(ExpenseEntryRepository expenseEntryRepository, ExpenseOwnerService expenseOwnerService, LocationService locationService) {
+    public ExpenseEntryService(ExpenseEntryRepository expenseEntryRepository, ExpenseOwnerService expenseOwnerService, LocationService locationService, ExpenseRulesetService expenseRulesetService) {
         this.expenseEntryRepository = expenseEntryRepository;
         this.expenseOwnerService = expenseOwnerService;
         this.locationService = locationService;
+        this.expenseRulesetService = expenseRulesetService;
     }
 
     public ExpenseEntry saveExpense(final ExpenseEntryApiPostDTO expenseEntryApiPostDTO, final String username) throws OwnerNotFoundException {
@@ -53,6 +56,16 @@ public class ExpenseEntryService {
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryApiPostDTO, owner, location);
 
+        decodeReceiptDataIfPresent(entity);
+
+        ExpenseEntry savedEntity = expenseEntryRepository.save(entity);
+
+        ExpenseEntry enrichedExpense = expenseRulesetService.applyRulesets(savedEntity);
+
+        return expenseEntryRepository.save(enrichedExpense);
+    }
+
+    private void decodeReceiptDataIfPresent(ExpenseEntry entity) {
         if (nonNull(entity.getReceiptData())) {
             byte[] data = Base64.getDecoder().decode(entity.getReceiptData());
             try {
@@ -64,12 +77,9 @@ public class ExpenseEntryService {
                         entity.getTimestamp(), e);
             }
         }
-
-        LOGGER.info("Persisting expense entry: {}", entity);
-        return expenseEntryRepository.save(entity);
     }
 
-    public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryUpdateForm form) {
+    public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryForm form) {
         if (form == null) {
             LOGGER.warn("Attempted to create expense for user {} with empty form", username);
             return Optional.empty();
@@ -107,13 +117,17 @@ public class ExpenseEntryService {
             return Optional.empty();
         }
 
+        expenseRulesetService.applyRulesets(newExpense);
+
         LOGGER.info("Creating expense for user {}", username);
         return Optional.of(expenseEntryRepository.save(newExpense));
     }
 
-    public List<ExpenseEntry> getExpenses(final String username) {
+    public List<ExpenseEntry> getAllExpenses(final String username) {
         LOGGER.info("Fetching all expenses for user: {}", username);
-        return expenseEntryRepository.findAllByOwner_Username(username);
+        return expenseEntryRepository.findAllByOwner_Username(username).stream()
+                .sorted(comparing(ExpenseEntry::getTimestamp).reversed())
+                .toList();
     }
 
     public Optional<ExpenseEntry> getExpense(final Integer expenseId, final String username) {
@@ -121,7 +135,7 @@ public class ExpenseEntryService {
         return expenseEntryRepository.findByIdAndOwner_Username(expenseId, username);
     }
 
-    public Optional<ExpenseEntry> updateExpense(final Integer expenseId, final String username, final ExpenseEntryUpdateForm form) {
+    public Optional<ExpenseEntry> updateExpense(final Integer expenseId, final String username, final ExpenseEntryForm form) {
         if (form == null) {
             LOGGER.warn("Attempted to update expense {} for user {} with empty form", expenseId, username);
             return Optional.empty();
@@ -169,7 +183,7 @@ public class ExpenseEntryService {
         return true;
     }
 
-    private void applyTimestampUpdates(ExpenseEntry expenseEntry, ExpenseEntryUpdateForm form) {
+    private void applyTimestampUpdates(ExpenseEntry expenseEntry, ExpenseEntryForm form) {
         String timestampValue = form.getTimestamp();
         String timezoneValue = form.getTimezone();
 

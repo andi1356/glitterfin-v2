@@ -1,14 +1,19 @@
 package arobu.glitterfinv2.model.entity;
 
+import arobu.glitterfinv2.model.entity.meta.ExpenseField;
+import arobu.glitterfinv2.model.entity.meta.ExpenseRulesetUpdatableField;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Objects;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity(name = "expense")
 public class ExpenseEntry {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     Integer id;
 
     @ManyToOne
@@ -29,6 +34,57 @@ public class ExpenseEntry {
 
     private Boolean shared = false;
     private Boolean outlier = false;
+
+    public ExpenseEntry() {
+    }
+
+    private ExpenseEntry(ExpenseEntry e) {
+        this.id = e.id;
+        this.owner = e.owner;
+        this.amount = e.amount;
+        this.timestamp = e.timestamp;
+        this.timezone = e.timezone;
+        this.source = e.source;
+        this.merchant = e.merchant;
+        this.location = e.location;
+        this.category = e.category;
+        this.receiptData = e.receiptData;
+        this.description = e.description;
+        this.details = e.details;
+        this.shared = e.shared;
+        this.outlier = e.outlier;
+    }
+
+    public ExpenseEntry copy() {
+        return new ExpenseEntry(this);
+    }
+
+    public Object get(ExpenseField field) {
+        return switch (field) {
+            case AMOUNT -> getAmount();
+            case TIMESTAMP -> getTimestamp();
+            case TIMEZONE -> getTimezone();
+            case SOURCE -> getSource();
+            case MERCHANT -> getMerchant();
+            case LOCATION -> getLocation();
+            case CATEGORY -> getCategory();
+            case RECEIPT_DATA -> getReceiptData();
+            case DESCRIPTION -> getDescription();
+            case DETAILS -> getDetails();
+            case IS_SHARED -> getShared();
+            case IS_OUTLIER -> getOutlier();
+        };
+    }
+
+    public void set(ExpenseRulesetUpdatableField field, String value) {
+        switch (field) {
+            case CATEGORY -> setCategory(value);
+            case DESCRIPTION -> setDescription(value);
+            case DETAILS -> setDetails(value);
+            case IS_SHARED -> setShared(Boolean.parseBoolean(value));
+            case IS_OUTLIER -> setOutlier(Boolean.parseBoolean(value));
+        }
+    }
 
     public Integer getId() {
         return id;
@@ -163,5 +219,16 @@ public class ExpenseEntry {
                 ", owner=" + owner +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ExpenseEntry that)) return false;
+        return Objects.equals(id, that.id) && Objects.equals(owner, that.owner) && Objects.equals(amount, that.amount) && Objects.equals(timestamp, that.timestamp) && Objects.equals(timezone, that.timezone) && Objects.equals(source, that.source) && Objects.equals(merchant, that.merchant) && Objects.equals(location, that.location) && Objects.equals(category, that.category) && Objects.equals(receiptData, that.receiptData) && Objects.equals(description, that.description) && Objects.equals(details, that.details) && Objects.equals(shared, that.shared) && Objects.equals(outlier, that.outlier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, owner, amount, timestamp, timezone, source, merchant, location, category, receiptData, description, details, shared, outlier);
     }
 }
