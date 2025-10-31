@@ -19,7 +19,7 @@ public class ExpenseEntryMapper {
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
 
-    public static ExpenseEntryForm toExpenseEntryUpdateForm(ExpenseEntry expenseEntry) {
+    public static ExpenseEntryForm toExpenseEntryForm(ExpenseEntry expenseEntry) {
         ExpenseEntryForm form = new ExpenseEntryForm();
         form.setDescription(expenseEntry.getDescription());
         form.setCategory(expenseEntry.getCategory());

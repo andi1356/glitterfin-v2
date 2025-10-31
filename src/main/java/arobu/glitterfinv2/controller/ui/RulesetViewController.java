@@ -68,8 +68,8 @@ public class RulesetViewController {
     @PostMapping("/conditions")
     public String createCondition(@ModelAttribute("conditionForm") ExpenseConditionForm form,
                                   RedirectAttributes redirectAttributes) {
-        conditionService.createCondition(form);
-        redirectAttributes.addFlashAttribute("conditionMessage", "Condition created successfully.");
+        final var creationMessage = conditionService.createCondition(form);
+        redirectAttributes.addFlashAttribute("conditionMessage", creationMessage);
         return "redirect:/rulesets/conditions";
     }
 

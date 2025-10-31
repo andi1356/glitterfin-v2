@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static arobu.glitterfinv2.model.entity.meta.Predicate.REGEX;
 import static java.util.Objects.nonNull;
@@ -39,12 +41,20 @@ public class ExpenseConditionService {
         return conditionRepository.findById(id);
     }
 
-    public void createCondition(ExpenseConditionForm form) {
+    public String createCondition(ExpenseConditionForm form) {
         ExpenseCondition condition = new ExpenseCondition()
                 .setExpenseField(form.getExpenseField())
                 .setPredicate(form.getPredicate())
                 .setValue(normalize(form.getPredicate(), form.getValue()));
+        if (condition.getPredicate()==REGEX) {
+            try {
+                Pattern.compile(condition.getValue());
+            } catch (PatternSyntaxException e) {
+                return "Regex invalid: " + e.getDescription();
+            }
+        }
         conditionRepository.save(condition);
+        return "Condition created successfully.";
     }
 
     public Optional<ExpenseCondition> updateCondition(Integer id, ExpenseConditionForm form) {

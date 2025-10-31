@@ -117,11 +117,13 @@ public class ExpenseEntryService {
             return Optional.empty();
         }
 
+        expenseRulesetService.applyRulesets(newExpense);
+
         LOGGER.info("Creating expense for user {}", username);
         return Optional.of(expenseEntryRepository.save(newExpense));
     }
 
-    public List<ExpenseEntry> getExpenses(final String username) {
+    public List<ExpenseEntry> getAllExpenses(final String username) {
         LOGGER.info("Fetching all expenses for user: {}", username);
         return expenseEntryRepository.findAllByOwner_Username(username).stream()
                 .sorted(comparing(ExpenseEntry::getTimestamp).reversed())

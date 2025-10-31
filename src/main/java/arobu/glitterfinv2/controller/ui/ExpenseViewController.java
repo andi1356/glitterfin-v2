@@ -26,7 +26,7 @@ public class ExpenseViewController {
 
     @GetMapping
     public String expenses(Model model, Authentication authentication) {
-        List<ExpenseEntry> expenses = expenseEntryService.getExpenses(authentication.getName());
+        List<ExpenseEntry> expenses = expenseEntryService.getAllExpenses(authentication.getName());
 
         model.addAttribute("expenses", expenses);
 
@@ -34,7 +34,7 @@ public class ExpenseViewController {
     }
 
     @GetMapping("/new")
-    public String newExpense(Model model) {
+    public String newExpenseUI(Model model) {
         ExpenseEntryForm form = new ExpenseEntryForm();
         form.setTimezone(ZonedDateTime.now().getOffset().getId());
 
@@ -45,10 +45,10 @@ public class ExpenseViewController {
     }
 
     @GetMapping("/{id}")
-    public String viewExpense(@PathVariable("id") Integer expenseId,
-                              Model model,
-                              Authentication authentication,
-                              RedirectAttributes redirectAttributes) {
+    public String viewExpenseUI(@PathVariable("id") Integer expenseId,
+                                Model model,
+                                Authentication authentication,
+                                RedirectAttributes redirectAttributes) {
 
         Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, authentication.getName());
 
@@ -63,10 +63,10 @@ public class ExpenseViewController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editExpense(@PathVariable("id") Integer expenseId,
-                              Model model,
-                              Authentication authentication,
-                              RedirectAttributes redirectAttributes) {
+    public String editExpenseUI(@PathVariable("id") Integer expenseId,
+                                Model model,
+                                Authentication authentication,
+                                RedirectAttributes redirectAttributes) {
 
         Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, authentication.getName());
 
@@ -76,7 +76,7 @@ public class ExpenseViewController {
         }
 
         model.addAttribute("expense", expenseEntry.get());
-        model.addAttribute("expenseForm", ExpenseEntryMapper.toExpenseEntryUpdateForm(expenseEntry.get()));
+        model.addAttribute("expenseForm", ExpenseEntryMapper.toExpenseEntryForm(expenseEntry.get()));
         model.addAttribute("isEdit", true);
 
         return "forms/expense-form";
