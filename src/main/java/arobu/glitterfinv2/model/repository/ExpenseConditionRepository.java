@@ -11,5 +11,6 @@ import java.util.List;
 public interface ExpenseConditionRepository extends JpaRepository<ExpenseCondition, Integer> {
     List<ExpenseCondition> findAllByOwner(ExpenseOwner owner);
     List<ExpenseCondition> findAllByOwner_Username(String ownerUsername);
-    List<ExpenseCondition> findAllByOwner_UsernameOrderByExpenseFieldPredicate(String ownerUsername);
+
+    List<ExpenseCondition> findAllByOwner_UsernameOrderByExpenseFieldAscPredicateAsc(String ownerUsername);
 }

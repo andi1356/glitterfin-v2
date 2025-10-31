@@ -28,7 +28,7 @@ public class ExpenseConditionService {
     }
 
     public List<ExpenseCondition> getConditions(String ownerId) {
-        return conditionRepository.findAllByOwner_UsernameOrderByExpenseFieldPredicate(ownerId);
+        return conditionRepository.findAllByOwner_UsernameOrderByExpenseFieldAscPredicateAsc(ownerId);
     }
 
     public Optional<ExpenseCondition> getCondition(Integer id) {
