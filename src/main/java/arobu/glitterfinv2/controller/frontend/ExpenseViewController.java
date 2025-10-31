@@ -1,7 +1,7 @@
 package arobu.glitterfinv2.controller.frontend;
 
-import arobu.glitterfinv2.model.dto.ExpenseEntryUpdateForm;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
+import arobu.glitterfinv2.model.form.ExpenseEntryForm;
 import arobu.glitterfinv2.model.mapper.ExpenseEntryMapper;
 import arobu.glitterfinv2.service.ExpenseEntryService;
 import org.springframework.security.core.Authentication;
@@ -35,13 +35,13 @@ public class ExpenseViewController {
 
     @GetMapping("/new")
     public String newExpense(Model model) {
-        ExpenseEntryUpdateForm form = new ExpenseEntryUpdateForm();
+        ExpenseEntryForm form = new ExpenseEntryForm();
         form.setTimezone(ZonedDateTime.now().getOffset().getId());
 
         model.addAttribute("expenseForm", form);
         model.addAttribute("isEdit", false);
 
-        return "expense-form";
+        return "forms/expense-form";
     }
 
     @GetMapping("/{id}")
@@ -79,11 +79,11 @@ public class ExpenseViewController {
         model.addAttribute("expenseForm", ExpenseEntryMapper.toExpenseEntryUpdateForm(expenseEntry.get()));
         model.addAttribute("isEdit", true);
 
-        return "expense-form";
+        return "forms/expense-form";
     }
 
     @PostMapping
-    public String createExpense(@ModelAttribute("expenseForm") ExpenseEntryUpdateForm expenseForm,
+    public String createExpense(@ModelAttribute("expenseForm") ExpenseEntryForm expenseForm,
                                 Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
 
@@ -101,7 +101,7 @@ public class ExpenseViewController {
 
     @PostMapping("/{id}/edit")
     public String updateExpense(@PathVariable("id") Integer expenseId,
-                                @ModelAttribute("expenseForm") ExpenseEntryUpdateForm expenseForm,
+                                @ModelAttribute("expenseForm") ExpenseEntryForm expenseForm,
                                 Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
 

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Glitterfin | ' + (${isEdit} ? 'Edit Condition' : 'Add Condition')">Glitterfin | Condition</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/rulesets.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<main>
+    <section class="ruleset-form-container">
+        <div class="ruleset-form-header">
+            <div>
+                <h1 th:text="${isEdit} ? 'Edit Condition' : 'Add Condition'">Condition</h1>
+                <p class="ruleset-description">Match an expense field against a predicate and value.</p>
+            </div>
+        </div>
+
+        <form th:action="${isEdit} ? @{/rulesets/conditions/{id}/edit(id=${condition.id})} : @{/rulesets/conditions}"
+              th:object="${conditionForm}"
+              method="post"
+              class="ruleset-form">
+            <div class="form-row">
+                <label for="expenseField">Expense field</label>
+                <select id="expenseField" th:field="*{expenseField}" required>
+                    <option th:each="field : ${fields}"
+                            th:value="${field}"
+                            th:text="${#strings.capitalize(#strings.replace(field.name().toLowerCase(), '_', ' '))}">
+                        Field
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="predicate">Predicate</label>
+                <select id="predicate" th:field="*{predicate}" required>
+                    <option th:each="predicateOption : ${predicates}"
+                            th:value="${predicateOption}"
+                            th:text="${#strings.replace(predicateOption.name().toUpperCase(), '_', ' ')}">
+                        Predicate
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="value">Value</label>
+                <input type="text" id="value" th:field="*{value}" placeholder="e.g. restaurant" required>
+                <p class="field-hint">Values are compared in a case-insensitive manner.</p>
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/rulesets/conditions}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary" th:text="${isEdit} ? 'Save Changes' : 'Create Condition'">
+                    Save
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>

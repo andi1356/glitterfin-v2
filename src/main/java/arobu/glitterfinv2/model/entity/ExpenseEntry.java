@@ -78,11 +78,6 @@ public class ExpenseEntry {
 
     public void set(ExpenseRulesetUpdatableField field, String value) {
         switch (field) {
-            case AMOUNT -> setAmount(BigDecimal.valueOf(Double.parseDouble(value)));
-            case TIMESTAMP -> setTimestamp(ZonedDateTime.parse(value));
-            case TIMEZONE -> setTimezone(value);
-            case SOURCE -> setSource(value);
-            case MERCHANT -> setMerchant(value);
             case CATEGORY -> setCategory(value);
             case DESCRIPTION -> setDescription(value);
             case DETAILS -> setDetails(value);

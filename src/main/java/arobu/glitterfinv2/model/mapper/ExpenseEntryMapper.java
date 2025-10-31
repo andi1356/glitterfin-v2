@@ -1,10 +1,10 @@
 package arobu.glitterfinv2.model.mapper;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
-import arobu.glitterfinv2.model.dto.ExpenseEntryUpdateForm;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
 import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
+import arobu.glitterfinv2.model.form.ExpenseEntryForm;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -19,8 +19,8 @@ public class ExpenseEntryMapper {
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
 
-    public static ExpenseEntryUpdateForm toExpenseEntryUpdateForm(ExpenseEntry expenseEntry) {
-        ExpenseEntryUpdateForm form = new ExpenseEntryUpdateForm();
+    public static ExpenseEntryForm toExpenseEntryUpdateForm(ExpenseEntry expenseEntry) {
+        ExpenseEntryForm form = new ExpenseEntryForm();
         form.setDescription(expenseEntry.getDescription());
         form.setCategory(expenseEntry.getCategory());
         form.setMerchant(expenseEntry.getMerchant());

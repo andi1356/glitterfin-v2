@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glitterfin | Ruleset Conditions</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/rulesets.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<main>
+    <section class="ruleset-container">
+        <div class="ruleset-header">
+            <div>
+                <h1>Ruleset Conditions</h1>
+                <p class="ruleset-description">Define when automation rules should apply to your expenses.</p>
+            </div>
+            <a th:href="@{/rulesets/conditions/new}" class="btn btn-primary">Add Condition</a>
+        </div>
+
+        <div class="ruleset-tabs" role="tablist">
+            <a th:href="@{/rulesets/conditions}"
+               th:classappend="${activeTab} == 'conditions' ? ' active'"
+               class="tab-link"
+               role="tab">Conditions</a>
+            <a th:href="@{/rulesets/rules}"
+               th:classappend="${activeTab} == 'rules' ? ' active'"
+               class="tab-link"
+               role="tab">Rules</a>
+        </div>
+
+        <div th:if="${conditionMessage}" class="feedback" th:text="${conditionMessage}"></div>
+
+        <div th:if="${#lists.isEmpty(conditions)}" class="empty-state">
+            <p>No conditions defined yet. Start by creating a condition to match expense data.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(conditions)}" class="ruleset-table-wrapper">
+            <table class="ruleset-table">
+                <thead>
+                <tr>
+                    <th>Expense Field</th>
+                    <th>Predicate</th>
+                    <th>Value</th>
+                    <th class="actions-header">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="condition : ${conditions}">
+                    <td th:text="${#strings.capitalize(#strings.replace(condition.expenseField.name().toLowerCase(), '_', ' '))}">Field</td>
+                    <td th:text="${#strings.capitalize(#strings.replace(condition.predicate.name().toUpperCase(), '_', ' '))}">Predicate</td>
+                    <td th:text="${condition.value}">value</td>
+                    <td class="actions">
+                        <a th:href="@{/rulesets/conditions/{id}/edit(id=${condition.id})}" class="btn btn-secondary">Edit</a>
+                        <form th:action="@{/rulesets/conditions/{id}/delete(id=${condition.id})}"
+                              method="post"
+                              class="inline-form"
+                              onsubmit="return confirm('Delete this condition? Rules using it will stop working.');">
+                            <button type="submit" class="btn btn-delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>
