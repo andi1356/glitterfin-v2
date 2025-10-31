@@ -23,12 +23,27 @@ public class Owner implements UserDetails {
         return userAgentId;
     }
 
+    public Owner setUserAgentId(String userAgentId) {
+        this.userAgentId = userAgentId;
+        return this;
+    }
+
     public String getApiToken() {
         return apiToken;
     }
 
+    public Owner setApiToken(String apiToken) {
+        this.apiToken = apiToken;
+        return this;
+    }
+
     public String getDetails() {
         return details;
+    }
+
+    public Owner setDetails(String details) {
+        this.details = details;
+        return this;
     }
 
     @Override
@@ -36,9 +51,19 @@ public class Owner implements UserDetails {
         return username;
     }
 
+    public Owner setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public Owner setPassword(String password) {
+        this.password = password;
+        return this;
     }
 
     @Override
