@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ExpenseRulesetService {
@@ -46,13 +47,18 @@ public class ExpenseRulesetService {
     }
 
     public boolean matches(ExpenseCondition condition, ExpenseEntry expense) {
-        String expenseFieldValue = expense.get(condition.getExpenseField()).toLowerCase();
-        return switch (condition.getPredicate()) {
-            case IS -> expenseFieldValue.equals(condition.getValue());
-            case CONTAINS -> expenseFieldValue.contains(condition.getValue());
-            case STARTS_WITH -> expenseFieldValue.startsWith(condition.getValue());
-            case ENDS_WITH -> expenseFieldValue.endsWith(condition.getValue());
-            case REGEX -> expenseFieldValue.matches(condition.getValue());
-        };
+        final var expenseFieldValue = expense.get(condition.getExpenseField());
+        if (Objects.nonNull(expenseFieldValue)) {
+            final var lowerCaseFieldValue = expenseFieldValue.toLowerCase();
+            return switch (condition.getPredicate()) {
+                case IS -> lowerCaseFieldValue.equals(condition.getValue());
+                case CONTAINS -> lowerCaseFieldValue.contains(condition.getValue());
+                case STARTS_WITH -> lowerCaseFieldValue.startsWith(condition.getValue());
+                case ENDS_WITH -> lowerCaseFieldValue.endsWith(condition.getValue());
+                case REGEX -> lowerCaseFieldValue.matches(condition.getValue());
+            };
+        } else {
+            return false;
+        }
     }
 }
