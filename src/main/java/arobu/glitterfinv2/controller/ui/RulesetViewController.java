@@ -1,4 +1,4 @@
-package arobu.glitterfinv2.controller.frontend;
+package arobu.glitterfinv2.controller.ui;
 
 import arobu.glitterfinv2.model.entity.ExpenseCondition;
 import arobu.glitterfinv2.model.entity.ExpenseRule;

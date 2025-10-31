@@ -1,4 +1,4 @@
-package arobu.glitterfinv2.controller.frontend;
+package arobu.glitterfinv2.controller.ui;
 
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Value;
