@@ -59,20 +59,20 @@ public class ExpenseEntry {
         return new ExpenseEntry(this);
     }
 
-    public String get(ExpenseField field) {
+    public Object get(ExpenseField field) {
         return switch (field) {
-            case AMOUNT -> getAmount().toString();
-            case TIMESTAMP -> getTimestamp().toString();
+            case AMOUNT -> getAmount();
+            case TIMESTAMP -> getTimestamp();
             case TIMEZONE -> getTimezone();
             case SOURCE -> getSource();
             case MERCHANT -> getMerchant();
-            case LOCATION -> getLocation().toString();
+            case LOCATION -> getLocation();
             case CATEGORY -> getCategory();
             case RECEIPT_DATA -> getReceiptData();
             case DESCRIPTION -> getDescription();
             case DETAILS -> getDetails();
-            case IS_SHARED -> getShared().toString();
-            case IS_OUTLIER -> getOutlier().toString();
+            case IS_SHARED -> getShared();
+            case IS_OUTLIER -> getOutlier();
         };
     }
 

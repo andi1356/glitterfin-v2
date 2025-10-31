@@ -50,7 +50,7 @@ public class ExpenseRulesetService {
     public boolean matches(ExpenseCondition condition, ExpenseEntry expense) {
         final var expenseFieldValue = expense.get(condition.getExpenseField());
         if (nonNull(expenseFieldValue)) {
-            final var lowerCaseFieldValue = expenseFieldValue.toLowerCase();
+            final var lowerCaseFieldValue = expenseFieldValue.toString().toLowerCase();
             return switch (condition.getPredicate()) {
                 case IS -> lowerCaseFieldValue.equals(condition.getValue());
                 case CONTAINS -> lowerCaseFieldValue.contains(condition.getValue());
