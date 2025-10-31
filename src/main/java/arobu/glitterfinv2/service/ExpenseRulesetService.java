@@ -11,7 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
+
+import static java.util.Objects.nonNull;
 
 @Service
 public class ExpenseRulesetService {
@@ -48,7 +49,7 @@ public class ExpenseRulesetService {
 
     public boolean matches(ExpenseCondition condition, ExpenseEntry expense) {
         final var expenseFieldValue = expense.get(condition.getExpenseField());
-        if (Objects.nonNull(expenseFieldValue)) {
+        if (nonNull(expenseFieldValue)) {
             final var lowerCaseFieldValue = expenseFieldValue.toLowerCase();
             return switch (condition.getPredicate()) {
                 case IS -> lowerCaseFieldValue.equals(condition.getValue());
