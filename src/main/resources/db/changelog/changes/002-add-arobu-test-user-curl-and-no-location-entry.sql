@@ -1,2 +1,1 @@
-INSERT INTO owner VALUES ('andi-dev-mbair', '$2a$10$gLxQ5C4YXbXBcUtsKKJw3e0L/kM00.YENZoi7bAgxYhty4QfAQLzS','IntelliJ','$2a$10$ZtaHiUS9IOJVtbCRYCutOOHGBET8Ln24mJ2C8KmuBR9H/eD4rqsS.','TBD');
 INSERT INTO location (display_name, latitude, longitude) VALUES ('NO LOCATION', 0.0, 0.0);

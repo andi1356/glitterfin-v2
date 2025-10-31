@@ -29,7 +29,7 @@ public class ExpenseRuleService {
 
     public List<ExpenseRule> getRules(Owner owner) {
         Sort sort = Sort.by(
-                Sort.Order.asc("conditionId"),
+                Sort.Order.asc("condition"),
                 Sort.Order.asc("priority")
         );
         return ruleRepository.findAllByOwner(owner, sort);
@@ -50,7 +50,7 @@ public class ExpenseRuleService {
             if (existingDuplicateExpenseRule.isPresent()) {
                 final var expenseRule = existingDuplicateExpenseRule.get();
                 return join("Rule uniqueness restriction hit. Check fields; ",
-                                    " Condition: ", expenseRule.getCondition().toString(),
+                                    " Condition: ", expenseRule.getCondition().prettyPrint(),
                                     ", Populating Field: ", expenseRule.getPopulatingField().toString(),
                                     ", Priority: ", expenseRule.getPriority().toString());
             } else {
@@ -71,7 +71,7 @@ public class ExpenseRuleService {
             return Optional.empty();
         }
         return ruleRepository.findByIdAndOwner(id, owner)
-                .flatMap(existing -> conditionRepository.findById(form.getConditionId())
+                .flatMap(existing -> conditionRepository.findByIdAndOwner(form.getConditionId(), owner)
                         .map(condition -> {
                             existing
                                     .setCondition(condition)

@@ -62,6 +62,10 @@ public class ExpenseCondition {
         return this;
     }
 
+    public String prettyPrint() {
+        return "ExpenseCondition(" + expenseField + " " + predicate + " " + value + ")";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ExpenseCondition that)) return false;

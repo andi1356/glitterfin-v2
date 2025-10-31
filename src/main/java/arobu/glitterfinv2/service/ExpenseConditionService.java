@@ -5,6 +5,7 @@ import arobu.glitterfinv2.model.entity.Owner;
 import arobu.glitterfinv2.model.entity.meta.Predicate;
 import arobu.glitterfinv2.model.form.ExpenseConditionForm;
 import arobu.glitterfinv2.model.repository.ExpenseConditionRepository;
+import arobu.glitterfinv2.model.repository.ExpenseRuleRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,11 @@ import static java.util.Objects.nonNull;
 public class ExpenseConditionService {
 
     private final ExpenseConditionRepository conditionRepository;
+    private final ExpenseRuleRepository expenseRuleRepository;
 
-    public ExpenseConditionService(ExpenseConditionRepository conditionRepository) {
+    public ExpenseConditionService(ExpenseConditionRepository conditionRepository, ExpenseRuleRepository expenseRuleRepository) {
         this.conditionRepository = conditionRepository;
+        this.expenseRuleRepository = expenseRuleRepository;
     }
 
     public List<ExpenseCondition> getConditions(Owner owner) {
@@ -70,6 +73,8 @@ public class ExpenseConditionService {
         if (!conditionRepository.existsByIdAndOwner(id, owner)) {
             return false;
         }
+        expenseRuleRepository.findAllByConditionIdIn(List.of(id))
+                        .forEach(expenseRule -> expenseRule.setCondition(null));
         conditionRepository.deleteById(id);
         return true;
     }
