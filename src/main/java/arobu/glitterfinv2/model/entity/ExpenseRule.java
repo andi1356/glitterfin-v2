@@ -14,6 +14,8 @@ public class ExpenseRule {
     @GeneratedValue(strategy = IDENTITY)
     private Integer id;
     @ManyToOne
+    private ExpenseOwner owner;
+    @ManyToOne
     private ExpenseCondition condition;
     @Enumerated(STRING)
     private ExpenseRulesetUpdatableField populatingField;
@@ -24,8 +26,12 @@ public class ExpenseRule {
         return id;
     }
 
-    public ExpenseRule setId(Integer id) {
-        this.id = id;
+    public ExpenseOwner getOwner() {
+        return owner;
+    }
+
+    public ExpenseRule setOwner(ExpenseOwner owner) {
+        this.owner = owner;
         return this;
     }
 
@@ -68,18 +74,19 @@ public class ExpenseRule {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ExpenseRule that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(condition, that.condition) && populatingField == that.populatingField && Objects.equals(value, that.value) && Objects.equals(priority, that.priority);
+        return Objects.equals(id, that.id) && Objects.equals(owner, that.owner) && Objects.equals(condition, that.condition) && populatingField == that.populatingField && Objects.equals(value, that.value) && Objects.equals(priority, that.priority);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, condition, populatingField, value, priority);
+        return Objects.hash(id, owner, condition, populatingField, value, priority);
     }
 
     @Override
     public String toString() {
         return "ExpenseRule{" +
                 "id=" + id +
+                ", owner=" + owner +
                 ", condition=" + condition +
                 ", populatingField=" + populatingField +
                 ", value='" + value + '\'' +

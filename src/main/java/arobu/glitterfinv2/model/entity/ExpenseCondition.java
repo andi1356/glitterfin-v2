@@ -2,10 +2,7 @@ package arobu.glitterfinv2.model.entity;
 
 import arobu.glitterfinv2.model.entity.meta.ExpenseField;
 import arobu.glitterfinv2.model.entity.meta.Predicate;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -17,6 +14,8 @@ public class ExpenseCondition {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     Integer id;
+    @ManyToOne
+    private ExpenseOwner owner;
     @Enumerated(STRING)
     ExpenseField expenseField;
     @Enumerated(STRING)
@@ -27,8 +26,12 @@ public class ExpenseCondition {
         return id;
     }
 
-    public ExpenseCondition setId(Integer id) {
-        this.id = id;
+    public ExpenseOwner getOwner() {
+        return owner;
+    }
+
+    public ExpenseCondition setOwner(ExpenseOwner owner) {
+        this.owner = owner;
         return this;
     }
 
@@ -36,8 +39,8 @@ public class ExpenseCondition {
         return expenseField;
     }
 
-    public ExpenseCondition setExpenseField(ExpenseField field) {
-        this.expenseField = field;
+    public ExpenseCondition setExpenseField(ExpenseField expenseField) {
+        this.expenseField = expenseField;
         return this;
     }
 
@@ -62,18 +65,19 @@ public class ExpenseCondition {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ExpenseCondition that)) return false;
-        return Objects.equals(id, that.id) && expenseField == that.expenseField && predicate == that.predicate && Objects.equals(value, that.value);
+        return Objects.equals(id, that.id) && Objects.equals(owner, that.owner) && expenseField == that.expenseField && predicate == that.predicate && Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, expenseField, predicate, value);
+        return Objects.hash(id, owner, expenseField, predicate, value);
     }
 
     @Override
     public String toString() {
         return "ExpenseCondition{" +
                 "id=" + id +
+                ", owner=" + owner +
                 ", expenseField=" + expenseField +
                 ", predicate=" + predicate +
                 ", value='" + value + '\'' +
