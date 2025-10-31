@@ -29,7 +29,7 @@ public class ExpenseRuleService {
 
     public List<ExpenseRule> getRules(Owner owner) {
         Sort sort = Sort.by(
-                Sort.Order.asc("condition_id"),
+                Sort.Order.asc("conditionId"),
                 Sort.Order.asc("priority")
         );
         return ruleRepository.findAllByOwner(owner, sort);

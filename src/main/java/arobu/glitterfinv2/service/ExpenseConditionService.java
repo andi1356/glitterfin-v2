@@ -27,7 +27,7 @@ public class ExpenseConditionService {
 
     public List<ExpenseCondition> getConditions(Owner owner) {
         Sort sort = Sort.by(
-                Sort.Order.asc("expense_field"),
+                Sort.Order.asc("expenseField"),
                 Sort.Order.asc("predicate")
         );
         return conditionRepository.findAllByOwner(owner, sort);

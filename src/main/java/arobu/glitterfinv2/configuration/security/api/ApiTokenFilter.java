@@ -14,7 +14,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -67,15 +66,15 @@ public class ApiTokenFilter extends OncePerRequestFilter {
                 return;
             }
             ownerOpt.ifPresent(owner -> {
-                        PreAuthenticatedAuthenticationToken apiUser = new PreAuthenticatedAuthenticationToken(
-                                owner.getUsername(),
-                                apiKey,
-                                singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
-                        apiUser.setDetails(owner.getDetails());
-                        SecurityContextHolder.getContext().setAuthentication(apiUser);
+                OwnerAuthenticationToken roleApiUser = new OwnerAuthenticationToken(
+                        owner,
+                        apiKey,
+                        singletonList(new SimpleGrantedAuthority("ROLE_API_USER"))
+                );
+                SecurityContextHolder.getContext().setAuthentication(roleApiUser);
 
-                        LOGGER.debug("Successfully authenticated api user: {} with User-Agent: {}",
-                                owner.getUsername(), owner.getUserAgentId());
+                LOGGER.info("Successfully authenticated api user: {} with User-Agent: {}",
+                        owner.getUsername(), owner.getUserAgentId());
                     });
             filterChain.doFilter(request, response);
         }
