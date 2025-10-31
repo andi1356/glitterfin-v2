@@ -49,8 +49,9 @@ public class ExpenseEntryService {
         this.expenseRulesetService = expenseRulesetService;
     }
 
-    public ExpenseEntry saveExpense(final ExpenseEntryApiPostDTO expenseEntryApiPostDTO, final String username) throws OwnerNotFoundException {
-        ExpenseOwner owner = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
+    public ExpenseEntry saveExpense(
+            final ExpenseEntryApiPostDTO expenseEntryApiPostDTO,
+            final ExpenseOwner owner) throws OwnerNotFoundException {
         Location location = locationService.getOrSaveLocationEntity(expenseEntryApiPostDTO.getLocationData());
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryApiPostDTO, owner, location);

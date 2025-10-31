@@ -5,8 +5,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -26,7 +26,7 @@ import static java.util.Objects.isNull;
 @Component
 public class ApiTokenFilter extends OncePerRequestFilter {
 
-    Logger LOGGER = LogManager.getLogger(ApiTokenFilter.class);
+    Logger LOGGER = LoggerFactory.getLogger(ApiTokenFilter.class);
 
     private final ExpenseOwnerService expenseOwnerService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
@@ -71,7 +71,7 @@ public class ApiTokenFilter extends OncePerRequestFilter {
                                 expenseOwner.getUsername(),
                                 apiKey,
                                 singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
-                        apiUser.setDetails("TO BE DEFINED");
+                        apiUser.setDetails(expenseOwner.getDetails());
                         SecurityContextHolder.getContext().setAuthentication(apiUser);
 
                         LOGGER.debug("Successfully authenticated api user: {} with User-Agent: {}",
