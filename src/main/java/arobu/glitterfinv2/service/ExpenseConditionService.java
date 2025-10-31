@@ -5,7 +5,6 @@ import arobu.glitterfinv2.model.entity.meta.Predicate;
 import arobu.glitterfinv2.model.form.ExpenseConditionForm;
 import arobu.glitterfinv2.model.repository.ExpenseConditionRepository;
 import arobu.glitterfinv2.model.repository.ExpenseRuleRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,20 +27,16 @@ public class ExpenseConditionService {
         this.ruleRepository = ruleRepository;
     }
 
-    public List<ExpenseCondition> getConditions() {
-        Sort sort = Sort.by(
-                Sort.Order.asc("expenseField"),
-                Sort.Order.asc("predicate"),
-                Sort.Order.asc("id")
-        );
-        return conditionRepository.findAll(sort);
+    public List<ExpenseCondition> getConditions(String ownerId) {
+        return conditionRepository.findAllByOwner_UsernameOrderByExpenseFieldPredicate(ownerId);
     }
 
     public Optional<ExpenseCondition> getCondition(Integer id) {
         return conditionRepository.findById(id);
     }
 
-    public String createCondition(ExpenseConditionForm form) {
+    public String createCondition(String ownerId, ExpenseConditionForm form) {
+
         ExpenseCondition condition = new ExpenseCondition()
                 .setExpenseField(form.getExpenseField())
                 .setPredicate(form.getPredicate())

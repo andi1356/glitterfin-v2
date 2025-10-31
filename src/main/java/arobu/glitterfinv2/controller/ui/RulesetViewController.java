@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,15 +32,15 @@ public class RulesetViewController {
     }
 
     @GetMapping("/conditions")
-    public String listConditions(Model model) {
-        List<ExpenseCondition> conditions = conditionService.getConditions();
+    public String listConditionsUI(Principal principal, Model model) {
+        List<ExpenseCondition> conditions = conditionService.getConditions(principal.getName());
         model.addAttribute("conditions", conditions);
         model.addAttribute("activeTab", "conditions");
         return "conditions";
     }
 
     @GetMapping("/conditions/new")
-    public String newCondition(Model model) {
+    public String newConditionUI(Model model) {
         model.addAttribute("conditionForm", new ExpenseConditionForm());
         model.addAttribute("fields", ExpenseField.values());
         model.addAttribute("predicates", Predicate.values());
@@ -48,7 +49,7 @@ public class RulesetViewController {
     }
 
     @GetMapping("/conditions/{id}/edit")
-    public String editCondition(@PathVariable("id") Integer conditionId,
+    public String editConditionUI(@PathVariable("id") Integer conditionId,
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
         Optional<ExpenseCondition> condition = conditionService.getCondition(conditionId);
@@ -66,9 +67,10 @@ public class RulesetViewController {
     }
 
     @PostMapping("/conditions")
-    public String createCondition(@ModelAttribute("conditionForm") ExpenseConditionForm form,
+    public String createCondition(Principal principal,
+                                  @ModelAttribute("conditionForm") ExpenseConditionForm form,
                                   RedirectAttributes redirectAttributes) {
-        final var creationMessage = conditionService.createCondition(form);
+        final var creationMessage = conditionService.createCondition(principal.getName(), form);
         redirectAttributes.addFlashAttribute("conditionMessage", creationMessage);
         return "redirect:/rulesets/conditions";
     }
@@ -97,18 +99,20 @@ public class RulesetViewController {
     }
 
     @GetMapping("/rules")
-    public String listRules(Model model) {
+    public String listRules(Principal principal, Model model) {
         List<ExpenseRule> rules = ruleService.getRules();
         model.addAttribute("rules", rules);
-        model.addAttribute("conditions", conditionService.getConditions());
+        model.addAttribute("conditions",
+                conditionService.getConditions(principal.getName()));
         model.addAttribute("activeTab", "rules");
         return "rules";
     }
 
     @GetMapping("/rules/new")
-    public String newRule(Model model,
+    public String newRule(Principal principal,
+                          Model model,
                           RedirectAttributes redirectAttributes) {
-        List<ExpenseCondition> conditions = conditionService.getConditions();
+        List<ExpenseCondition> conditions = conditionService.getConditions(principal.getName());
         if (conditions.isEmpty()) {
             redirectAttributes.addFlashAttribute("conditionMessage", "Create a condition before adding rules.");
             return "redirect:/rulesets/conditions";
@@ -121,7 +125,8 @@ public class RulesetViewController {
     }
 
     @GetMapping("/rules/{id}/edit")
-    public String editRule(@PathVariable("id") Integer ruleId,
+    public String editRule(Principal principal,
+                           @PathVariable("id") Integer ruleId,
                            Model model,
                            RedirectAttributes redirectAttributes) {
         Optional<ExpenseRule> rule = ruleService.getRule(ruleId);
@@ -129,7 +134,7 @@ public class RulesetViewController {
             redirectAttributes.addFlashAttribute("ruleMessage", "Unable to locate the requested rule.");
             return "redirect:/rulesets/rules";
         }
-        List<ExpenseCondition> conditions = conditionService.getConditions();
+        List<ExpenseCondition> conditions = conditionService.getConditions(principal.getName());
         if (conditions.isEmpty()) {
             redirectAttributes.addFlashAttribute("conditionMessage", "Create a condition before editing rules.");
             return "redirect:/rulesets/conditions";

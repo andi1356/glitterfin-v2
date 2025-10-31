@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.util.Comparator.comparing;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -60,7 +59,7 @@ public class ExpenseEntryService {
 
         ExpenseEntry savedEntity = expenseEntryRepository.save(entity);
 
-        ExpenseEntry enrichedExpense = expenseRulesetService.applyRulesets(savedEntity);
+        ExpenseEntry enrichedExpense = expenseRulesetService.applyRulesets(owner, savedEntity);
 
         return expenseEntryRepository.save(enrichedExpense);
     }
@@ -80,10 +79,6 @@ public class ExpenseEntryService {
     }
 
     public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryForm form) {
-        if (form == null) {
-            LOGGER.warn("Attempted to create expense for user {} with empty form", username);
-            return Optional.empty();
-        }
         ExpenseEntry newExpense = new ExpenseEntry();
 
         ExpenseOwner owner  = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
@@ -117,17 +112,13 @@ public class ExpenseEntryService {
             return Optional.empty();
         }
 
-        expenseRulesetService.applyRulesets(newExpense);
-
         LOGGER.info("Creating expense for user {}", username);
         return Optional.of(expenseEntryRepository.save(newExpense));
     }
 
     public List<ExpenseEntry> getAllExpenses(final String username) {
         LOGGER.info("Fetching all expenses for user: {}", username);
-        return expenseEntryRepository.findAllByOwner_Username(username).stream()
-                .sorted(comparing(ExpenseEntry::getTimestamp).reversed())
-                .toList();
+        return expenseEntryRepository.findAllByOwner_UsernameOrderByTimestampDesc(username);
     }
 
     public Optional<ExpenseEntry> getExpense(final Integer expenseId, final String username) {

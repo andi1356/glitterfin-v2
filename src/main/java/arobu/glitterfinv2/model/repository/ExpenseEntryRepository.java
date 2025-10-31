@@ -10,6 +10,8 @@ import java.util.Optional;
 @Repository
 public interface ExpenseEntryRepository extends JpaRepository<ExpenseEntry, Integer> {
 
+    List<ExpenseEntry> findAllByOwner_UsernameOrderByTimestampDesc(String username);
+
     List<ExpenseEntry> findAllByOwner_Username(String ownerUsername);
 
     Optional<ExpenseEntry> findByIdAndOwner_Username(Integer id, String ownerUsername);
