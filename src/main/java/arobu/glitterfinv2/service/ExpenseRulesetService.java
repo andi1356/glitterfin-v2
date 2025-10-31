@@ -28,10 +28,11 @@ public class ExpenseRulesetService {
         this.auditRepository = auditRepository;
     }
 
-    public ExpenseEntry applyRulesets(ExpenseOwner owner, final ExpenseEntry expense) {
+    public ExpenseEntry applyRulesets(Owner owner, final ExpenseEntry expense) {
         ExpenseEntry expenseCopy = expense.copy();
 
-        List<Integer> matchingConditionIds = conditionRepository.findAllByOwner(owner).stream()
+        List<Integer> matchingConditionIds = conditionRepository.findAllByOwner(owner)
+                .stream()
                 .filter(condition -> matches(condition, expense))
                 .map(ExpenseCondition::getId)
                 .toList();

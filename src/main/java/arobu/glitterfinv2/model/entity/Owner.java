@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity(name = "owner")
-public class ExpenseOwner implements UserDetails {
+public class Owner implements UserDetails {
     @Id
     private String username;
     private String userAgentId;
@@ -53,6 +53,6 @@ public class ExpenseOwner implements UserDetails {
 
     @Override
     public String toString() {
-        return "ExpenseOwner{" + username + '}';
+        return "Owner{" + username + '}';
     }
 }

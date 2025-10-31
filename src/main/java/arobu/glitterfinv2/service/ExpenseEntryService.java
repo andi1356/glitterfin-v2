@@ -3,8 +3,8 @@ package arobu.glitterfinv2.service;
 import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
 import arobu.glitterfinv2.model.dto.LocationData;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
-import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
+import arobu.glitterfinv2.model.entity.Owner;
 import arobu.glitterfinv2.model.form.ExpenseEntryForm;
 import arobu.glitterfinv2.model.mapper.ExpenseEntryMapper;
 import arobu.glitterfinv2.model.repository.ExpenseEntryRepository;
@@ -38,20 +38,18 @@ public class ExpenseEntryService {
     Logger LOGGER = LogManager.getLogger(ExpenseEntryService.class);
 
     private final ExpenseEntryRepository expenseEntryRepository;
-    private final ExpenseOwnerService expenseOwnerService;
     private final LocationService locationService;
     private final ExpenseRulesetService expenseRulesetService;
 
-    public ExpenseEntryService(ExpenseEntryRepository expenseEntryRepository, ExpenseOwnerService expenseOwnerService, LocationService locationService, ExpenseRulesetService expenseRulesetService) {
+    public ExpenseEntryService(ExpenseEntryRepository expenseEntryRepository, LocationService locationService, ExpenseRulesetService expenseRulesetService) {
         this.expenseEntryRepository = expenseEntryRepository;
-        this.expenseOwnerService = expenseOwnerService;
         this.locationService = locationService;
         this.expenseRulesetService = expenseRulesetService;
     }
 
     public ExpenseEntry saveExpense(
             final ExpenseEntryApiPostDTO expenseEntryApiPostDTO,
-            final ExpenseOwner owner) throws OwnerNotFoundException {
+            final Owner owner) throws OwnerNotFoundException {
         Location location = locationService.getOrSaveLocationEntity(expenseEntryApiPostDTO.getLocationData());
 
         ExpenseEntry entity = ExpenseEntryMapper.toEntity(expenseEntryApiPostDTO, owner, location);
@@ -79,10 +77,9 @@ public class ExpenseEntryService {
         }
     }
 
-    public Optional<ExpenseEntry> createExpense(final String username, final ExpenseEntryForm form) {
+    public Optional<ExpenseEntry> createExpense(final Owner owner, final ExpenseEntryForm form) {
         ExpenseEntry newExpense = new ExpenseEntry();
 
-        ExpenseOwner owner  = expenseOwnerService.getExpenseOwnerEntityByUsername(username);
         if (nonNull(form.getLatitude()) && nonNull(form.getLongitude())) {
             newExpense.setLocation(locationService.getOrSaveLocationEntity(
                     new LocationData(form.getLatitude().toString(), form.getLongitude().toString())));
@@ -109,31 +106,31 @@ public class ExpenseEntryService {
                 || newExpense.getTimezone() == null
                 || newExpense.getSource() == null || newExpense.getSource().isBlank()
                 || newExpense.getMerchant() == null || newExpense.getMerchant().isBlank()) {
-            LOGGER.warn("Missing required fields when creating expense for user {}", username);
+            LOGGER.warn("Missing required fields when creating expense for user {}", owner.getUsername());
             return Optional.empty();
         }
 
-        LOGGER.info("Creating expense for user {}", username);
+        LOGGER.info("Creating expense for user {}", owner.getUsername());
         return Optional.of(expenseEntryRepository.save(newExpense));
     }
 
-    public List<ExpenseEntry> getAllExpenses(final String username) {
-        LOGGER.info("Fetching all expenses for user: {}", username);
-        return expenseEntryRepository.findAllByOwner_UsernameOrderByTimestampDesc(username);
+    public List<ExpenseEntry> getAllExpenses(final Owner owner) {
+        LOGGER.info("Fetching all expenses for user: {}", owner.getUsername());
+        return expenseEntryRepository.findAllByOwnerOrderByTimestampDesc(owner);
     }
 
-    public Optional<ExpenseEntry> getExpense(final Integer expenseId, final String username) {
-        LOGGER.info("Fetching expense {} for user {}", expenseId, username);
-        return expenseEntryRepository.findByIdAndOwner_Username(expenseId, username);
+    public Optional<ExpenseEntry> getExpense(final Integer expenseId, Owner owner) {
+        LOGGER.info("Fetching expense {} for user {}", expenseId, owner.getUsername());
+        return expenseEntryRepository.findByIdAndOwner(expenseId, owner);
     }
 
-    public Optional<ExpenseEntry> updateExpense(final Integer expenseId, final String username, final ExpenseEntryForm form) {
+    public Optional<ExpenseEntry> updateExpense(final Integer expenseId, final Owner owner, final ExpenseEntryForm form) {
         if (form == null) {
-            LOGGER.warn("Attempted to update expense {} for user {} with empty form", expenseId, username);
+            LOGGER.warn("Attempted to update expense {} for user {} with empty form", expenseId, owner.getUsername());
             return Optional.empty();
         }
 
-        return getExpense(expenseId, username).map(expenseEntry -> {
+        return expenseEntryRepository.findByIdAndOwner(expenseId, owner).map(expenseEntry -> {
             expenseEntry.setDescription(form.getDescription());
             expenseEntry.setCategory(form.getCategory());
             expenseEntry.setMerchant(form.getMerchant());
@@ -157,21 +154,18 @@ public class ExpenseEntryService {
 
             applyTimestampUpdates(expenseEntry, form);
 
-            LOGGER.info("Updating expense {} for user {}", expenseId, username);
+            LOGGER.info("Updating expense {} for user {}", expenseId, owner.getUsername());
             return expenseEntryRepository.save(expenseEntry);
         });
     }
 
-    public boolean deleteExpense(final Integer expenseId, final String username) {
-        Optional<ExpenseEntry> expenseEntry = getExpense(expenseId, username);
-
-        if (expenseEntry.isEmpty()) {
-            LOGGER.warn("Attempted to delete missing expense {} for user {}", expenseId, username);
+    public boolean deleteExpense(final Integer expenseId, final Owner owner) {
+        if (!expenseEntryRepository.existsByIdAndOwner(expenseId, owner)) {
+            LOGGER.warn("Attempted to delete missing expense {} for user {}", expenseId, owner.getUsername());
             return false;
         }
-
-        LOGGER.info("Deleting expense {} for user {}", expenseId, username);
-        expenseEntryRepository.delete(expenseEntry.get());
+        LOGGER.info("Deleting expense {} for user {}", expenseId, owner.getUsername());
+        expenseEntryRepository.deleteById(expenseId);
         return true;
     }
 

@@ -1,6 +1,6 @@
 package arobu.glitterfinv2.configuration.security.api;
 
-import arobu.glitterfinv2.service.ExpenseOwnerService;
+import arobu.glitterfinv2.service.OwnerService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,12 +28,12 @@ public class ApiTokenFilter extends OncePerRequestFilter {
 
     Logger LOGGER = LoggerFactory.getLogger(ApiTokenFilter.class);
 
-    private final ExpenseOwnerService expenseOwnerService;
+    private final OwnerService ownerService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
 
-    public ApiTokenFilter(ExpenseOwnerService expenseOwnerService,
+    public ApiTokenFilter(OwnerService ownerService,
                           @Qualifier("apiEntryPoint") AuthenticationEntryPoint authenticationEntryPoint) {
-        this.expenseOwnerService = expenseOwnerService;
+        this.ownerService = ownerService;
         this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
@@ -56,8 +56,8 @@ public class ApiTokenFilter extends OncePerRequestFilter {
             );
             return;
         } else {
-            final var expenseOwnerOpt = expenseOwnerService.getExpenseOwner(userAgentId, apiKey);
-            if (expenseOwnerOpt.isEmpty()) {
+            final var ownerOpt = ownerService.getOwner(userAgentId, apiKey);
+            if (ownerOpt.isEmpty()) {
                 LOGGER.error("Invalid API use attempt from IP: {} with User-Agent: {}",
                                 request.getRemoteAddr(), userAgentId);
                 authenticationEntryPoint.commence(
@@ -66,16 +66,16 @@ public class ApiTokenFilter extends OncePerRequestFilter {
                         new BadCredentialsException("Invalid API key"));
                 return;
             }
-            expenseOwnerOpt.ifPresent(expenseOwner -> {
+            ownerOpt.ifPresent(owner -> {
                         PreAuthenticatedAuthenticationToken apiUser = new PreAuthenticatedAuthenticationToken(
-                                expenseOwner.getUsername(),
+                                owner.getUsername(),
                                 apiKey,
                                 singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
-                        apiUser.setDetails(expenseOwner.getDetails());
+                        apiUser.setDetails(owner.getDetails());
                         SecurityContextHolder.getContext().setAuthentication(apiUser);
 
                         LOGGER.debug("Successfully authenticated api user: {} with User-Agent: {}",
-                                expenseOwner.getUsername(), expenseOwner.getUserAgentId());
+                                owner.getUsername(), owner.getUserAgentId());
                     });
             filterChain.doFilter(request, response);
         }

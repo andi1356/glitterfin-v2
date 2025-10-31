@@ -18,7 +18,7 @@ public class ExpenseEntry {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private ExpenseOwner owner;
+    private Owner owner;
     private BigDecimal amount;
     private ZonedDateTime timestamp;
     private String timezone;
@@ -95,11 +95,11 @@ public class ExpenseEntry {
         return this;
     }
 
-    public ExpenseOwner getOwner() {
+    public Owner getOwner() {
         return owner;
     }
 
-    public ExpenseEntry setOwner(ExpenseOwner owner) {
+    public ExpenseEntry setOwner(Owner owner) {
         this.owner = owner;
         return this;
     }

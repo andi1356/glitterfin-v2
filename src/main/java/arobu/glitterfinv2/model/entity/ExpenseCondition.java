@@ -15,7 +15,7 @@ public class ExpenseCondition {
     @GeneratedValue(strategy = IDENTITY)
     Integer id;
     @ManyToOne
-    private ExpenseOwner owner;
+    private Owner owner;
     @Enumerated(STRING)
     ExpenseField expenseField;
     @Enumerated(STRING)
@@ -26,11 +26,11 @@ public class ExpenseCondition {
         return id;
     }
 
-    public ExpenseOwner getOwner() {
+    public Owner getOwner() {
         return owner;
     }
 
-    public ExpenseCondition setOwner(ExpenseOwner owner) {
+    public ExpenseCondition setOwner(Owner owner) {
         this.owner = owner;
         return this;
     }

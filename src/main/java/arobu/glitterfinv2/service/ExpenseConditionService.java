@@ -1,10 +1,11 @@
 package arobu.glitterfinv2.service;
 
 import arobu.glitterfinv2.model.entity.ExpenseCondition;
+import arobu.glitterfinv2.model.entity.Owner;
 import arobu.glitterfinv2.model.entity.meta.Predicate;
 import arobu.glitterfinv2.model.form.ExpenseConditionForm;
 import arobu.glitterfinv2.model.repository.ExpenseConditionRepository;
-import arobu.glitterfinv2.model.repository.ExpenseRuleRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,25 +20,27 @@ import static java.util.Objects.nonNull;
 public class ExpenseConditionService {
 
     private final ExpenseConditionRepository conditionRepository;
-    private final ExpenseRuleRepository ruleRepository;
 
-    public ExpenseConditionService(ExpenseConditionRepository conditionRepository,
-                                   ExpenseRuleRepository ruleRepository) {
+    public ExpenseConditionService(ExpenseConditionRepository conditionRepository) {
         this.conditionRepository = conditionRepository;
-        this.ruleRepository = ruleRepository;
     }
 
-    public List<ExpenseCondition> getConditions(String ownerId) {
-        return conditionRepository.findAllByOwner_UsernameOrderByExpenseFieldAscPredicateAsc(ownerId);
+    public List<ExpenseCondition> getConditions(Owner owner) {
+        Sort sort = Sort.by(
+                Sort.Order.asc("expense_field"),
+                Sort.Order.asc("predicate")
+        );
+        return conditionRepository.findAllByOwner(owner, sort);
     }
 
-    public Optional<ExpenseCondition> getCondition(Integer id) {
-        return conditionRepository.findById(id);
+    public Optional<ExpenseCondition> getCondition(Integer id, Owner owner) {
+        return conditionRepository.findByIdAndOwner(id, owner);
     }
 
-    public String createCondition(String ownerId, ExpenseConditionForm form) {
+    public String createCondition(Owner owner, ExpenseConditionForm form) {
 
         ExpenseCondition condition = new ExpenseCondition()
+                .setOwner(owner)
                 .setExpenseField(form.getExpenseField())
                 .setPredicate(form.getPredicate())
                 .setValue(normalize(form.getPredicate(), form.getValue()));
@@ -52,8 +55,8 @@ public class ExpenseConditionService {
         return "Condition created successfully.";
     }
 
-    public Optional<ExpenseCondition> updateCondition(Integer id, ExpenseConditionForm form) {
-        return conditionRepository.findById(id)
+    public Optional<ExpenseCondition> updateCondition(Integer id, Owner owner, ExpenseConditionForm form) {
+        return conditionRepository.findByIdAndOwner(id, owner)
                 .map(existing -> {
                     existing
                             .setExpenseField(form.getExpenseField())
@@ -63,11 +66,8 @@ public class ExpenseConditionService {
                 });
     }
 
-    public boolean deleteCondition(Integer id) {
-        if (!conditionRepository.existsById(id)) {
-            return false;
-        }
-        if (ruleRepository.existsByConditionId(id)) {
+    public boolean deleteCondition(Owner owner, Integer id) {
+        if (!conditionRepository.existsByIdAndOwner(id, owner)) {
             return false;
         }
         conditionRepository.deleteById(id);
