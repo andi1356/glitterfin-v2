@@ -2,8 +2,8 @@ package arobu.glitterfinv2.model.mapper;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
-import arobu.glitterfinv2.model.entity.ExpenseOwner;
 import arobu.glitterfinv2.model.entity.Location;
+import arobu.glitterfinv2.model.entity.Owner;
 import arobu.glitterfinv2.model.form.ExpenseEntryForm;
 
 import java.time.ZoneId;
@@ -47,7 +47,7 @@ public class ExpenseEntryMapper {
         return form;
     }
 
-    public static ExpenseEntry toEntity(final ExpenseEntryApiPostDTO dto, ExpenseOwner owner, Location location) {
+    public static ExpenseEntry toEntity(final ExpenseEntryApiPostDTO dto, Owner owner, Location location) {
 
         ExpenseEntry expense = new ExpenseEntry();
 

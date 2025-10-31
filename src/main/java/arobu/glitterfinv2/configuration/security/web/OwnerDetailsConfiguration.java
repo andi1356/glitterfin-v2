@@ -12,9 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
-public class ExpenseOwnerDetailsConfiguration {
+public class OwnerDetailsConfiguration {
 
-    Logger LOGGER = LogManager.getLogger(ExpenseOwnerDetailsConfiguration.class);
+    Logger LOGGER = LogManager.getLogger(OwnerDetailsConfiguration.class);
 
     @Bean
     public AuthenticationProvider authenticationProvider(

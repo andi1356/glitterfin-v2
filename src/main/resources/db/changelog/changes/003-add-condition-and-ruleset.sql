@@ -1,6 +1,7 @@
 CREATE TABLE expense_condition
 (
     id              SERIAL,
+    owner_username  VARCHAR(255) NOT NULL,
     expense_field   VARCHAR(255) NOT NULL,
     predicate       VARCHAR(255) NOT NULL,
     value           VARCHAR(255) NOT NULL,
@@ -10,13 +11,14 @@ CREATE TABLE expense_condition
 CREATE TABLE expense_rule
 (
     id                SERIAL,
+    owner_username    VARCHAR(255) NOT NULL,
     condition_id      INTEGER NULL,
     populating_field  VARCHAR(255) NOT NULL,
     value             VARCHAR(255) NOT NULL,
     priority          INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (id),
     FOREIGN KEY (condition_id) REFERENCES expense_condition,
-    UNIQUE(condition_id, populating_field, priority)
+    UNIQUE(owner_username, condition_id, populating_field, priority)
 );
 
 CREATE TABLE expense_ruleset_audit (
@@ -29,4 +31,8 @@ CREATE TABLE expense_ruleset_audit (
     FOREIGN KEY (condition_id) REFERENCES expense_condition,
     FOREIGN KEY (rule_id) REFERENCES expense_rule,
     FOREIGN KEY (expense_id) REFERENCES expense
-)
+);
+
+--rollback DROP TABLE expense_condition;
+--rollback DROP TABLE expense_rule;
+--rollback DROP TABLE expense_ruleset_audit;

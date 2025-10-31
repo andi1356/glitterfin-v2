@@ -1,12 +1,12 @@
 package arobu.glitterfinv2.configuration.security.api;
 
-import arobu.glitterfinv2.service.ExpenseOwnerService;
+import arobu.glitterfinv2.service.OwnerService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -14,7 +14,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,14 +25,14 @@ import static java.util.Objects.isNull;
 @Component
 public class ApiTokenFilter extends OncePerRequestFilter {
 
-    Logger LOGGER = LogManager.getLogger(ApiTokenFilter.class);
+    Logger LOGGER = LoggerFactory.getLogger(ApiTokenFilter.class);
 
-    private final ExpenseOwnerService expenseOwnerService;
+    private final OwnerService ownerService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
 
-    public ApiTokenFilter(ExpenseOwnerService expenseOwnerService,
+    public ApiTokenFilter(OwnerService ownerService,
                           @Qualifier("apiEntryPoint") AuthenticationEntryPoint authenticationEntryPoint) {
-        this.expenseOwnerService = expenseOwnerService;
+        this.ownerService = ownerService;
         this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
@@ -56,8 +55,8 @@ public class ApiTokenFilter extends OncePerRequestFilter {
             );
             return;
         } else {
-            final var expenseOwnerOpt = expenseOwnerService.getExpenseOwner(userAgentId, apiKey);
-            if (expenseOwnerOpt.isEmpty()) {
+            final var ownerOpt = ownerService.getOwner(userAgentId, apiKey);
+            if (ownerOpt.isEmpty()) {
                 LOGGER.error("Invalid API use attempt from IP: {} with User-Agent: {}",
                                 request.getRemoteAddr(), userAgentId);
                 authenticationEntryPoint.commence(
@@ -66,16 +65,16 @@ public class ApiTokenFilter extends OncePerRequestFilter {
                         new BadCredentialsException("Invalid API key"));
                 return;
             }
-            expenseOwnerOpt.ifPresent(expenseOwner -> {
-                        PreAuthenticatedAuthenticationToken apiUser = new PreAuthenticatedAuthenticationToken(
-                                expenseOwner.getUsername(),
-                                apiKey,
-                                singletonList(new SimpleGrantedAuthority("ROLE_API_USER")));
-                        apiUser.setDetails("TO BE DEFINED");
-                        SecurityContextHolder.getContext().setAuthentication(apiUser);
+            ownerOpt.ifPresent(owner -> {
+                OwnerAuthenticationToken roleApiUser = new OwnerAuthenticationToken(
+                        owner,
+                        apiKey,
+                        singletonList(new SimpleGrantedAuthority("ROLE_API_USER"))
+                );
+                SecurityContextHolder.getContext().setAuthentication(roleApiUser);
 
-                        LOGGER.debug("Successfully authenticated api user: {} with User-Agent: {}",
-                                expenseOwner.getUsername(), expenseOwner.getUserAgentId());
+                LOGGER.info("Successfully authenticated api user: {} with User-Agent: {}",
+                        owner.getUsername(), owner.getUserAgentId());
                     });
             filterChain.doFilter(request, response);
         }

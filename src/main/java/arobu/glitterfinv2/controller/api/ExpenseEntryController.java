@@ -2,13 +2,14 @@ package arobu.glitterfinv2.controller.api;
 
 import arobu.glitterfinv2.model.dto.ExpenseEntryApiPostDTO;
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
+import arobu.glitterfinv2.model.entity.Owner;
 import arobu.glitterfinv2.service.ExpenseEntryService;
 import arobu.glitterfinv2.service.exception.OwnerNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,13 +31,14 @@ public class ExpenseEntryController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String,String>> insertExpense(@RequestBody final ExpenseEntryApiPostDTO dto) {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ResponseEntity<Map<String,String>> insertExpense(
+            @AuthenticationPrincipal Owner owner,
+            @RequestBody final ExpenseEntryApiPostDTO dto) {
 
         Map<String, String> response = new HashMap<>();
         ExpenseEntry savedEntity;
         try {
-            savedEntity = expenseEntryService.saveExpense(dto, username);
+            savedEntity = expenseEntryService.saveExpense(dto, owner);
         } catch (OwnerNotFoundException e) {
             LOGGER.error("Owner not found for expense {}",dto, e);
             response.put("status", "failure");

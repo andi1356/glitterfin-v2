@@ -1,9 +1,6 @@
 package arobu.glitterfinv2.service;
 
-import arobu.glitterfinv2.model.entity.ExpenseCondition;
-import arobu.glitterfinv2.model.entity.ExpenseEntry;
-import arobu.glitterfinv2.model.entity.ExpenseRule;
-import arobu.glitterfinv2.model.entity.ExpenseRulesetAudit;
+import arobu.glitterfinv2.model.entity.*;
 import arobu.glitterfinv2.model.repository.ExpenseConditionRepository;
 import arobu.glitterfinv2.model.repository.ExpenseRuleRepository;
 import arobu.glitterfinv2.model.repository.ExpenseRulesetAuditRepository;
@@ -31,10 +28,11 @@ public class ExpenseRulesetService {
         this.auditRepository = auditRepository;
     }
 
-    public ExpenseEntry applyRulesets(final ExpenseEntry expense) {
+    public ExpenseEntry applyRulesets(Owner owner, final ExpenseEntry expense) {
         ExpenseEntry expenseCopy = expense.copy();
 
-        List<Integer> matchingConditionIds = conditionRepository.findAll().stream()
+        List<Integer> matchingConditionIds = conditionRepository.findAllByOwner(owner)
+                .stream()
                 .filter(condition -> matches(condition, expense))
                 .map(ExpenseCondition::getId)
                 .toList();

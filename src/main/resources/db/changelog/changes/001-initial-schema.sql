@@ -1,11 +1,11 @@
 CREATE TABLE owner
 (
-    user_agent_id VARCHAR(255),
-    api_token     VARCHAR(255) NOT NULL,
-    details       VARCHAR(255) NOT NULL,
     username      VARCHAR(255) NOT NULL,
     password      VARCHAR(255) NOT NULL,
-    PRIMARY KEY (user_agent_id)
+    user_agent_id VARCHAR(255) NOT NULL,
+    api_token     VARCHAR(255) NOT NULL,
+    details       VARCHAR(255) NOT NULL,
+    PRIMARY KEY (username)
 );
 
 CREATE TABLE location
@@ -26,7 +26,7 @@ CREATE TABLE location
 
 CREATE TABLE expense (
     id        SERIAL,
-    owner_id  VARCHAR(255),
+    owner_id  VARCHAR(255) NOT NULL,
     amount    NUMERIC(20,2) NOT NULL,
     timestamp TIMESTAMP     NOT NULL,
     timezone  varchar(6)    NOT NULL,

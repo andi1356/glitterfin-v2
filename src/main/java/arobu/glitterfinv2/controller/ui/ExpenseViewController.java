@@ -1,10 +1,11 @@
 package arobu.glitterfinv2.controller.ui;
 
 import arobu.glitterfinv2.model.entity.ExpenseEntry;
+import arobu.glitterfinv2.model.entity.Owner;
 import arobu.glitterfinv2.model.form.ExpenseEntryForm;
 import arobu.glitterfinv2.model.mapper.ExpenseEntryMapper;
 import arobu.glitterfinv2.service.ExpenseEntryService;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class ExpenseViewController {
     }
 
     @GetMapping
-    public String expenses(Model model, Authentication authentication) {
-        List<ExpenseEntry> expenses = expenseEntryService.getAllExpenses(authentication.getName());
+    public String listExpensesUI(@AuthenticationPrincipal Owner owner, Model model) {
+        List<ExpenseEntry> expenses = expenseEntryService.getAllExpenses(owner);
 
         model.addAttribute("expenses", expenses);
 
@@ -46,11 +47,11 @@ public class ExpenseViewController {
 
     @GetMapping("/{id}")
     public String viewExpenseUI(@PathVariable("id") Integer expenseId,
+                                @AuthenticationPrincipal Owner owner,
                                 Model model,
-                                Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
 
-        Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, authentication.getName());
+        Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, owner);
 
         if (expenseEntry.isEmpty()) {
             redirectAttributes.addFlashAttribute("expenseMessage", "Unable to locate the requested expense.");
@@ -64,11 +65,11 @@ public class ExpenseViewController {
 
     @GetMapping("/{id}/edit")
     public String editExpenseUI(@PathVariable("id") Integer expenseId,
+                                @AuthenticationPrincipal Owner owner,
                                 Model model,
-                                Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
 
-        Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, authentication.getName());
+        Optional<ExpenseEntry> expenseEntry = expenseEntryService.getExpense(expenseId, owner);
 
         if (expenseEntry.isEmpty()) {
             redirectAttributes.addFlashAttribute("expenseMessage", "Unable to locate the requested expense.");
@@ -84,11 +85,11 @@ public class ExpenseViewController {
 
     @PostMapping
     public String createExpense(@ModelAttribute("expenseForm") ExpenseEntryForm expenseForm,
-                                Authentication authentication,
+                                @AuthenticationPrincipal Owner owner,
                                 RedirectAttributes redirectAttributes) {
 
         boolean created = expenseEntryService
-                .createExpense(authentication.getName(), expenseForm)
+                .createExpense(owner, expenseForm)
                 .isPresent();
 
         String message = created
@@ -101,12 +102,12 @@ public class ExpenseViewController {
 
     @PostMapping("/{id}/edit")
     public String updateExpense(@PathVariable("id") Integer expenseId,
+                                @AuthenticationPrincipal Owner owner,
                                 @ModelAttribute("expenseForm") ExpenseEntryForm expenseForm,
-                                Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
 
         boolean updated = expenseEntryService
-                .updateExpense(expenseId, authentication.getName(), expenseForm)
+                .updateExpense(expenseId, owner, expenseForm)
                 .isPresent();
 
         String message = updated
@@ -119,13 +120,13 @@ public class ExpenseViewController {
 
     @PostMapping("/{id}/delete")
     public String deleteExpense(@PathVariable("id") Integer expenseId,
-                                Authentication authentication,
+                                @AuthenticationPrincipal Owner owner,
                                 RedirectAttributes redirectAttributes) {
 
-        boolean deleted = expenseEntryService.deleteExpense(expenseId, authentication.getName());
+        boolean deleted = expenseEntryService.deleteExpense(expenseId, owner);
         String message = deleted
                 ? "Expense deleted successfully."
-                : "Unable to delete the expense. It may have already been removed.";
+                : "Unable to delete the expense.";
 
         redirectAttributes.addFlashAttribute("expenseMessage", message);
         return "redirect:/expenses";
