@@ -145,11 +145,9 @@ public class RulesetViewController {
     @PostMapping("/rules")
     public String createRule(@ModelAttribute("ruleForm") ExpenseRuleForm form,
                              RedirectAttributes redirectAttributes) {
-        boolean created = ruleService.createRule(form).isPresent();
-        String message = created
-                ? "Rule created successfully."
-                : "Unable to create the rule. Please verify the selected condition.";
-        redirectAttributes.addFlashAttribute("ruleMessage", message);
+        String creationMessage = ruleService.createRule(form);
+
+        redirectAttributes.addFlashAttribute("ruleMessage", creationMessage);
         return "redirect:/rulesets/rules";
     }
 

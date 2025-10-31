@@ -1,5 +1,6 @@
 package arobu.glitterfinv2.service;
 
+import arobu.glitterfinv2.model.entity.ExpenseCondition;
 import arobu.glitterfinv2.model.entity.ExpenseRule;
 import arobu.glitterfinv2.model.form.ExpenseRuleForm;
 import arobu.glitterfinv2.model.repository.ExpenseConditionRepository;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.lang.String.join;
 
 @Service
 public class ExpenseRuleService {
@@ -34,19 +37,28 @@ public class ExpenseRuleService {
         return ruleRepository.findById(id);
     }
 
-    public Optional<ExpenseRule> createRule(ExpenseRuleForm form) {
-        if (form.getConditionId() == null) {
-            return Optional.empty();
+    public String createRule(ExpenseRuleForm form) {
+        conditionRepository.findById(form.getConditionId())
+                .map(condition -> ruleRepository.findByConditionAndPopulatingFieldAndPriority(condition, form.getPopulatingField(), form.getPriority())
+                        .map(rule ->
+                                join("Rule uniqueness restriction hit. Recommendation is to increment priority.",
+                                        " Condition: ", rule.getCondition().toString(),
+                                        ", Populating Field: ", rule.getPopulatingField().toString(),
+                                        ", Priority: ", rule.getPriority().toString())));
+
+        Optional<ExpenseCondition> condition = conditionRepository.findById(form.getConditionId());
+        if (condition.isEmpty()) {
+            return "Unable to create the rule. Condition was null";
+        } else {
+            return ruleRepository
+                    .findByConditionAndPopulatingFieldAndPriority(condition.get(), form.getPopulatingField(), form.getPriority())
+                    .map(existingRule ->
+                            join("Rule uniqueness restriction hit. Check fields; ",
+                                    " Condition: ", existingRule.getCondition().toString(),
+                                    ", Populating Field: ", existingRule.getPopulatingField().toString(),
+                                    ", Priority: ", existingRule.getPriority().toString()))
+                    .orElse("Expense Rule created.");
         }
-        return conditionRepository.findById(form.getConditionId())
-                .map(condition -> {
-                    ExpenseRule rule = new ExpenseRule()
-                            .setCondition(condition)
-                            .setPopulatingField(form.getPopulatingField())
-                            .setValue(normalize(form.getValue()))
-                            .setPriority(form.getPriority());
-                    return ruleRepository.save(rule);
-                });
     }
 
     public Optional<ExpenseRule> updateRule(Integer id, ExpenseRuleForm form) {

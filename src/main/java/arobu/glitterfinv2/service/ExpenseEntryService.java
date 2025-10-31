@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Comparator.comparing;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -122,7 +123,9 @@ public class ExpenseEntryService {
 
     public List<ExpenseEntry> getExpenses(final String username) {
         LOGGER.info("Fetching all expenses for user: {}", username);
-        return expenseEntryRepository.findAllByOwner_Username(username);
+        return expenseEntryRepository.findAllByOwner_Username(username).stream()
+                .sorted(comparing(ExpenseEntry::getTimestamp).reversed())
+                .toList();
     }
 
     public Optional<ExpenseEntry> getExpense(final Integer expenseId, final String username) {
