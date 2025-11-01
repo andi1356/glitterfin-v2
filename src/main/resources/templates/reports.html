@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glitterfin | Expense Reports</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/reports.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+<main>
+    <section class="reports-container">
+        <header class="reports-header">
+            <div>
+                <p class="eyebrow">Insights</p>
+                <h1>Expense Reports</h1>
+                <p class="subtitle">Review how much you spent over the last 7 and 30 days and where it went.</p>
+            </div>
+        </header>
+
+        <div class="summary-grid">
+            <article class="summary-card">
+                <h2>Last 7 days</h2>
+                <p class="total" th:text="'RON ' + #numbers.formatDecimal(report.lastSevenDays().totalAmount(), 1, 'COMMA', 2, 'POINT')">RON 0,00</p>
+                <dl>
+                    <div>
+                        <dt>Transactions</dt>
+                        <dd th:text="${report.lastSevenDays().expenseCount()}">0</dd>
+                    </div>
+                    <div>
+                        <dt>Average per expense</dt>
+                        <dd th:text="'RON ' + #numbers.formatDecimal(report.lastSevenDays().averagePerExpense(), 1, 'COMMA', 2, 'POINT')">RON 0,00</dd>
+                    </div>
+                    <div>
+                        <dt>Average per day</dt>
+                        <dd th:text="'RON ' + #numbers.formatDecimal(report.lastSevenDays().averagePerDay(), 1, 'COMMA', 2, 'POINT')">RON 0,00</dd>
+                    </div>
+                </dl>
+            </article>
+            <article class="summary-card">
+                <h2>Last 30 days</h2>
+                <p class="total" th:text="'RON ' + #numbers.formatDecimal(report.lastThirtyDays().totalAmount(), 1, 'COMMA', 2, 'POINT')">RON 0,00</p>
+                <dl>
+                    <div>
+                        <dt>Transactions</dt>
+                        <dd th:text="${report.lastThirtyDays().expenseCount()}">0</dd>
+                    </div>
+                    <div>
+                        <dt>Average per expense</dt>
+                        <dd th:text="'RON ' + #numbers.formatDecimal(report.lastThirtyDays().averagePerExpense(), 1, 'COMMA', 2, 'POINT')">RON 0,00</dd>
+                    </div>
+                    <div>
+                        <dt>Average per day</dt>
+                        <dd th:text="'RON ' + #numbers.formatDecimal(report.lastThirtyDays().averagePerDay(), 1, 'COMMA', 2, 'POINT')">RON 0,00</dd>
+                    </div>
+                </dl>
+            </article>
+        </div>
+
+        <section class="category-section">
+            <header>
+                <h2>Top categories (last 30 days)</h2>
+                <p>Highest spending categories from the past month.</p>
+            </header>
+            <div th:if="${#lists.isEmpty(report.topCategories())}" class="empty-state">
+                <p>No spending recorded in the last 30 days.</p>
+            </div>
+            <div th:if="${!#lists.isEmpty(report.topCategories())}" class="table-wrapper">
+                <table class="category-table">
+                    <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Total spent</th>
+                        <th>Transactions</th>
+                        <th>Share of month</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="category : ${report.topCategories()}">
+                        <td th:text="${category.category()}">Category</td>
+                        <td th:text="'RON ' + #numbers.formatDecimal(category.totalAmount(), 1, 'COMMA', 2, 'POINT')">RON 0,00</td>
+                        <td th:text="${category.expenseCount()}">0</td>
+                        <td th:text="#numbers.formatDecimal(category.percentageOfTotal(), 1, 'COMMA', 2, 'POINT') + '%'">0%</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</main>
+<div th:insert="~{fragments/footer :: footer}"></div>
+</body>
+</html>
