@@ -22,8 +22,7 @@ services:
     volumes:
       - data_volume_prod:/app/data
     depends_on:
-      db-prod:
-        condition: service_healthy
+      - db-prod
     restart: unless-stopped
 
 
@@ -43,12 +42,6 @@ services:
           cpus: '0.5'
     volumes:
       - db_volume_prod:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
 
 
   app-dev:
